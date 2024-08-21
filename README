@@ -1,0 +1,50 @@
+simple page where you create an account and login.
+
+no unqiue name
+
+once login, the page should only show the pages you are permitted to
+
+you have classes.
+- owner
+- tester
+- hotelOwner
+- HotelStaff
+- Costumer
+
+simple have one page where you set the Hotel
+
+hotel has a 
+- name
+- description
+- location
+- oneToMany for the htoelrooms
+
+then after that, you can set the rooms
+- number room
+- description
+- wifi
+- single beds
+- double beds
+- rooms amount
+- toilet
+- shower
+- microwave
+- washer
+- kitchen
+- TV
+- costumer service
+
+
+you have these pages
+
+- one where to get the hotel itself
+- one to set the room
+- one to have the specifics based on th LOCATION of the hotel. and the specifics of the room
+
+when rooms are show, they show what they HAVE not what they DON'T have
+
+- page to show the rooms you have booked for that period
+- a calender showing where you booked and how long. clicking on it shows the room page
+- settings
+
+and thats it. real simple.
