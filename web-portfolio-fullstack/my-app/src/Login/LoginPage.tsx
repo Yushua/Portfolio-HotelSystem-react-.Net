@@ -139,8 +139,6 @@ const LoginCreatePage: React.FC<LoginCreateProps> = ({ ActionName }) => {
     }
   };
   
-
-
     return (
       <div>
         <div className="LoginPageImageBox">

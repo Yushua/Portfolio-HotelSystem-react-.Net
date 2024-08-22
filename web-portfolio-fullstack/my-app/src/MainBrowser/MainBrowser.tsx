@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './MainBrowser.css';
 import DashboardPage from './Pages/DashboardPage';
 import AppBar from './AppBarPage';
-import { Box } from '@mui/material';
 
 export async function newBrowserWindow(newWindow:JSX.Element) {
   if (!!_setWindowBrowser && !document.getElementById("ErrorPage"))
@@ -14,9 +13,10 @@ var _setWindowBrowser: React.Dispatch<React.SetStateAction<JSX.Element>> | null 
 type WebPagesProp = Array<[string, JSX.Element]>;
 interface ResponsiveAppBarProps {
   webPages: WebPagesProp;
+  favoritePages: WebPagesProp;
 }
 
-function MainBrowser({ webPages }: ResponsiveAppBarProps){
+function MainBrowser({ webPages, favoritePages }: ResponsiveAppBarProps){
   
   const [WindowBrowser, setWindowBrowser] = useState<JSX.Element>(<DashboardPage/>)
   _setWindowBrowser = setWindowBrowser

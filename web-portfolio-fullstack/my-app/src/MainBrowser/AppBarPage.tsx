@@ -14,9 +14,11 @@ import AdbIcon from '@mui/icons-material/Adb';
 import './AppBarPage.css'
 import UserProfile from './ProfileInformation/UserProfile';
 import { newWindow } from '../App';
-import LoginHomePage from '../Login/LoginHomePage';
 import { newBrowserWindow } from './MainBrowser';
 import DashboardPage from './Pages/DashboardPage';
+import SettingsPage from './Pages/SettingPages/SettingsPage';
+import RolesManagement from './Pages/SettingPages/RolesManagement';
+import LogoutImageComponentSetup from './components/logoutImageComponentSetup';
 
 export const addPage = (pageName: string, pageElement: JSX.Element) => {
   //this will later be done in the backend
@@ -27,7 +29,7 @@ export const removePage = (pageName: string) => {
   _setPagesUser(prevPages => prevPages.filter(([name, _]) => name !== pageName));
 };
 
-const settings = [['Profile', <UserProfile/>], ['Logout', <></>]];
+const settings = [['Profile', <UserProfile/>], ['Settings', <SettingsPage/>], ['Role Management', <RolesManagement/>], ['Logout', <LogoutImageComponentSetup />]];
 var _setPagesUser: React.Dispatch<React.SetStateAction<Array<[string, JSX.Element]>>> = () => {};
 
 type WebPagesProp = Array<[string, JSX.Element]>;
@@ -62,11 +64,9 @@ function ResponsiveAppBar({ webPages }: ResponsiveAppBarProps){
 
   const handleonClickProfile = (index: number) => {
     return () => {
-      if (settings[index][0] === "Profile") {
-        newBrowserWindow(<UserProfile/>);
-      } else if (settings[index][0] === "Logout") {
-        newWindow(<LoginHomePage />);
-      }
+      // Type assertion to specify that it's a JSX.Element
+      const window = settings[index][1] as JSX.Element;
+      newWindow(window);
     };
   };
 
