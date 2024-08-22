@@ -12,10 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import './AppBarPage.css'
-import UserProfile from './ProfileInformation/UserProfile';
-import { newWindow } from '../App';
-import { newBrowserWindow } from './MainBrowser';
-import DashboardPage, { newDashboardWindow } from './Pages/DashboardPage';
+import UserProfile from './Pages/UserPages/UserProfile';
+import { newDashboardWindow } from './Pages/DashboardPage';
 import SettingsPage from './Pages/SettingPages/SettingsPage';
 import RolesManagement from './Pages/SettingPages/RolesManagement';
 import LogoutImageComponentSetup from './components/logoutImageComponentSetup';

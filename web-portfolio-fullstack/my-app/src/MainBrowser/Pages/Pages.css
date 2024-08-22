@@ -2,34 +2,3 @@
     font-size: 16px; /* Set a default root font size */
   }
 
-  html, body {
-    margin: 0!important;
-    display: flex!important;
-    height: 70vh!important;
-    width: 100%!important;
-    justify-content: center!important; /* Center horizontally */
-    align-items: center!important; /* Center vertically */
-    background-color: #D8EDF3!important;
-    position: absolute!important;
-    top: 0!important;
-    left: 0!important;
-  }
-  
-  .MainBrowserBox {
-    width: 120rem;
-    margin: 5rem 5rem 5rem 5rem; /* Adjusted margin-top to 10rem */
-    display: flex;
-    overflow-y: auto; /* Add scrollbar when content exceeds height */
-    border-radius: 1rem;
-    position: relative;
-    justify-content: center!important;
-    align-items: center!important;
-}
-
-.position-top-left {
-  padding: 0;
-  margin: 0;
-  width: 100%; /* Set width to 100% */
-  top: 0;
-  left: 0; 
-}

@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { newWindow } from '../App';
-import UserProfile from '../MainBrowser/ProfileInformation/UserProfile';
+import UserProfile from '../MainBrowser/Pages/UserPages/UserProfile';
 import MainBrowser from '../MainBrowser/MainBrowser';
 import CreateHotelPage from '../MainBrowser/Pages/HotelOwnerPages/CreateHotelPage';
-import CreateRoomPage from '../MainBrowser/Pages/HotelOwnerPages/CreateRoomPage';
 import HotelVacancies from '../MainBrowser/Pages/HotelOwnerPages/HotelVacancies';
 import SetupNewEmployeeVacancy from '../MainBrowser/Pages/HotelOwnerPages/SetupNewEmployeeVacancy';
-import ShowHotelDataOwner from '../MainBrowser/Pages/HotelOwnerPages/ShowHotelDataOwner';
-import ShowHotelEmployees from '../MainBrowser/Pages/HotelOwnerPages/ShowHotelHotelEmployees';
+import ShowHotelEmployees from '../MainBrowser/Pages/HotelOwnerPages/ShowHotelEmployees';
 import ShowRoomDataOwner from '../MainBrowser/Pages/HotelOwnerPages/ShowRoomDataOwner';
 import SearchForRooms from '../MainBrowser/Pages/UserPages/SearchForRooms';
 import ShowAllRooms from '../MainBrowser/Pages/UserPages/ShowAllRooms';
 import Vacancies from '../MainBrowser/Pages/UserPages/Vacancies';
-import getUserWebpages from '../MainBrowser/Functions/ft_GetuserWebPages';
-import getUserFavorites from '../MainBrowser/Functions/ft_GetuserFavorites';
+import ShowAllOwnerHotels from '../MainBrowser/Pages/HotelOwnerPages/ShowAllOwnerHotels';
 
 const WebPages: Array<[string, JSX.Element]> = [
   ['Profile', <UserProfile />],
   //owner
   ['Create Hotel', <CreateHotelPage/>],
-  // ['Create Room', <CreateRoomPage/>],
+  ['Hotel Owner', <ShowAllOwnerHotels/>],
   ['HotelVacancies', <HotelVacancies/>],
   ['Employee Vacancies', <SetupNewEmployeeVacancy/>],
-  ['Hotel Data Owner', <ShowHotelDataOwner/>],
-  ['Hotel Employees', <ShowHotelEmployees/>],
-  ['Hotel RoomOwner', <ShowRoomDataOwner/>],
+  ['Employees', <ShowHotelEmployees/>],
   //User
-  ['Search Rooms', <SearchForRooms/>],
-  ['Show Rooms', <ShowAllRooms/>],
+  ['Rooms', <ShowAllRooms/>],
+  ['Hotels', <ShowAllRooms/>],
   ['Vacancies', <Vacancies/>],
 ];
 

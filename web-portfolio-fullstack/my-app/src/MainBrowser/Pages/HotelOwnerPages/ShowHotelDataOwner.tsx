@@ -1,10 +1,31 @@
+import { useEffect } from "react";
 
-import React from 'react';
+async function getOwnerHotelData(hotelID: string){
 
-function ShowHotelDataOwner() {
+}
+
+interface ResponsiveAppBarProps {
+  hotelId: string;
+}
+function ShowHotelDataOwner({ hotelId }: ResponsiveAppBarProps) {
+
+  const fetchOwnerHotels = async () => {
+    await getOwnerHotelData(hotelId);
+  }
+
+  useEffect(() => {
+    fetchOwnerHotels();
+  }, []);
+
   return (
     <>
-      Show Hotel Owner
+
+      shows all OCCUPIED rooms
+
+      shows all UNNOCCUPIED ROOMS
+
+      add room option
+
     </>
   );
 }

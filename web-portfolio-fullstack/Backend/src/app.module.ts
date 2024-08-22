@@ -9,9 +9,9 @@ import { User } from './user/user.entity';
 import { Task } from './tasks/task.entity';
 import { JwtService } from '@nestjs/jwt';
 import { HotelsModule } from './hotels/hotels.module';
-import { HotelRooms } from './hotels/hotel-rooms.entity';
 import { Hotels } from './hotels/hotels.entity';
 import { HotelEmployee } from './user/hotel-employee.entity';
+import { HotelRooms } from './hotels/hotelsRooms.entity';
 
 @Module({
   imports: [
