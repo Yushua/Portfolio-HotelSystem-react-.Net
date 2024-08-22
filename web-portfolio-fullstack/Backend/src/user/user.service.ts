@@ -23,6 +23,9 @@ export class UserService {
     private readonly employeeEntity: Repository<HotelEmployee>,
   ) {}
 
+  /*
+    user Management
+  */
   async userCreation(createUserDto: CreateUserDto): Promise<User> {
     const { username, password } = createUserDto;
     let user: User = await this.userEntity.findOne({ where: { username } });
@@ -34,11 +37,6 @@ export class UserService {
         password: hashedPassword,
       });
       await this.userEntity.save(user);
-      
-      // const hotelEmployee = this.employeeEntity.create({
-      //   name: username,
-      // });
-      // await this.employeeEntity.save(hotelEmployee);
 
       return user;
     } else {
@@ -76,6 +74,9 @@ export class UserService {
 
   }
 
+  /*
+    user Data
+  */
   async getUseryId(id: string): Promise<User>{
     const found: User = await this.userEntity.findOneBy({ id });
     if (!found) {
@@ -99,6 +100,10 @@ export class UserService {
     }
     throw new NotFoundException(`"${username}" not in use`);
   }
+
+  /*
+    topBar functions
+  */
 
   // async addFavorite(
   //   user: User,
@@ -126,4 +131,9 @@ export class UserService {
   //   user.favorites.splice(index, 1);
   //   await this.userEntity.save(user);
   // }
+
+  /*
+    Employee functions
+  */
+
 }

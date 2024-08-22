@@ -1,7 +1,5 @@
-import { Box, Grid } from '@mui/material';
-import './Dashboard.css';
+
 import React from 'react';
-import RoleSetup from '../../../Login/RoleSetup';
 
 function SetupNewEmployeeVacancy() {
   return (

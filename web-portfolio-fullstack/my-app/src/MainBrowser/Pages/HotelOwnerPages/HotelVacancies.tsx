@@ -1,12 +1,10 @@
-import { Box, Grid } from '@mui/material';
-import './Dashboard.css';
-import React from 'react';
-import RoleSetup from '../../../Login/RoleSetup';
 
-function SetupHotelVacancies() {
+import React from 'react';
+
+function HotelVacancies() {
   return (
     <>
-      show the vacanies already RoleSetup
+      show the vacanies already Role
       once pressed. you see the people applying, links to their webpages
       info is set over the screen.
 
@@ -15,4 +13,4 @@ function SetupHotelVacancies() {
   );
 }
 
-export default SetupHotelVacancies;
+export default HotelVacancies;

@@ -1,11 +1,14 @@
-import { Box, Grid } from '@mui/material';
-import './Dashboard.css';
+
 import React from 'react';
 
-function ShowRoomDataUser() {
+interface ResponsiveAppBarProps {
+  roomId: string;
+}
+
+function ShowRoomDataUser({ roomId }: ResponsiveAppBarProps) {
   return (
     <>
-      Show Room User
+      Show Room User on ID
     </>
   );
 }

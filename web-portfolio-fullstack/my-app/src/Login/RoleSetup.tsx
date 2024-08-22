@@ -1,19 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { newWindow } from '../App';
 import UserProfile from '../MainBrowser/ProfileInformation/UserProfile';
-import HotelOwnerPage from '../MainBrowser/Pages/HoterlOwner';
-import MarketPlaceBuyer from '../MainBrowser/Pages/MarketPlaceBuyer';
-import MarketPlaceSellerPage from '../MainBrowser/Pages/MarketPlaceSellerPage';
-import HotelBuyerPage from '../MainBrowser/Pages/HoterlBuyerPage';
 import MainBrowser from '../MainBrowser/MainBrowser';
 import getUserFavorites from '../MainBrowser/Functions/getuserFunctions';
+import CreateHotelPage from '../MainBrowser/Pages/HotelOwnerPages/CreateHotelPage';
+import CreateRoomPage from '../MainBrowser/Pages/HotelOwnerPages/CreateRoomPage';
+import HotelVacancies from '../MainBrowser/Pages/HotelOwnerPages/HotelVacancies';
+import SetupNewEmployeeVacancy from '../MainBrowser/Pages/HotelOwnerPages/SetupNewEmployeeVacancy';
+import ShowHotelDataOwner from '../MainBrowser/Pages/HotelOwnerPages/ShowHotelDataOwner';
+import ShowHotelEmployees from '../MainBrowser/Pages/HotelOwnerPages/ShowHotelHotelEmployees';
+import ShowRoomDataOwner from '../MainBrowser/Pages/HotelOwnerPages/ShowRoomDataOwner';
+import SearchForRooms from '../MainBrowser/Pages/UserPages/SearchForRooms';
+import ShowAllRooms from '../MainBrowser/Pages/UserPages/ShowAllRooms';
+import Vacancies from '../MainBrowser/Pages/UserPages/Vacancies';
 
 const WebPages: Array<[string, JSX.Element]> = [
   ['Profile', <UserProfile />],
-  ['Hotels', <HotelBuyerPage />],
-  ['Hotel Owner', <HotelOwnerPage />],
-  ['Marketplace', <MarketPlaceBuyer />],
-  ['Marketplace Owner', <MarketPlaceSellerPage />],
+  //owner
+  ['Create Hotel', <CreateHotelPage/>],
+  ['Create Room', <CreateRoomPage/>],
+  ['HotelVacancies', <HotelVacancies/>],
+  ['SetupNewEmployeeVacancies', <SetupNewEmployeeVacancy/>],
+  ['ShowHotelDataOwner', <ShowHotelDataOwner/>],
+  ['ShowHotelEmployees', <ShowHotelEmployees/>],
+  ['ShowRoomDataOwner', <ShowRoomDataOwner/>],
+  //User
+  ['SearchForRooms', <SearchForRooms/>],
+  ['ShowAllRooms', <ShowAllRooms/>],
+  ['Vacancies', <Vacancies/>],
 ];
 
 const filterWebPages = (pageNames: string[]): Array<[string, JSX.Element]> => {
