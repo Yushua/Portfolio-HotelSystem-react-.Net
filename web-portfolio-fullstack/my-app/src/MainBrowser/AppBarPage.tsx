@@ -15,10 +15,11 @@ import './AppBarPage.css'
 import UserProfile from './ProfileInformation/UserProfile';
 import { newWindow } from '../App';
 import { newBrowserWindow } from './MainBrowser';
-import DashboardPage from './Pages/DashboardPage';
+import DashboardPage, { newDashboardWindow } from './Pages/DashboardPage';
 import SettingsPage from './Pages/SettingPages/SettingsPage';
 import RolesManagement from './Pages/SettingPages/RolesManagement';
 import LogoutImageComponentSetup from './components/logoutImageComponentSetup';
+import DashboardPageInfo from './Pages/DashboardInfo';
 
 export const addPage = (pageName: string, pageElement: JSX.Element) => {
   //this will later be done in the backend
@@ -59,19 +60,19 @@ function ResponsiveAppBar({ webPages }: ResponsiveAppBarProps){
   };
 
   const handleClickDashboard = () => {
-    newBrowserWindow(<DashboardPage />);
+    newDashboardWindow(<DashboardPageInfo/>);
   }
 
   const handleonClickProfile = (index: number) => {
     return () => {
-      // Type assertion to specify that it's a JSX.Element
       const window = settings[index][1] as JSX.Element;
-      newWindow(window);
+      newDashboardWindow(window);
+      handleCloseUserMenu()
     };
   };
 
   const handleonClickMenu= (component: JSX.Element) => {
-    newBrowserWindow(component);
+    newDashboardWindow(component);
   };
 
   return (
