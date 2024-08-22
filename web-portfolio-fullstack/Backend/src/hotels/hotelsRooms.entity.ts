@@ -10,10 +10,28 @@ export class HotelRooms {
   hotelRoomNumber: number;
 
   @Column()
-  hotelId: string;
+  hotelRoomName: number;
+
+  @Column()
+  hotelRoomEmployee: number;
 
   @Column()
   hotelRoomDescription: string;
+
+  @Column({ default: false })
+  Kitchen: boolean;
+
+  @Column({ default: false })
+  Wifi: boolean;
+
+  @Column({ default: false })
+  Breakfast: boolean;
+
+  @Column({ default: false })
+  Roomservice: boolean;
+
+  @Column({ default: false })
+  Animals: boolean;
 
   @Column()
   BigBed: number;
@@ -23,12 +41,6 @@ export class HotelRooms {
 
   @Column()
   Rooms: number;
-
-  @Column({ default: false })
-  Kitchen: boolean;
-
-  @Column({ default: false })
-  Wifi: boolean;
 
   @ManyToOne(() => Hotels, (hotels) => hotels.hotelrooms)
   hotel: Hotels;

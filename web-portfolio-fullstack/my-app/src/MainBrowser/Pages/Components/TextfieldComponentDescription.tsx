@@ -13,6 +13,7 @@ function TextfieldComponentDescription({ value, size }: ResponsiveAppBarProps) {
       value={value}
       className="gridTextfieldInput"
       fullWidth
+      multiline
       style={{ marginTop: 10 }}
       rows={size}
     />
