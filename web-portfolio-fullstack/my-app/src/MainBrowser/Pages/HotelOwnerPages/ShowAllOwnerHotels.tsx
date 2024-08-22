@@ -44,18 +44,8 @@ function ShowAllOwnerHotels() {
     fetchOwnerHotels();
   }, []);
 
-  const handleEdit = async () => {
-    //editing the data here
-  };
-  const handleCheck = async () => {
-    //go to this hotel
-  };
-
   return (
     <>
-      Show all hotels from owner
-      edit option. so everything in textfield WHEN edit is on.
-      so make sure there is an edit button FOR THAT specific data.
       <Grid container className='container' spacing={6}>
       {hotels.map((hotel) => (
         <Grid item xs={4}>
@@ -95,7 +85,7 @@ function ShowAllOwnerHotels() {
             <Button
               variant="contained"
               style={{ marginTop: 10 }}
-              onClick={() => newDashboardWindow(<ShowHotelDataOwner hotelId={hotel.hotelId} />)}
+              onClick={() => newDashboardWindow( <ShowHotelDataOwner hotelId={hotel.hotelId}/>)}
             >Check</Button>
             </Grid>
           </Grid>

@@ -1,9 +1,9 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, PatchHotelDto } from './DTO/create-hotelDto';
 import { HotelRooms } from './hotelsRooms.entity';
 
 @Injectable()
@@ -46,6 +46,44 @@ export class HotelsService {
       relations: ['hotels'],
     });
     return (userWithHotels.hotels)
+  }
+
+  async getHotelData(hotelId: string, user: User):Promise<Hotels> {
+    const userWithHotels = await this.userEntity.findOne({
+      where: { id: user.id },
+      relations: ['hotels'], // Ensure this matches the relation name in User entity
+    });
+
+    if (!userWithHotels) {
+      throw new UnauthorizedException();
+    }
+
+    const hotel = await this.HotelsEntity.findOne({
+      where: { hotelId: hotelId, user: { id: user.id } },
+      relations: ['user', 'hotelrooms'], // Load related entities as needed
+    });
+
+    return (hotel)
+  }
+
+  /* Patch data */
+
+  async PatchHotelData(user: User, hotelData: PatchHotelDto) {
+    const hotel = await this.HotelsEntity.findOne({
+          where: { hotelId: hotelData.HotelId},
+        });
+        if (!hotel) {
+          throw new NotFoundException('Hotel already made');
+        }
+        if (hotel.hotelOwner !== user.username){
+          throw new UnauthorizedException();
+        }
+      hotel.hotelName = hotelData.HotelName;
+      hotel.hotelDescription = hotelData.Description;
+      await this.HotelsEntity.save(hotel);
+      
+      console.log(hotel.hotelName)
+      console.log(hotel.hotelDescription)
   }
 
   // /* check information */

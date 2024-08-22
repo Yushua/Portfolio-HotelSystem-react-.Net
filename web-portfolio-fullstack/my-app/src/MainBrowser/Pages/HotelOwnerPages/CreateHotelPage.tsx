@@ -38,8 +38,6 @@ async function sendData(HotelName: string, Description: string){
 var _setHotelNameMessage: React.Dispatch<React.SetStateAction<string>>
 var _setHotelNameError: React.Dispatch<React.SetStateAction<boolean>>
 
-var _setHotelDescriptionMessage: React.Dispatch<React.SetStateAction<string>>
-var _setHotelDescriptionError: React.Dispatch<React.SetStateAction<boolean>>
 function CreateHotelPage() {
 
   const [HotelName, setHotelName] = useState<string>('');
@@ -55,9 +53,7 @@ function CreateHotelPage() {
 
   const [HotelDescription, setHotelDescription] = useState<string>('');
   const [HotelDescriptionMessage, setHotelDescriptionMessage] = useState<string>('');
-  _setHotelDescriptionMessage = setHotelDescriptionMessage
   const [HotelDescriptionError, setHotelDescriptionError] = useState<boolean>(false);
-  _setHotelDescriptionError = setHotelDescriptionError
 
   const handleHotelDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
