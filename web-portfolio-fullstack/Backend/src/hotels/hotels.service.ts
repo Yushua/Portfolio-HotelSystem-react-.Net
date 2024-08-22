@@ -81,9 +81,6 @@ export class HotelsService {
       hotel.hotelName = hotelData.HotelName;
       hotel.hotelDescription = hotelData.Description;
       await this.HotelsEntity.save(hotel);
-      
-      console.log(hotel.hotelName)
-      console.log(hotel.hotelDescription)
   }
 
   // /* check information */

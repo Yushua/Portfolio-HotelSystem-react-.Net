@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { newDashboardWindow } from '../DashboardPage';
 import ShowHotelDataOwner from './ShowHotelDataOwner';
 import EditHotelData from './EditHotelData';
+import TextfieldComponent from '../Components/TextfieldComponent';
+import TextfieldComponentDescription from '../Components/TextfieldComponentDescription';
 
 async function getOwnerHotelData(){
   try {
@@ -22,7 +24,6 @@ async function getOwnerHotelData(){
     }
     else {
       const data = await response.json();
-      console.log(data["userWithHotels"])
       _setHotels(data["userWithHotels"])
     }
     return response;
@@ -49,26 +50,9 @@ function ShowAllOwnerHotels() {
       <Grid container className='container' spacing={6}>
       {hotels.map((hotel) => (
         <Grid item xs={4}>
-          
-          <TextField
-            label={hotel.hotelName}
-            className="gridTextfieldInput"
-            fullWidth
-            style={{ marginTop: 10 }}
-          />
-          <TextField
-            label={hotel.hotelOwner}
-            className="gridTextfieldInput"
-            fullWidth
-            style={{ marginTop: 10 }}
-          />
-          <TextField
-            label={hotel.hotelDescription}
-            className="gridTextfieldInput"
-            fullWidth
-            rows={4}
-            style={{ marginTop: 10 }}
-          />
+          <TextfieldComponent value={hotel.hotelName}/>
+          <TextfieldComponent value={hotel.hotelOwner}/>
+          <TextfieldComponentDescription value={hotel.hotelDescription} size={4}/>
           <Grid container spacing={6}>
             <Grid item xs={2}>
             <Button

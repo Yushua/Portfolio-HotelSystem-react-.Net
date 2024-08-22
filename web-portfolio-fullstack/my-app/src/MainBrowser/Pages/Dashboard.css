@@ -36,6 +36,22 @@
     margin: 5rem;
   }
 
+  .MainHotelBox {
+    position: absolute;
+    border-radius: 1rem;
+    width: 92%;
+    align-items: center;
+    justify-content: center!important;
+    border: 1px solid #ccc;
+    top: 4rem;
+    left: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+    height: 100%;
+    overflow-y: auto;
+    margin: 5rem;
+  }
+
 
 .MuiGrid-container.position-top-left {
   position: relative;

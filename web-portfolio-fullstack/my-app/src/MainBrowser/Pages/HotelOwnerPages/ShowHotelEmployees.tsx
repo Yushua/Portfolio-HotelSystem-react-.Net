@@ -1,13 +1,12 @@
 
 import React from 'react';
 
-function ShowHotelEmployees() {
+function ShowAllEmployees() {
   return (
     <>
-
-
+      show all your employees
     </>
   );
 }
 
-export default ShowHotelEmployees;
+export default ShowAllEmployees;

@@ -1,7 +1,9 @@
 import { Grid, TextField } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import ShowHotelEmployees from "./ShowHotelEmployees";
+import ShowHotelEmployees from "./HotelDataOverTabs/ShowHotelEmployees";
 import ShowHotelDataOwnerTabs from "./ShowHotelDataOwnerTabs";
+import TextfieldComponent from "../Components/TextfieldComponent";
+import TextfieldComponentDescription from "../Components/TextfieldComponentDescription";
 
 async function getOwnerHotelData(hotelID: string){
   const credentials = {
@@ -53,40 +55,19 @@ function ShowHotelDataOwner({ hotelId }: ResponsiveAppBarProps) {
     <>
     <Grid container className='container' spacing={6}>
       <Grid item xs={4}>
-        <TextField
-          label={hotel.hotelName}
-          className="gridTextfieldInput"
-          fullWidth
-          style={{ marginTop: 10 }}
-        />
+        <TextfieldComponent value={hotel.hotelName}/>
       </Grid>
       <Grid item xs={4}>
-        <TextField
-          label={hotel.hotelId}
-          className="gridTextfieldInput"
-          fullWidth
-          style={{ marginTop: 10 }}
-        />
+        <TextfieldComponent value={hotel.hotelId}/>
       </Grid>
       <Grid item xs={4}>
-        <TextField
-          label={hotel.hotelOwner}
-          className="gridTextfieldInput"
-          fullWidth
-          style={{ marginTop: 10 }}
-        />
+        <TextfieldComponent value={hotel.hotelOwner}/>
       </Grid>
       <Grid item xs={12}>
-        <TextField
-          label={hotel.hotelDescription}
-          className="gridTextfieldInput"
-          fullWidth
-          rows={4}
-          style={{ marginTop: 10 }}
-        />
+        <TextfieldComponentDescription value={hotel.hotelDescription} size={4}/>
       </Grid>
+    <ShowHotelDataOwnerTabs hotelId={hotelId}/>
     </Grid>
-    <ShowHotelDataOwnerTabs/>
     </>
   );
 }

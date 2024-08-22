@@ -44,11 +44,8 @@ export class HotelsController {
         @Request() req,
         @Body() GetHotelData: GetHotelData,
       ): Promise<{ HotelData: any }> {
-        console.log("i am done1")
         const user: User = req.user;
         const HotelData = await this.hotelService.getHotelData(GetHotelData.HotelId, user);
-        console.log("i am done2")
-        console.log(HotelData)
         return {HotelData}
       }
 }

@@ -3,23 +3,19 @@ import { newWindow } from '../App';
 import UserProfile from '../MainBrowser/Pages/UserPages/UserProfile';
 import MainBrowser from '../MainBrowser/MainBrowser';
 import CreateHotelPage from '../MainBrowser/Pages/HotelOwnerPages/CreateHotelPage';
-import HotelVacancies from '../MainBrowser/Pages/HotelOwnerPages/HotelVacancies';
-import SetupNewEmployeeVacancy from '../MainBrowser/Pages/HotelOwnerPages/SetupNewEmployeeVacancy';
-import ShowHotelEmployees from '../MainBrowser/Pages/HotelOwnerPages/ShowHotelEmployees';
-import ShowRoomDataOwner from '../MainBrowser/Pages/HotelOwnerPages/ShowRoomDataOwner';
-import SearchForRooms from '../MainBrowser/Pages/UserPages/SearchForRooms';
 import ShowAllRooms from '../MainBrowser/Pages/UserPages/ShowAllRooms';
 import Vacancies from '../MainBrowser/Pages/UserPages/Vacancies';
 import ShowAllOwnerHotels from '../MainBrowser/Pages/HotelOwnerPages/ShowAllOwnerHotels';
+import AllVacancies from '../MainBrowser/Pages/HotelOwnerPages/AllVacancies';
+import ShowAllEmployees from '../MainBrowser/Pages/HotelOwnerPages/ShowHotelEmployees';
 
 const WebPages: Array<[string, JSX.Element]> = [
   ['Profile', <UserProfile />],
   //owner
   ['Create Hotel', <CreateHotelPage/>],
   ['Hotel Owner', <ShowAllOwnerHotels/>],
-  ['HotelVacancies', <HotelVacancies/>],
-  ['Employee Vacancies', <SetupNewEmployeeVacancy/>],
-  ['Employees', <ShowHotelEmployees/>],
+  ['Vacancies', <AllVacancies/>],
+  ['Employees', <ShowAllEmployees/>],
   //User
   ['Rooms', <ShowAllRooms/>],
   ['Hotels', <ShowAllRooms/>],
