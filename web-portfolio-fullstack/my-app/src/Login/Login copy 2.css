@@ -5,8 +5,6 @@
 html, body {
   margin: 0;
   display: flex;
-  height: 70vh;
-  width: 100%;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   background-color: #D8EDF3;
@@ -22,7 +20,7 @@ html, body {
 
 
 .LoginPageBox {
-  padding: 1rem; /* Add padding around the buttons */
+  padding: 2rem; /* Add padding around the buttons */
   border: 2px solid #94D9EF;
   border-radius: 1rem;
   background-color: #94D9EF;
