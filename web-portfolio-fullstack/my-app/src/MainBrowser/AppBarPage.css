@@ -1,0 +1,46 @@
+.global {
+    font-size: 16px; /* Set a default root font size */
+  }
+
+/* styles.css */
+
+.app-bar {
+    position: static;
+    width: 100%;
+  }
+  .adb-icon {
+    display: flex;
+  }
+  
+  .adb-icon.md {
+    display: flex;
+  }
+  
+  .logo {
+    margin-right: 1rem !important;
+    display: flex !important;
+    font-weight: 700 !important;
+    letter-spacing: .3rem !important;
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+  
+  .menu-item-text {
+    text-align: center;
+  }
+  
+  .PageButton {
+    /* margin-top: 2 !important; */
+    /* margin-left: 1rem !important; */
+    color: white !important;
+    display: block !important;
+  }
+  
+  .avatar {
+    padding: 0 !important;
+  }
+  
+  .user-menu {
+    margin-top: 45px !important;
+  }
+  

@@ -1,0 +1,69 @@
+.global {
+  font-size: 16px; /* Set a default root font size */
+}
+
+html, body {
+  margin: 0;
+  height: 70vh; 
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  background-color: #D8EDF3;
+}
+
+.LoginPageImageBox {/* Adjust the margin-top to lower the box */
+  padding: 1rem; /* Add padding around the buttons */
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center content horizontally */
+}
+
+
+.LoginPageBox {
+  margin-top: 5rem; /* Adjust the margin-top to lower the box */
+  padding: 1rem; /* Add padding around the buttons */
+  border: 2px solid #90F3E4;
+  border-radius: 1rem;
+  background-color: #94D9EF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center content horizontally */
+}
+
+.Button {
+  padding: 3rem;
+  border: none;
+  background-color: #90F3E4;
+  cursor: pointer;
+  
+}
+
+.centerBox {
+  display: flex;
+  align-items: center;
+  padding-top: 2rem;
+  /* height: 20vh; Set height to 100% of viewport height */
+}
+
+.imageButton {
+  display: flex;
+}
+
+.buttonImage {
+  width: 100%;
+  height: auto;
+  
+}
+
+.buttonWrapper {
+  margin:  3rem; /* Add margin between the button containers */
+}
+
+.buttonWrapper > button {
+  width: 15rem; /* Set a fixed width for the buttons using rem units */
+  height: 3rem;
+}
+

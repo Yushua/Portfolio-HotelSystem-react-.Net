@@ -1,0 +1,105 @@
+.global {
+    font-size: 16px; /* Set a default root font size */
+  }
+
+  html, body {
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    /* background-color: #D8EDF3; */
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .MainBrowserBox {
+    width: 98rem;
+
+    margin: 5rem 5rem 5rem 5rem; /* Adjusted margin-top to 10rem */
+    display: flex;
+    overflow-y: auto; /* Add scrollbar when content exceeds height */
+    border-radius: 1rem;
+    position: relative;
+    justify-content: center!important;
+    align-items: center!important;
+}
+
+.position-top-left {
+  /* padding: 0;
+  margin: 0; */
+  width: 100%; /* Set width to 100% */
+  /* top: 0;
+  left: 0; */
+}
+
+  .gridContainer {
+    border: 2px solid #a0c2a0;
+    background-color: #a0c2a0;
+    border-radius: 1rem;
+    /* padding: 1rem; */
+    /* Add any container styles here */
+    /* padding: 5rem; */
+  }
+  
+  .gridItem {
+    border: 2px solid #B6E0C5;
+    background-color: #B6E0B6;
+    border-radius: 1rem;
+    height: 10rem;
+    display: flex;
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+
+  .gridItem {
+    border: 2px solid #B6E0C5;
+    background-color: #B6E0B6;
+    border-radius: 1rem;
+    height: 10rem;
+    display: flex;
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+
+  .gridItemButton {
+    border: 2px solid #B6E0C5;
+    background-color: #B6E0B6;
+    border-radius: 1rem;
+    height: 10rem;
+    display: flex;
+    padding: 1rem;
+    margin: 0.5rem;
+    justify-content: center!important;
+  }
+  
+  .gridItem1 {
+    border: 2px solid #B6E0C5;
+    background-color: #B6E0B6;
+    border-radius: 1rem;
+    height: 32.7rem;
+    display: flex;
+    padding: 0rem;
+    margin: 0.5rem;
+    align-Items: flex-start;
+    overflow-y: auto;
+  }
+  .gridItem1::-webkit-scrollbar {
+    width: 1rem; /* Width of the scrollbar */
+    left: -1rem;
+  }
+  
+  .gridItem1::-webkit-scrollbar-track {
+
+  }
+  
+  .gridItem1::-webkit-scrollbar-thumb {
+    background-color: white; /* Color of the scrollbar thumb */
+    border-radius: 2rem; /* Set border radius to match container */
+  }
+  
+  .gridItem1::-webkit-scrollbar-thumb:hover {
+    background-color: #88C9A1; /* Color of the scrollbar thumb on hover */
+  }
+
+  

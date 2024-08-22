@@ -1,0 +1,14 @@
+.global {
+    font-size: 16px; /* Set a default root font size */
+  }
+
+  html, body {
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    background-color: #D8EDF3;
+  }
+
+  
+  
