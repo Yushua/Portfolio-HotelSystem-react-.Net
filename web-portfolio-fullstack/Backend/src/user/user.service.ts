@@ -11,6 +11,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { moderatorCredentialsDto } from 'src/auth/dto/auth-moderator-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { WebBrowserDtoPatch } from './dto/WebBrowserDtoPatch';
+import { HotelEmployee } from './hotel-employee.entity';
 // import { WebserviceService } from 'src/webservice/webservice.service';
 
 @Injectable()
@@ -18,6 +19,8 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userEntity: Repository<User>,
+    @InjectRepository(HotelEmployee)
+    private readonly employeeEntity: Repository<HotelEmployee>,
   ) {}
 
   async userCreation(createUserDto: CreateUserDto): Promise<User> {
@@ -31,6 +34,12 @@ export class UserService {
         password: hashedPassword,
       });
       await this.userEntity.save(user);
+      
+      // const hotelEmployee = this.employeeEntity.create({
+      //   name: username,
+      // });
+      // await this.employeeEntity.save(hotelEmployee);
+
       return user;
     } else {
       throw new ConflictException(`Username ${username} already exist`);
@@ -89,19 +98,6 @@ export class UserService {
       return user;
     }
     throw new NotFoundException(`"${username}" not in use`);
-  }
-
-  /* user browser services */
-
-  async checkWebrowserNameInUser(
-    user: User,
-    browserName: string,
-  ): Promise<boolean> {
-    if (user.favorites.includes(browserName)) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   // async addFavorite(

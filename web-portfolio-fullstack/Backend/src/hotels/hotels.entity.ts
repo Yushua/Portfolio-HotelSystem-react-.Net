@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { HotelRooms } from './hotel-rooms.entity';
+import { User } from 'src/user/user.entity';
 
 @Entity()
 export class Hotels {

@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { UserStatus } from './user.model';
+import { HotelEmployee } from './hotel-employee.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
   //can change
   @Column({ unique: true })
   username: string;
@@ -25,13 +25,14 @@ export class User {
   @Column({ default: false })
   twoFactorAuth: boolean;
 
-  //roles are set in the authentication section. never anywhere else. due to security risks
   @Column('text', { array: true, default: '{}' })
   roles: string[];
 
-  @Column('text', {
-    array: true,
-    default: ['Profile', 'Hotels', 'Marketplace', 'Wastelander 1'],
-  })
-  favorites: string[];
+  //Hotels.
+
+  //bookings
+
+  @OneToOne(() => HotelEmployee, employee => employee.user)
+  @JoinColumn()
+  employee: HotelEmployee;
 }

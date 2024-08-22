@@ -20,14 +20,6 @@ import { User } from './user.entity';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('GetAllUserFavorites')
-  @UseGuards()
-  async getAll(@Request() req): Promise<{ favorites: string[] }> {
-    const user: User = req.user;
-    const favorites = user.favorites;
-    return { favorites };
-  }
-
   // @Post('AddAllUserFavorites')
   // @UseGuards()
   // async PostUserAddFavorite(

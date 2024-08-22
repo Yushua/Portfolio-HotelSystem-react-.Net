@@ -11,19 +11,20 @@ import { JwtService } from '@nestjs/jwt';
 import { HotelsModule } from './hotels/hotels.module';
 import { HotelRooms } from './hotels/hotel-rooms.entity';
 import { Hotels } from './hotels/hotels.entity';
+import { HotelEmployee } from './user/hotel-employee.entity';
 
 @Module({
   imports: [
     UserModule,
     TasksModule,
-    TypeOrmModule.forFeature([User, Task, HotelRooms, Hotels]), // Include Website entity in TypeOrmModule.forFeature
+    TypeOrmModule.forFeature([User, Task, HotelRooms, Hotels, HotelEmployee]), // Include Website entity in TypeOrmModule.forFeature
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
       port: 5432,
       username: 'postgres',
       password: 'postgres',
-      database: 'Postgres-Portfolio',
+      database: 'HotelSystem-Management',
       autoLoadEntities: true,
       synchronize: true,
     }),
