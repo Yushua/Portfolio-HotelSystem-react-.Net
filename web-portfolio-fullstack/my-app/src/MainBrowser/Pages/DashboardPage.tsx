@@ -1,32 +1,25 @@
 import { Box, Grid } from '@mui/material';
 import './Dashboard.css';
-import React from 'react';
+import React, { useState } from 'react';
+import DashboardPageInfo from './DashboardInfo';
+
+export async function newDashboardWindow(newWindow:JSX.Element) {
+  if (!!_setWindowDashboard && !document.getElementById("ErrorPage"))
+    _setWindowDashboard(newWindow)
+}
+
+var _setWindowDashboard: React.Dispatch<React.SetStateAction<JSX.Element>> | null = null
+
 function DashboardPage() {
+
+  const [WindowDashboard, setWindowDashboard] = useState<JSX.Element>(<DashboardPageInfo/>)
+  _setWindowDashboard = setWindowDashboard
+
   return (
     <>
-    {/* ok
-    first box, is the dashboard box. this one taken the entire width and height
-    from the previous box.
-    then within, there is one container. in that container, there are items. each representing
-    a block.
-    the top block
-    the second row block two seperate, these are longer
-    
-    the top block has the user
-    the second block the pages it can access
-    the third block user data. achievements, etc. for now,
-    the first two are enough*/}
-
-  <Box className='MainBrowserBox'>
-    <div className="MuiGrid-container position-top-left">
-      <Grid container className="gridContainer">
-        <Grid item xs={12}>
-          <Box className="gridItem">
-          </Box>
-        </Grid>
-      </Grid>
-    </div>
-  </Box>
+      <Box className='MainBrowserBox'>
+        {WindowDashboard}
+      </Box>
     </>
   );
 }
