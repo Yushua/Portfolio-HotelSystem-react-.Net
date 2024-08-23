@@ -3,6 +3,8 @@ import { HotelsService } from './hotels.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/user.entity';
 import { CreateHotelDto, GetHotelData, PatchHotelDto, PatchHotelRoomDto } from './DTO/create-hotelDto';
+import { Hotels } from './hotels.entity';
+import { HotelRooms } from './hotelsRooms.entity';
 
 @Controller('hotels')
 @UseGuards(AuthGuard('jwt'))
@@ -53,9 +55,19 @@ export class HotelsController {
       async GetHotelData(
         @Request() req,
         @Body() GetHotelData: GetHotelData,
-      ): Promise<{ HotelData: any }> {
+      ): Promise<{ HotelData: Hotels }> {
         const user: User = req.user;
         const HotelData = await this.hotelService.getHotelData(GetHotelData.HotelId, user);
         return {HotelData}
+      }
+
+      @Post(`HotelRooms`)
+      async GetHotelRoomsData(
+        @Request() req,
+        @Body() GetHotelData: GetHotelData,
+      ): Promise<{ HotelRoomsData: HotelRooms[] }> {
+        const user: User = req.user;
+        const HotelRoomsData = await this.hotelService.getHotelRoomsData(GetHotelData.HotelId, user);
+        return {HotelRoomsData}
       }
 }

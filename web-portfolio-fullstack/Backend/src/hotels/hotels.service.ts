@@ -119,6 +119,28 @@ export class HotelsService {
     return (hotel)
   }
 
+  async getHotelRoomsData(hotelId: string, user: User):Promise<HotelRooms[]> {
+    const userWithHotels = await this.userEntity.findOne({
+      where: { id: user.id },
+      relations: ['hotels'], // Ensure this matches the relation name in User entity
+    });
+
+    if (!userWithHotels) {
+      throw new UnauthorizedException();
+    }
+
+    const hotel = await this.HotelsEntity.findOne({
+      where: { hotelId: hotelId, user: { id: user.id } },
+      relations: ['user', 'hotelrooms'], // Load related entities as needed
+    });
+
+    if (!hotel) {
+      throw new UnauthorizedException();
+    }
+
+    return (hotel.hotelrooms)
+  }
+
   /* Patch data */
 
   async PatchHotelData(user: User, hotelData: PatchHotelDto) {

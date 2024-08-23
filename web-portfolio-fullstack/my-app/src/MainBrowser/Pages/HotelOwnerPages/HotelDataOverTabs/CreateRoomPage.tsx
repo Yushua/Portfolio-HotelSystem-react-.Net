@@ -2,6 +2,8 @@
 
 import { Button, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import React from 'react';
+import { newDashboardWindow } from '../../DashboardPage';
+import ShowHotelDataOwnerTabs from '../ShowHotelDataOwnerTabs';
 
 interface ResponsiveAppBarProps {
   hotelId: string;
@@ -133,8 +135,7 @@ async function createRoomHttp(
           handleErrors(errorData.message, credentials)
         }
       } else {
-        const data = await response.json();
-        //return to this page again
+        newDashboardWindow(<ShowHotelDataOwnerTabs hotelId={hotelId}/>)
       }
       return response;
     } catch (error: any) {

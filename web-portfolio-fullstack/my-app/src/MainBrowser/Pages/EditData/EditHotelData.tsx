@@ -2,7 +2,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import { newDashboardWindow } from '../DashboardPage';
-import ShowHotelDataOwner from './ShowHotelDataOwner';
+import ShowHotelDataOwner from '../HotelOwnerPages/ShowHotelDataOwner';
 async function PatchHotelData(hotelData: ResponsiveAppBarProps){
   const credentials = {
     HotelName: hotelData.hotelName,

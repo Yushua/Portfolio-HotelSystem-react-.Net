@@ -4,7 +4,7 @@ import ShowHotelDataOwnerTabs from "./ShowHotelDataOwnerTabs";
 import TextfieldComponent from "../Components/TextfieldComponent";
 import TextfieldComponentDescription from "../Components/TextfieldComponentDescription";
 import { newDashboardWindow } from "../DashboardPage";
-import EditHotelData from "./EditHotelData";
+import EditHotelData from "../EditData/EditHotelData";
 
 async function getOwnerHotelData(hotelID: string){
   const credentials = {
