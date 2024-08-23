@@ -1,5 +1,6 @@
 
 import React from 'react';
+import Vacancies from '../../UserPages/Vacancies';
 
 interface ResponsiveAppBarProps {
   hotelId: string;
@@ -7,11 +8,8 @@ interface ResponsiveAppBarProps {
 function HotelVacancies({ hotelId }: ResponsiveAppBarProps) {
   return (
     <>
-      see the vacancies you have opened, once clicked you get the data from that vacancie.
-
-      the option to edit the info
-
-      the people applying below, licking on them shows their EmployeePage
+      frist option to make Vacancies
+      below all the vacancies from THAT Hotel
     </>
   );
 }

@@ -50,6 +50,14 @@ export class HotelsController {
         await this.hotelService.createRoom(patchHotelRoomDto);
       }
 
+      @Patch(`PatchHotelRoom`)
+      async PatchHotelRoom(
+        @Request() req,
+        @Body() patchHotelRoomDto: PatchHotelRoomDto,
+      ) {
+        const user: User = req.user;
+        await this.hotelService.PatchHotelRoomOwner(patchHotelRoomDto);
+      }
 
       @Post(`GetHotelData`)
       async GetHotelData(

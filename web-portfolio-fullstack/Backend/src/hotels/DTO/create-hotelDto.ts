@@ -38,6 +38,10 @@ export class PatchHotelRoomDto {
 
   @IsNotEmpty()
   @IsString()
+  hotelRoomId?: string;
+
+  @IsNotEmpty()
+  @IsString()
   RoomNumber: string;
 
   @IsNotEmpty()

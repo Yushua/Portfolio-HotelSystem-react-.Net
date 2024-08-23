@@ -91,6 +91,64 @@ export class HotelsService {
     console.log("done")
   }
 
+  async PatchHotelRoomOwner(patchHotelRoomDto: PatchHotelRoomDto): Promise<void> {
+    const hotel = await this.HotelsEntity.findOne({
+      where: { hotelId: patchHotelRoomDto.HotelId },
+    });
+  
+    if (!hotel) {
+      throw new Error('Hotel not found');
+    }
+
+    const existingRooms = await this.HotelRoomsEntity.find({
+      where: { hotel: hotel },
+    });
+
+    
+    const roomNumberExists = existingRooms.some(room => room.hotelRoomNumber === patchHotelRoomDto.RoomNumber);
+    const roomNameExists = existingRooms.some(room => room.hotelRoomName === patchHotelRoomDto.RoomName);
+    const errors = [];
+    if (roomNumberExists) {
+      errors.push('RoomNumber already exists');
+    }
+    if (roomNameExists) {
+      errors.push('RoomName already exists');
+    }
+    if (roomNumberExists || roomNameExists){
+      throw new HttpException(
+        { message: errors },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const existingRoom = await this.HotelRoomsEntity.findOne({
+      where: { hotelRoomId: patchHotelRoomDto.hotelRoomId } // Adjust RoomId to match your DTO structure
+    });
+
+    if (!existingRoom) {
+      throw new Error('Room not found');
+    }
+    existingRoom.hotelRoomNumber = patchHotelRoomDto.RoomNumber;
+    existingRoom.hotelRoomName = patchHotelRoomDto.RoomName;
+    existingRoom.hotelRoomEmployee = patchHotelRoomDto.Employee;
+    existingRoom.hotelRoomDescription = patchHotelRoomDto.HotelDescription;
+    existingRoom.Kitchen = patchHotelRoomDto.Kitchen;
+    existingRoom.Wifi = patchHotelRoomDto.Wifi;
+    existingRoom.Breakfast = patchHotelRoomDto.Breakfast;
+    existingRoom.Roomservice = patchHotelRoomDto.Roomservice;
+    existingRoom.Animals = patchHotelRoomDto.Animals;
+    existingRoom.BigBed = patchHotelRoomDto.BigBeds;
+    existingRoom.SmallBed = patchHotelRoomDto.SmallBeds;
+    existingRoom.Rooms = patchHotelRoomDto.Rooms;
+    existingRoom.hotel = hotel;
+    try {
+      await this.HotelRoomsEntity.save(existingRoom);
+    } catch (error) {
+      console.error('Error saving new room:', error);
+      throw new Error('Error saving new room');
+    }
+  }
+
   /* get data */
 
   async getAllOwnerHotels(user: User):Promise<Hotels> {

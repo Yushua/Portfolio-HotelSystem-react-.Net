@@ -24,9 +24,8 @@ function ShowHotelDataOwnerTabs({ hotelId, pageName }: ResponsiveAppBarProps) {
   const WebPages: Array<[string, JSX.Element]> = [
     ['Rooms', <ShowAllOwnerRoomsFromHotel hotelId={hotelId}/>],
     ['Create', <CreateRoomPage hotelId={hotelId}/>],
-    ['Employees', <ShowHotelEmployees hotelId={hotelId}/>],
     ['Vacancies', <HotelVacancies hotelId={hotelId}/>],
-    ['Room Data', <ShowRoomDataOwner hotelData={[]} hotelId={hotelId}/>],
+    ['Employees', <ShowHotelEmployees hotelId={hotelId}/>],
   ];
   const [WindowDashboard, setWindowHotelData] = useState<JSX.Element>(<ShowAllOwnerRoomsFromHotel hotelId={hotelId}/>)
   _setWindowHotelData = setWindowHotelData

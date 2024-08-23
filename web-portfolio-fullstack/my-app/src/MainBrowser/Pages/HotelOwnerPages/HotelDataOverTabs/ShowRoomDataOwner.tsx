@@ -16,6 +16,7 @@ interface ResponsiveAppBarProps {
 //simple. it shows all the data
 //here you can edit the room
 function ShowRoomDataOwner({ hotelData, hotelId }: ResponsiveAppBarProps) {
+
   return (
     <>
     <Grid container

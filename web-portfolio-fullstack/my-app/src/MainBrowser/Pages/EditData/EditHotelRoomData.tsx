@@ -97,12 +97,15 @@ var _setFormMessage: React.Dispatch<React.SetStateAction<FormStateMessage>>
 
 async function PatchHotelData(
   hotelId: string,
+  hotelRoomId:string,
   formStateString: FormStateString,
   formStateNumber: FormStateNumber,
   checkboxes: FormStateBoolean){
 
+    console.log(hotelRoomId)
     const credentials = {
       HotelId: hotelId,
+      hotelRoomId: hotelRoomId, 
       RoomNumber: formStateString.RoomNumber,
       RoomName: formStateString.RoomName,
       Employee: formStateString.Employee,
@@ -127,14 +130,14 @@ async function PatchHotelData(
       body: JSON.stringify(credentials),
     });
     if (!response.ok) {
-      if (response.status === 404){
+      if (response.status === 400){
         const errorData = await response.json();
-        _setHotelNameError(true)
-        _setHotelNameMessage(errorData.message)
+        handleErrors(errorData.message, credentials)
       }
     }
     else {
-      // const data = await response.json();
+      newDashboardWindow(<ShowHotelDataOwner hotelId={hotelId}/>)
+      _setOpen(false);
     }
     return response;
   } catch (error: any) {
@@ -145,8 +148,7 @@ async function DeleteRoom(roomId: string){
 ///delete room
 }
 
-var _setHotelNameMessage: React.Dispatch<React.SetStateAction<string>>
-var _setHotelNameError: React.Dispatch<React.SetStateAction<boolean>>
+var _setOpen: React.Dispatch<React.SetStateAction<boolean>>
 
 interface ResponsiveAppBarProps {
   hotelRoomData: any;
@@ -154,7 +156,7 @@ interface ResponsiveAppBarProps {
 }
 function EditHotelRoomData({ hotelRoomData, hotelId }: ResponsiveAppBarProps) {
   const [open, setOpen] = useState(true);
-
+  _setOpen = setOpen;
   const handleClose = async () => {
     setOpen(false);
     newDashboardWindow(<ShowHotelDataOwner hotelId={hotelId}/>)
@@ -228,8 +230,7 @@ function EditHotelRoomData({ hotelRoomData, hotelId }: ResponsiveAppBarProps) {
   };
 
   const handleSave = async () => {
-    setOpen(false);
-    await PatchHotelData(hotelId, formStateString, formStateNumber, checkboxes);
+    await PatchHotelData(hotelId, hotelRoomData.hotelRoomId ,formStateString, formStateNumber, checkboxes);
   };
 
 

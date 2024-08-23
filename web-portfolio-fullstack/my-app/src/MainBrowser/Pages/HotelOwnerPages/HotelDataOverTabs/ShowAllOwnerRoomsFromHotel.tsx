@@ -78,13 +78,6 @@ function ShowAllOwnerRoomsFromHotel({ hotelId }: ResponsiveAppBarProps) {
             <Grid item xs={12}>
               <TextfieldComponentDescription value={hotel.hotelRoomDescription} size={4}/>
             </Grid>
-            <Grid item xs={2}>
-            {/* <Button
-              variant="contained"
-              style={{ marginTop: 10 }}
-              onClick={() => newDashboardWindow( <ShowHotelDataOwner hotelId={hotel.hotelId}/>)}
-            >Check</Button> */}
-            </Grid>
           </Grid>
       ))}
     </>
