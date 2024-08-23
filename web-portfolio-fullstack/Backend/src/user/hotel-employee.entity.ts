@@ -4,10 +4,10 @@ import { User } from 'src/user/user.entity';
 @Entity()
 export class HotelEmployee {
   @PrimaryGeneratedColumn()
-  id: number;
+  EmployeeId: number;
 
   @Column()
-  name: string;
+  EmployeeName: string;
 
   @OneToOne(() => User, user => user.employee)
   user: User;

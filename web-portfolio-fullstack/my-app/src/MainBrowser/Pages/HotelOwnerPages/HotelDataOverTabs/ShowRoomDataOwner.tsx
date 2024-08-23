@@ -1,8 +1,5 @@
 import { Button, Checkbox, FormControlLabel, Grid } from '@mui/material';
-import React from 'react';
 import TextfieldComponent from '../../Components/TextfieldComponent';
-import TextfieldComponentDescription from '../../Components/TextfieldComponentDescription';
-import { CheckBox } from '@mui/icons-material';
 import { newDashboardWindow } from '../../DashboardPage';
 import EditHotelRoomData from '../../EditData/EditHotelRoomData';
 
@@ -11,10 +8,6 @@ interface ResponsiveAppBarProps {
   hotelId: string;
 }
 
-//check out the room id, if its empty, nothing is here.
-//if its filled, send it to the backend.
-//simple. it shows all the data
-//here you can edit the room
 function ShowRoomDataOwner({ hotelData, hotelId }: ResponsiveAppBarProps) {
 
   return (

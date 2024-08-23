@@ -36,8 +36,7 @@ export class PatchHotelRoomDto {
   @IsString()
   HotelId: string;
 
-  @IsNotEmpty()
-  @IsString()
+  //this is an option.
   hotelRoomId?: string;
 
   @IsNotEmpty()
@@ -87,4 +86,60 @@ export class PatchHotelRoomDto {
   @IsNotEmpty()
   @IsBoolean()
   Animals: boolean;
+}
+
+export class PatchHotelVacancyCreateDto {
+  @IsNotEmpty()
+  @IsString()
+  HotelId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  Description: string;
+
+  @IsString()
+  @IsNotEmpty()
+  jobName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  jobDescription: string;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  filled: string;
+
+  @IsString()
+  @IsNotEmpty()
+  employeeId: string;
+}
+
+export class PatchHotelVacancyPatchDto {
+  @IsNotEmpty()
+  @IsString()
+  VacancyId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  HotelId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  Description: string;
+
+  @IsString()
+  @IsNotEmpty()
+  jobName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  jobDescription: string;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  filled: string;
+
+  @IsString()
+  @IsNotEmpty()
+  employeeId: string;
 }

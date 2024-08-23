@@ -6,6 +6,7 @@ import ShowAllOwnerRoomsFromHotel from './HotelDataOverTabs/ShowAllOwnerRoomsFro
 import { Button, Grid } from '@mui/material';
 import CreateRoomPage from './HotelDataOverTabs/CreateRoomPage';
 import ShowRoomDataOwner from './HotelDataOverTabs/ShowRoomDataOwner';
+import HotelVacanciesCreate from './HotelDataOverTabs/HotelVacanciesCreate';
 
 export async function newHotelDataWindow(newWindow:JSX.Element) {
   if (!!_setWindowHotelData && !document.getElementById("ErrorPage"))
@@ -22,8 +23,9 @@ interface ResponsiveAppBarProps {
 function ShowHotelDataOwnerTabs({ hotelId, pageName }: ResponsiveAppBarProps) {
   
   const WebPages: Array<[string, JSX.Element]> = [
+    ['Create Room', <CreateRoomPage hotelId={hotelId}/>],
     ['Rooms', <ShowAllOwnerRoomsFromHotel hotelId={hotelId}/>],
-    ['Create', <CreateRoomPage hotelId={hotelId}/>],
+    ['Create Vacancy', <HotelVacanciesCreate hotelId={hotelId}/>],
     ['Vacancies', <HotelVacancies hotelId={hotelId}/>],
     ['Employees', <ShowHotelEmployees hotelId={hotelId}/>],
   ];
@@ -44,8 +46,7 @@ function ShowHotelDataOwnerTabs({ hotelId, pageName }: ResponsiveAppBarProps) {
       style={{
         marginTop: 10,
         display: 'flex',
-        justifyContent: 'center'}}>
-          
+        justifyContent: 'center'}}>      
         <Button
         fullWidth
         onClick={() => newHotelDataWindow(Links[1])}

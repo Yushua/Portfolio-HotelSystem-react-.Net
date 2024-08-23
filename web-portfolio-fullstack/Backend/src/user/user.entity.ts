@@ -32,8 +32,7 @@ export class User {
   //Hotels.
 
   @OneToMany(() => Hotels, hotels => hotels.user)
-  @JoinColumn()
-  hotels: Hotels;
+  hotels: Hotels[];
 
   //bookings
 

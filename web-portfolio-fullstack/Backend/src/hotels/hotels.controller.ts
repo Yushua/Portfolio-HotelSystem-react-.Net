@@ -23,6 +23,15 @@ export class HotelsController {
         return { hotelID };
       }
 
+      @Post(`CreateRoom`)
+      async CreateRoom(
+        @Request() req,
+        @Body() patchHotelRoomDto: PatchHotelRoomDto,
+      ):Promise<{hotelData: any}> {
+        const user: User = req.user;
+        return { hotelData: await this.hotelService.createRoom(patchHotelRoomDto) };
+      }
+
       @Get(`HotelOwner`)
       async HotelOwner(
         @Request() req,
@@ -41,14 +50,6 @@ export class HotelsController {
         await this.hotelService.PatchHotelData(user, patchHotelDto);
       }
 
-      @Patch(`CreateRoom`)
-      async CreateRoom(
-        @Request() req,
-        @Body() patchHotelRoomDto: PatchHotelRoomDto,
-      ) {
-        const user: User = req.user;
-        await this.hotelService.createRoom(patchHotelRoomDto);
-      }
 
       @Patch(`PatchHotelRoom`)
       async PatchHotelRoom(

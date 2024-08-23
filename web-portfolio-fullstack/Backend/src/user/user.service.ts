@@ -51,6 +51,8 @@ export class UserService {
       throw new UnauthorizedException('Invalid username');
     } else if (!(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid password');
+    } else {
+      console.log(user)
     }
     return user;
   }

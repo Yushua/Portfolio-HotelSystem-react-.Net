@@ -3,7 +3,8 @@
 import { Button, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import React from 'react';
 import { newDashboardWindow } from '../../DashboardPage';
-import ShowHotelDataOwnerTabs from '../ShowHotelDataOwnerTabs';
+import ShowHotelDataOwnerTabs, { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
+import ShowRoomDataOwner from './ShowRoomDataOwner';
 
 interface ResponsiveAppBarProps {
   hotelId: string;
@@ -119,9 +120,10 @@ async function createRoomHttp(
     };
 
     await resetErrorAndMessage();
+    console.log("making room")
     try {
       const response = await fetch("http://localhost:3000/hotels/CreateRoom", {
-        method: "PATCH",
+        method: "POST",
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -135,7 +137,8 @@ async function createRoomHttp(
           handleErrors(errorData.message, credentials)
         }
       } else {
-        newDashboardWindow(<ShowHotelDataOwnerTabs hotelId={hotelId}/>)
+        const data = await response.json();
+        newHotelDataWindow(<ShowRoomDataOwner hotelData={data["hotelData"]} hotelId={hotelId}/>)
       }
       return response;
     } catch (error: any) {
