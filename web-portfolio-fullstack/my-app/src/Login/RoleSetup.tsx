@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { newWindow } from '../App';
 import UserProfile from '../MainBrowser/Pages/UserPages/UserProfile';
 import MainBrowser from '../MainBrowser/MainBrowser';
@@ -22,9 +22,9 @@ const WebPages: Array<[string, JSX.Element]> = [
   ['Vacancies', <Vacancies/>],
 ];
 
-const filterWebPages = (pageNames: string[]): Array<[string, JSX.Element]> => {
-  return WebPages.filter(([name, _]) => pageNames.includes(name));
-};
+// const filterWebPages = (pageNames: string[]): Array<[string, JSX.Element]> => {
+//   return WebPages.filter(([name, _]) => pageNames.includes(name));
+// };
 
 //to do, add filter online.
 export async function filterRoles(): Promise<Array<[string, JSX.Element]>> {
@@ -36,8 +36,8 @@ export async function filterRoles(): Promise<Array<[string, JSX.Element]>> {
 }
 
 function RoleSetup(){
-  const [RoleWebList, setRoleWebList] = useState<Array<[string, JSX.Element]>>([]);
-  const [FavoriteWebList, setFavoriteWebList] = useState<Array<[string, JSX.Element]>>([]);
+  // const [RoleWebList, setRoleWebList] = useState<Array<[string, JSX.Element]>>([]);
+  // const [FavoriteWebList, setFavoriteWebList] = useState<Array<[string, JSX.Element]>>([]);
 
   useEffect(() => {
     const getRolesOfUser = async () => {
@@ -54,7 +54,7 @@ function RoleSetup(){
       newWindow(<MainBrowser webPages={WebPages} favoritePages={WebPages}/>);
     };
     getRolesOfUser();
-  }, [RoleWebList, FavoriteWebList]);
+  }, []);
 
     return (
       <>

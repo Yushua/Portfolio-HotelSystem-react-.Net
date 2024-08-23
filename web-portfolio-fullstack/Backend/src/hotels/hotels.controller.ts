@@ -2,7 +2,7 @@ import { Body, Controller, Get, Patch, Post, Request, UseGuards } from '@nestjs/
 import { HotelsService } from './hotels.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, GetHotelData, PatchHotelDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, GetHotelData, PatchHotelDto, PatchHotelRoomDto } from './DTO/create-hotelDto';
 
 @Controller('hotels')
 @UseGuards(AuthGuard('jwt'))
@@ -38,6 +38,16 @@ export class HotelsController {
         const user: User = req.user;
         await this.hotelService.PatchHotelData(user, patchHotelDto);
       }
+
+      @Patch(`CreateRoom`)
+      async CreateRoom(
+        @Request() req,
+        @Body() patchHotelRoomDto: PatchHotelRoomDto,
+      ) {
+        const user: User = req.user;
+        await this.hotelService.createRoom(patchHotelRoomDto);
+      }
+
 
       @Post(`GetHotelData`)
       async GetHotelData(

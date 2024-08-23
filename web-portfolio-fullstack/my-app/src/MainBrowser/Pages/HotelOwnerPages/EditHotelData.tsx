@@ -2,7 +2,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import { newDashboardWindow } from '../DashboardPage';
-import ShowAllOwnerHotels from './ShowAllOwnerHotels';
+import ShowHotelDataOwner from './ShowHotelDataOwner';
 async function PatchHotelData(hotelData: ResponsiveAppBarProps){
   const credentials = {
     HotelName: hotelData.hotelName,
@@ -27,12 +27,12 @@ async function PatchHotelData(hotelData: ResponsiveAppBarProps){
       }
     }
     else {
-      const data = await response.json();
+      // const data = await response.json();
     }
     return response;
   } catch (error: any) {
   }  
-  newDashboardWindow(<ShowAllOwnerHotels/>)
+  newDashboardWindow(<ShowHotelDataOwner hotelId={hotelData.hotelId}/>)
 }
 
 var _setHotelNameMessage: React.Dispatch<React.SetStateAction<string>>
@@ -53,7 +53,7 @@ function EditHotelData({ hotelId, hotelName, hotelDescription }: ResponsiveAppBa
 
   const handleClose = () => {
     setOpen(false);
-    newDashboardWindow(<ShowAllOwnerHotels/>)
+    newDashboardWindow(<ShowHotelDataOwner hotelId={hotelId}/>)
   };
 
   const handleChange = (e:any) => {
@@ -68,7 +68,6 @@ function EditHotelData({ hotelId, hotelName, hotelDescription }: ResponsiveAppBa
   const [HotelNameError, setHotelNameError] = useState<boolean>(false);
   _setHotelNameError = setHotelNameError
 
-  const [HotelDescription, setHotelDescription] = useState<string>('');
   const [HotelDescriptionMessage, setHotelDescriptionMessage] = useState<string>('');
   const [HotelDescriptionError, setHotelDescriptionError] = useState<boolean>(false);
 

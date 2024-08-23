@@ -1,7 +1,4 @@
 
-import React from 'react';
-import Vacancies from '../UserPages/Vacancies';
-
 function AllVacancies() {
   return (
     <>

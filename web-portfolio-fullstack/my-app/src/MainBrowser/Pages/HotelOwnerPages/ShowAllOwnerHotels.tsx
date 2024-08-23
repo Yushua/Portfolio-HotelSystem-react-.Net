@@ -1,9 +1,8 @@
 
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { newDashboardWindow } from '../DashboardPage';
 import ShowHotelDataOwner from './ShowHotelDataOwner';
-import EditHotelData from './EditHotelData';
 import TextfieldComponent from '../Components/TextfieldComponent';
 import TextfieldComponentDescription from '../Components/TextfieldComponentDescription';
 
@@ -19,7 +18,7 @@ async function getOwnerHotelData(){
     });
     if (!response.ok) {
       if (response.status === 404){
-        const errorData = await response.json();
+        // const errorData = await response.json();
       }
     }
     else {
@@ -49,22 +48,11 @@ function ShowAllOwnerHotels() {
     <>
       <Grid container className='container' spacing={6}>
       {hotels.map((hotel) => (
-        <Grid item xs={4}>
+        <Grid item xs={4} key={hotel.hotelId}>
           <TextfieldComponent value={hotel.hotelName}/>
           <TextfieldComponent value={hotel.hotelOwner}/>
           <TextfieldComponentDescription value={hotel.hotelDescription} size={4}/>
           <Grid container spacing={6}>
-            <Grid item xs={2}>
-            <Button
-              variant="contained"
-              style={{ marginTop: 10 }}
-              onClick={() => newDashboardWindow(<EditHotelData
-                hotelId={hotel.hotelId}
-                hotelName={hotel.hotelName}
-                hotelDescription={hotel.hotelDescription}
-                />)}
-            >edit</Button>
-            </Grid>
             <Grid item xs={2}>
             <Button
               variant="contained"

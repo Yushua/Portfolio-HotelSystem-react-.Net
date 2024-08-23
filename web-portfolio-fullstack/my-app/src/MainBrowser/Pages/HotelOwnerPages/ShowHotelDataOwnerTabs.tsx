@@ -1,20 +1,17 @@
 
 import React, { useState } from 'react';
-import DashboardPageInfo from '../DashboardInfo';
-import CreateRoomPage from './HotelDataOverTabs/CreateRoomPage';
 import ShowOccupiedHotelRoomsOwner from './HotelDataOverTabs/ShowOccupiedHotelRoomsOwner';
 import ShowHotelEmployees from './HotelDataOverTabs/ShowHotelEmployees';
 import HotelVacancies from './HotelDataOverTabs/HotelVacancies';
 import ShowVacantHotelRoomsOwner from './HotelDataOverTabs/ShowVacantHotelRoomsOwner';
 import ShowAllOwnerRoomsFromHotel from './HotelDataOverTabs/ShowAllOwnerRoomsFromHotel';
 import { Button, Grid } from '@mui/material';
+import CreateRoomPage from './HotelDataOverTabs/CreateRoomPage';
 
 export async function newHotelDataWindow(newWindow:JSX.Element) {
   if (!!_setWindowHotelData && !document.getElementById("ErrorPage"))
     _setWindowHotelData(newWindow)
 }
-
-
 
 var _setWindowHotelData: React.Dispatch<React.SetStateAction<JSX.Element>> | null = null
 
@@ -38,7 +35,12 @@ function ShowHotelDataOwnerTabs({ hotelId }: ResponsiveAppBarProps) {
   return (
     <>
     {WebPages.map((Links) => (
-      <Grid item xs={2} style={{ marginTop: 10, display: 'flex', justifyContent: 'center'}}>
+      <Grid item xs={2} key={Links[0]} 
+      style={{
+        marginTop: 10,
+        display: 'flex',
+        justifyContent: 'center'}}>
+          
         <Button
         fullWidth
         onClick={() => newHotelDataWindow(Links[1])}

@@ -7,13 +7,13 @@ export class HotelRooms {
   hotelRoomId: string;
 
   @Column()
-  hotelRoomNumber: number;
+  hotelRoomNumber: string;
 
   @Column()
-  hotelRoomName: number;
+  hotelRoomName: string;
 
   @Column()
-  hotelRoomEmployee: number;
+  hotelRoomEmployee: string;
 
   @Column()
   hotelRoomDescription: string;

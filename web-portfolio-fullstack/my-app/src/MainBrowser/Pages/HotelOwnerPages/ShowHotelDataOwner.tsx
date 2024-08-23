@@ -1,9 +1,10 @@
-import { Grid, TextField } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import ShowHotelEmployees from "./HotelDataOverTabs/ShowHotelEmployees";
 import ShowHotelDataOwnerTabs from "./ShowHotelDataOwnerTabs";
 import TextfieldComponent from "../Components/TextfieldComponent";
 import TextfieldComponentDescription from "../Components/TextfieldComponentDescription";
+import { newDashboardWindow } from "../DashboardPage";
+import EditHotelData from "./EditHotelData";
 
 async function getOwnerHotelData(hotelID: string){
   const credentials = {
@@ -66,6 +67,18 @@ function ShowHotelDataOwner({ hotelId }: ResponsiveAppBarProps) {
       <Grid item xs={12}>
         <TextfieldComponentDescription value={hotel.hotelDescription} size={4}/>
       </Grid>
+
+      <Grid item xs={12}>
+        <Button
+          variant="contained"
+          onClick={() => newDashboardWindow(<EditHotelData
+            hotelId={hotel.hotelId}
+            hotelName={hotel.hotelName}
+            hotelDescription={hotel.hotelDescription}
+            />)}
+        >edit</Button>
+      </Grid>
+
     <ShowHotelDataOwnerTabs hotelId={hotelId}/>
     </Grid>
     </>

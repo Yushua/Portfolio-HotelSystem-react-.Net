@@ -1,9 +1,9 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, PatchHotelDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, PatchHotelDto, PatchHotelRoomDto } from './DTO/create-hotelDto';
 import { HotelRooms } from './hotelsRooms.entity';
 
 @Injectable()
@@ -36,6 +36,59 @@ export class HotelsService {
     const savedHotel = await this.HotelsEntity.save(newHotel);
 
     return savedHotel.hotelId;
+  }
+
+  async createRoom(patchHotelRoomDto: PatchHotelRoomDto): Promise<void> {
+    const hotel = await this.HotelsEntity.findOne({
+      where: { hotelId: patchHotelRoomDto.HotelId },
+    });
+  
+    if (!hotel) {
+      throw new Error('Hotel not found');
+    }
+    const existingRooms = await this.HotelRoomsEntity.find({
+      where: { hotel: hotel },
+    });
+
+    const roomNumberExists = existingRooms.some(room => room.hotelRoomNumber === patchHotelRoomDto.RoomNumber);
+    const roomNameExists = existingRooms.some(room => room.hotelRoomName === patchHotelRoomDto.RoomName);
+    const errors = [];
+      if (roomNumberExists) {
+        errors.push('RoomNumber already exists');
+      }
+
+      if (roomNameExists) {
+        errors.push('RoomName already exists');
+      }
+    if (!roomNumberExists && !roomNameExists){
+      const newRoom = this.HotelRoomsEntity.create({
+        hotelRoomNumber: patchHotelRoomDto.RoomNumber,
+        hotelRoomName: patchHotelRoomDto.RoomName,
+        hotelRoomEmployee: patchHotelRoomDto.Employee,
+        hotelRoomDescription: patchHotelRoomDto.HotelDescription,
+        Kitchen: patchHotelRoomDto.Kitchen,
+        Wifi: patchHotelRoomDto.Wifi,
+        Breakfast: patchHotelRoomDto.Breakfast,
+        Roomservice: patchHotelRoomDto.Roomservice,
+        Animals: patchHotelRoomDto.Animals,
+        BigBed: patchHotelRoomDto.BigBeds,
+        SmallBed: patchHotelRoomDto.SmallBeds,
+        Rooms: patchHotelRoomDto.Rooms,
+        hotel: hotel
+      });
+      try {
+        await this.HotelRoomsEntity.save(newRoom);
+      } catch (error) {
+        console.error('Error saving new room:', error);
+        throw new Error('Error saving new room');
+      }
+    } else {
+      throw new HttpException(
+        { message: errors },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    console.log("done")
   }
 
   /* get data */
