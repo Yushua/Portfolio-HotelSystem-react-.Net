@@ -2,9 +2,9 @@
 
 import { Button, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import React from 'react';
-import { newDashboardWindow } from '../../DashboardPage';
-import ShowHotelDataOwnerTabs, { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
-import ShowRoomDataOwner from './ShowRoomDataOwner';
+import ShowRoomDataOwner from '../HotelDataOverTabs/ShowRoomDataOwner';
+import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
+import { FormBoolean } from '../HotelDataOverTabs/CreateFunctions';
 
 interface ResponsiveAppBarProps {
   hotelId: string;
@@ -44,10 +44,6 @@ type FormStateBoolean = {
   Shower: boolean,
   Animals: boolean,
   [key: string]: boolean; // Allows additional properties with boolean values
-};
-
-type FormBoolean = {
-  [key: string]: boolean; // This allows for dynamic keys representing each field's error state
 };
 
 const validateFieldErrors = (name: string) => {
@@ -191,6 +187,9 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
         ...prevState,
         [name]: value,
       }));
+    } else {
+      validateFieldErrors(name)
+      validateFieldmessage(name, "only use numbers")
     }
   };
 
@@ -350,7 +349,6 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           onChange={handleOnChangeValueNumber}
           error={!!formErrors.BigBeds}
           helperText={formMessage.BigBeds}
-
         />
       </Grid>
       <Grid item xs={4}>

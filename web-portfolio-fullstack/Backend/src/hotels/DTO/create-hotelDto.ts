@@ -16,6 +16,11 @@ export class GetHotelData {
   HotelId: string;
 }
 
+export class GetVacancyData {
+  @IsNotEmpty()
+  @IsString()
+  vacancyId: string;
+}
 
 export class PatchHotelDto {
   @IsNotEmpty()
@@ -95,23 +100,19 @@ export class PatchHotelVacancyCreateDto {
 
   @IsString()
   @IsNotEmpty()
-  Description: string;
-
-  @IsString()
-  @IsNotEmpty()
   jobName: string;
 
   @IsString()
   @IsNotEmpty()
   jobDescription: string;
 
-  @IsBoolean()
-  @IsNotEmpty()
-  filled: string;
-
   @IsString()
   @IsNotEmpty()
-  employeeId: string;
+  jobTitle: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  jobPay: number;
 }
 
 export class PatchHotelVacancyPatchDto {
@@ -125,7 +126,7 @@ export class PatchHotelVacancyPatchDto {
 
   @IsString()
   @IsNotEmpty()
-  Description: string;
+  jobDescription: string;
 
   @IsString()
   @IsNotEmpty()
@@ -133,13 +134,9 @@ export class PatchHotelVacancyPatchDto {
 
   @IsString()
   @IsNotEmpty()
-  jobDescription: string;
+  jobPay: number;
 
   @IsBoolean()
   @IsNotEmpty()
   filled: string;
-
-  @IsString()
-  @IsNotEmpty()
-  employeeId: string;
 }

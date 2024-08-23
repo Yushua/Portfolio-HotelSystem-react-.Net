@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import TextfieldComponent from '../../Components/TextfieldComponent';
 import TextfieldComponentDescription from '../../Components/TextfieldComponentDescription';
 import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
-import ShowRoomDataOwner from './ShowRoomDataOwner';
+import ShowRoomDataOwner from '../HotelDataOverTabs/ShowRoomDataOwner';
 
 async function getOwnerHotelRooms(hotelId: string){
 

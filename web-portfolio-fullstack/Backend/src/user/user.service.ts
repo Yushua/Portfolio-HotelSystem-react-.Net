@@ -10,8 +10,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { moderatorCredentialsDto } from 'src/auth/dto/auth-moderator-credentials.dto';
 import * as bcrypt from 'bcrypt';
-import { WebBrowserDtoPatch } from './dto/WebBrowserDtoPatch';
-import { HotelEmployee } from './hotel-employee.entity';
 // import { WebserviceService } from 'src/webservice/webservice.service';
 
 @Injectable()
@@ -19,8 +17,6 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userEntity: Repository<User>,
-    @InjectRepository(HotelEmployee)
-    private readonly employeeEntity: Repository<HotelEmployee>,
   ) {}
 
   /*
@@ -51,8 +47,6 @@ export class UserService {
       throw new UnauthorizedException('Invalid username');
     } else if (!(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid password');
-    } else {
-      console.log(user)
     }
     return user;
   }

@@ -10,14 +10,13 @@ import { Task } from './tasks/task.entity';
 import { JwtService } from '@nestjs/jwt';
 import { HotelsModule } from './hotels/hotels.module';
 import { Hotels } from './hotels/hotels.entity';
-import { HotelEmployee } from './user/hotel-employee.entity';
 import { HotelRooms } from './hotels/hotelsRooms.entity';
 
 @Module({
   imports: [
     UserModule,
     TasksModule,
-    TypeOrmModule.forFeature([User, Task, HotelRooms, Hotels, HotelEmployee]), // Include Website entity in TypeOrmModule.forFeature
+    TypeOrmModule.forFeature([User, Task, HotelRooms, Hotels]), // Include Website entity in TypeOrmModule.forFeature
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

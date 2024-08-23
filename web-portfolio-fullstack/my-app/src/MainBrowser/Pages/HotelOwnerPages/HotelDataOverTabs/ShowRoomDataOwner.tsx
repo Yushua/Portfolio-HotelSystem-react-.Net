@@ -65,6 +65,9 @@ function ShowRoomDataOwner({ hotelData, hotelId }: ResponsiveAppBarProps) {
           <TextfieldComponent value={hotelData.Rooms}/>
         </Grid>
         <Grid item xs={12}>
+          <TextfieldComponent value={hotelData.roomDescription}/>
+        </Grid>
+        <Grid item xs={12}>
           <Button
             variant="contained"
             onClick={() => newDashboardWindow(<EditHotelRoomData

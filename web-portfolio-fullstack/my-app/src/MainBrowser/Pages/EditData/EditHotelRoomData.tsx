@@ -3,7 +3,6 @@ import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Fo
 import React, { useState } from 'react';
 import { newDashboardWindow } from '../DashboardPage';
 import ShowHotelDataOwner from '../HotelOwnerPages/ShowHotelDataOwner';
-import ShowHotelDataOwnerTabs, { newHotelDataWindow } from '../HotelOwnerPages/ShowHotelDataOwnerTabs';
 
 type FormStateString = {
   RoomNumber: string;
@@ -41,7 +40,7 @@ type FormStateBoolean = {
   [key: string]: boolean; // Allows additional properties with boolean values
 };
 
-type FormBoolean = {
+export type FormBoolean = {
   [key: string]: boolean; // This allows for dynamic keys representing each field's error state
 };
 

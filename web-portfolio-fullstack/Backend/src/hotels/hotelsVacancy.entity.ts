@@ -9,15 +9,18 @@ export class HotelVacancy {
   @ManyToOne(() => Hotels, (hotels) => hotels.hotelrooms)
   hotel: Hotels;
 
-  @Column({ default: '' })
+  @Column()
   jobName: string;
 
-  @Column({ default: '' })
+  @Column()
+  jobTitle: string;
+
+  @Column()
+  jobPay: number;
+
+  @Column()
   jobDescription: string;
 
-  @Column({ unique: true })
-  filled: boolean;
-
-  @Column({ default: '' })
-  employeeId: string;
+  @Column('text', { array: true, default: '{}' })
+  employeeId: string[];
 }

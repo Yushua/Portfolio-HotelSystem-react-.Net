@@ -5,11 +5,12 @@ import Vacancies from '../../UserPages/Vacancies';
 interface ResponsiveAppBarProps {
   hotelId: string;
 }
-function HotelVacanciesCreate({ hotelId }: ResponsiveAppBarProps) {
+function HotelVacancies({ hotelId }: ResponsiveAppBarProps) {
   return (
     <>
+      show all vacancies
     </>
   );
 }
 
-export default HotelVacanciesCreate;
+export default HotelVacancies;

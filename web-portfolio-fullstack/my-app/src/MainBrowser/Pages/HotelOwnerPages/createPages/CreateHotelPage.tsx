@@ -1,8 +1,8 @@
 
 import { Button, Grid, TextField } from '@mui/material';
 import React, { useState } from 'react';
-import { newDashboardWindow } from '../DashboardPage';
-import ShowHotelDataOwner from './ShowHotelDataOwner';
+import { newDashboardWindow } from '../../DashboardPage';
+import ShowHotelDataOwner from '../ShowHotelDataOwner';
 
 async function sendData(HotelName: string, Description: string){
   const credentials = {

@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, PatchHotelDto, PatchHotelRoomDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto } from './DTO/create-hotelDto';
 import { HotelRooms } from './hotelsRooms.entity';
+import { HotelVacancy } from './hotelsVacancy.entity';
 
 @Injectable()
 export class HotelsService {
@@ -15,6 +16,8 @@ export class HotelsService {
     private readonly HotelsEntity: Repository<Hotels>,
     @InjectRepository(HotelRooms)
     private readonly HotelRoomsEntity: Repository<HotelRooms>,
+    @InjectRepository(HotelVacancy)
+    private readonly HotelVacancyEntity: Repository<HotelVacancy>,
   ) {}
 
 
@@ -90,6 +93,47 @@ export class HotelsService {
     return newRoom;
   }
 
+  async createVacancy(patchHotelVacancyCreateDto: PatchHotelVacancyCreateDto): Promise<any> {
+    const hotel = await this.HotelsEntity.findOne({
+      where: { hotelId: patchHotelVacancyCreateDto.HotelId },
+    });
+  
+    if (!hotel) {
+      throw new Error('Hotel not found');
+    }
+    console.log(hotel.hotelName)
+    const existingRooms = await this.HotelVacancyEntity.find({
+      where: { hotel: hotel },
+    });
+
+    const jobNameVacancyExists = existingRooms.some(room => room.jobName === patchHotelVacancyCreateDto.jobName);
+    const errors = [];
+      if (jobNameVacancyExists) {
+        errors.push('jobName for this hotel already exists');
+      }
+    if (jobNameVacancyExists){
+      throw new HttpException(
+        { message: errors },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const newVacancy = this.HotelVacancyEntity.create({
+      hotel: hotel,
+      jobName: patchHotelVacancyCreateDto.jobName,
+      jobTitle: patchHotelVacancyCreateDto.jobTitle,
+      jobPay: patchHotelVacancyCreateDto.jobPay,
+      jobDescription: patchHotelVacancyCreateDto.jobDescription,
+      employeeId: []
+    });
+    try {
+      await this.HotelVacancyEntity.save(newVacancy);
+    } catch (error) {
+      console.error('Error saving new room:', error);
+      throw new Error('Error saving new room');
+    }
+    return newVacancy;
+  }
+
   async PatchHotelRoomOwner(patchHotelRoomDto: PatchHotelRoomDto): Promise<void> {
     const hotel = await this.HotelsEntity.findOne({
       where: { hotelId: patchHotelRoomDto.HotelId },
@@ -103,7 +147,6 @@ export class HotelsService {
       where: { hotel: hotel },
     });
 
-    
     const roomNumberExists = existingRooms.some(room => room.hotelRoomNumber === patchHotelRoomDto.RoomNumber);
     const roomNameExists = existingRooms.some(room => room.hotelRoomName === patchHotelRoomDto.RoomName);
     const errors = [];

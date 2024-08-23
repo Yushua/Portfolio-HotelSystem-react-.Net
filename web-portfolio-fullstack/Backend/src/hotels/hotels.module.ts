@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
 import { HotelRooms } from './hotelsRooms.entity';
 import { User } from 'src/user/user.entity';
-import { HotelVacancy } from './hotelsVacancy';
+import { HotelVacancy } from './hotelsVacancy.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Hotels, HotelRooms, User, HotelVacancy])],

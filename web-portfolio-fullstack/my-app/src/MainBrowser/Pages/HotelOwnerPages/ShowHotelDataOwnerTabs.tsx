@@ -1,12 +1,11 @@
 
 import React, { useEffect, useState } from 'react';
-import ShowHotelEmployees from './HotelDataOverTabs/ShowHotelEmployees';
-import HotelVacancies from './HotelDataOverTabs/HotelVacancies';
-import ShowAllOwnerRoomsFromHotel from './HotelDataOverTabs/ShowAllOwnerRoomsFromHotel';
+import ShowHotelEmployees from './showPages/ShowHotelEmployees';
+import HotelVacancies from './showPages/HotelVacancies';
+import ShowAllOwnerRoomsFromHotel from './showPages/ShowAllOwnerRoomsFromHotel';
 import { Button, Grid } from '@mui/material';
-import CreateRoomPage from './HotelDataOverTabs/CreateRoomPage';
-import ShowRoomDataOwner from './HotelDataOverTabs/ShowRoomDataOwner';
-import HotelVacanciesCreate from './HotelDataOverTabs/HotelVacanciesCreate';
+import HotelVacanciesCreate from './createPages/HotelVacanciesCreate';
+import CreateRoomPage from './createPages/CreateRoomPage';
 
 export async function newHotelDataWindow(newWindow:JSX.Element) {
   if (!!_setWindowHotelData && !document.getElementById("ErrorPage"))
