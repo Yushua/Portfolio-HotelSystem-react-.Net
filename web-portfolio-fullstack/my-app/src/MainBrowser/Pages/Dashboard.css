@@ -98,6 +98,13 @@
     padding-bottom: 2rem!important;
   }
 
+  .dialogContainer {
+    width: 78rem!important;
+    padding: 1rem!important;
+    display: flex;
+    justify-content: center!important;
+  }
+
   .buttonContainerTabsData {
     display: flex;
     margin-top: 3rem!important;
