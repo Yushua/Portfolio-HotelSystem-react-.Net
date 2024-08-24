@@ -107,4 +107,15 @@ export class HotelsController {
         const user: User = req.user;
         await this.hotelService.PatchVacancyData(patchHotelVacancyPatchDto, user);
       }
+
+      @Get("GetAllVacanciesuser")
+      async GetAllVacanciesuser(
+        @Request() req,
+      ) {
+        const user: User = req.user;
+        
+        // await this.hotelService.PatchVacancyData(patchHotelVacancyPatchDto, user);
+
+        // return(vacancyData: await this.hotelService.GetAllVacancyData(patchHotelVacancyPatchDto, user))
+      }
 }

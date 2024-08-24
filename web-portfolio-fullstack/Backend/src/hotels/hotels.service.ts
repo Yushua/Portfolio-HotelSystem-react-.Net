@@ -101,12 +101,11 @@ export class HotelsService {
     if (!hotel) {
       throw new Error('Hotel not found');
     }
-    console.log(hotel.hotelName)
-    const existingRooms = await this.HotelVacancyEntity.find({
+    const vacancies = await this.HotelVacancyEntity.find({
       where: { hotel: hotel },
     });
 
-    const jobNameVacancyExists = existingRooms.some(room => room.jobName === patchHotelVacancyCreateDto.jobName);
+    const jobNameVacancyExists = vacancies.some(room => room.jobName === patchHotelVacancyCreateDto.jobName);
     const errors = [];
       if (jobNameVacancyExists) {
         errors.push('jobName for this hotel already exists');
@@ -123,7 +122,6 @@ export class HotelsService {
       jobTitle: patchHotelVacancyCreateDto.jobTitle,
       jobPay: patchHotelVacancyCreateDto.jobPay,
       jobDescription: patchHotelVacancyCreateDto.jobDescription,
-      employeeId: []
     });
     try {
       await this.HotelVacancyEntity.save(newVacancy);
@@ -297,10 +295,25 @@ export class HotelsService {
 
   async PatchVacancyData(patchHotelVacancyPatchDto: PatchHotelVacancyPatchDto, user: User) {
 
-    const vacancy = this.ft_getVacancyData(patchHotelVacancyPatchDto.VacancyId);
-    await this.ft_getHotelData((await vacancy).hotel.hotelId, user.id)
+    const vacancy = await this.ft_getVacancyData(patchHotelVacancyPatchDto.VacancyId);
     
-    
+    const hotel = await this.ft_getHotelData(vacancy.hotel.hotelId, user.id);
+
+    const vacancies = await this.HotelVacancyEntity.find({
+      where: { hotel: hotel },
+    });
+
+    const jobNameVacancyExists = vacancies.some(room => room.jobName === patchHotelVacancyPatchDto.jobName);
+    const errors = [];
+      if (jobNameVacancyExists) {
+        errors.push('jobName for this hotel already exists');
+      }
+
+    vacancy.jobName = patchHotelVacancyPatchDto.jobName;
+    vacancy.jobTitle = patchHotelVacancyPatchDto.jobTitle;
+    vacancy.jobPay = patchHotelVacancyPatchDto.jobPay;
+    vacancy.jobDescription = patchHotelVacancyPatchDto.jobDescription;
+    await this.HotelVacancyEntity.save(vacancy);
   }
 
   // /* check information */

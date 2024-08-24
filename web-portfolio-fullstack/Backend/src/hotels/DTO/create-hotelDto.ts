@@ -128,6 +128,10 @@ export class PatchHotelVacancyPatchDto {
   @IsNotEmpty()
   jobName: string;
 
+  @IsString()
+  @IsNotEmpty()
+  jobTitle: string;
+
   @IsNumber()
   @IsNotEmpty()
   jobPay: number;

@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
 import { UserStatus } from './user.model';
 import { Hotels } from 'src/hotels/hotels.entity';
+import { HotelVacancy } from 'src/hotels/hotelsVacancy.entity';
 
 @Entity()
 export class User {
@@ -34,4 +35,7 @@ export class User {
   hotels: Hotels[];
 
   //employeeData
+
+  @ManyToOne(() => HotelVacancy, vacancy => vacancy.employees)
+  vacancy: HotelVacancy;
 }

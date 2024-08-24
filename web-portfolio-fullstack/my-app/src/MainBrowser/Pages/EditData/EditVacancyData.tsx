@@ -86,6 +86,7 @@ async function PatchVacancyData(
       jobDescription: formStateString.jobDescription,
       jobName: formStateString.jobName,
       jobPay: formStateNumber.jobPay,
+      jobTitle: formStateString.jobTitle,
     };
   try {
     const response = await fetch("http://localhost:3000/hotels/PatchHotelVacancyDataOwner", {
@@ -104,8 +105,8 @@ async function PatchVacancyData(
       }
     }
     else {
-      // _setOpen(false);
-      // newHotelDataWindow(<HotelVacancies hotelId={hotelId}/>)
+      _setOpen(false);
+      newHotelDataWindow(<HotelVacancies hotelId={hotelId}/>)
     }
     return response;
   } catch (error: any) {

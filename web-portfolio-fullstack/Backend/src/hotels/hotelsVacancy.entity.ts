@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Hotels } from './hotels.entity';
+import { User } from 'src/user/user.entity';
 
 @Entity()
 export class HotelVacancy {
@@ -21,6 +22,7 @@ export class HotelVacancy {
   @Column()
   jobDescription: string;
 
-  @Column('text', { array: true, default: '{}' })
-  employeeId: string[];
+  //add an emplpyee here, so I can see, oh... this one applied to this vacancy
+  @OneToMany(() => User, (employees) => employees.vacancy)
+  employees: User;
 }
