@@ -373,23 +373,49 @@ export class HotelsService {
     return VacanciesData;
   }
 
-  async applyToVacancy(user: User, vacancyId: string){
-
+  async applyToVacancy(user: User, vacancyId: string) {
     const vacancy = await this.HotelVacancyEntity.findOne({
       where: { VacancyId: vacancyId },
       relations: ['users'],  // Fetch the users related to this vacancy
     });
+  
     if (!vacancy) {
-      throw new NotFoundException(`Vacancy with ID ${vacancyId} not found`);
+      throw new UnauthorizedException();
     }
-
+  
     const hasAlreadyApplied = vacancy.users.some(u => u.id === user.id);
     if (hasAlreadyApplied) {
       throw new BadRequestException('User has already applied to this vacancy.');
-    }//apply error 404
-    vacancy.users.push(user);
+    }
+  
+    vacancy.users.push(user);  // Add user to vacancy's user list
+  
     await this.HotelVacancyEntity.save(vacancy);
   }
+
+  async removedFromVacancy(user: User, userId: string, vacancyId: string) {
+    const vacancy = await this.HotelVacancyEntity.findOne({
+      where: { VacancyId: vacancyId },
+      relations: ['users', 'hotel', 'hotel.user'],  // Include hotel and hotel owner
+    });
+
+    if (!vacancy) {
+      throw new UnauthorizedException();
+    }
+
+    const isOwner = vacancy.hotel.user.id === user.id;  // Check if hotel owner matches the requesting user
+    if (!isOwner) {
+      throw new UnauthorizedException();
+    }
+
+    const userIndex = vacancy.users.findIndex(u => u.id === userId);
+    if (userIndex === -1) {
+      throw new NotFoundException('User is not applied to this vacancy.');
+    }
+    vacancy.users.splice(userIndex, 1);
+
+    await this.HotelVacancyEntity.save(vacancy);
+  } 
 
   // /* check information */
   // async checkHotel(hotelId: string): Promise<Hotels>{

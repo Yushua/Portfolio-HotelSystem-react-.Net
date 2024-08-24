@@ -22,6 +22,16 @@ export class GetVacancyData {
   vacancyId: string;
 }
 
+export class DeleteEmployeeFromVacancyDTO {
+  @IsNotEmpty()
+  @IsString()
+  vacancyId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+}
+
 export class PatchHotelDto {
   @IsNotEmpty()
   @IsString()

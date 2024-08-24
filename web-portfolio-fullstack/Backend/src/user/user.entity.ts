@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn, ManyToMany, ManyToOne, JoinTable } from 'typeorm';
 import { UserStatus } from './user.model';
 import { Hotels } from 'src/hotels/hotels.entity';
 import { HotelVacancy } from 'src/hotels/hotelsVacancy.entity';
@@ -36,6 +36,7 @@ export class User {
 
   //employeeData
 
-  @ManyToOne(() => HotelVacancy, vacancy => vacancy.users)
-  vacancy: HotelVacancy;
+  @ManyToMany(() => HotelVacancy, vacancy => vacancy.users)
+  @JoinTable() // Join table to manage the many-to-many relationship
+  vacancies: HotelVacancy[];
 }

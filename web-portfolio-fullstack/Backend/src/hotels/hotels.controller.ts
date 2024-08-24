@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { HotelsService } from './hotels.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { Hotels } from './hotels.entity';
 import { HotelRooms } from './hotelsRooms.entity';
 
@@ -135,4 +135,15 @@ export class HotelsController {
         const user: User = req.user;
         await this.hotelService.applyToVacancy(user, getVacancyData.vacancyId);
       }
+
+      @Delete("DeleteEmployeeFromVacancy")
+      async DeleteEmployeeFromVacancy(
+        @Request() req,
+        @Body() deleteEmployeeFromVacancyDTO: DeleteEmployeeFromVacancyDTO,
+      ) {
+        const user: User = req.user;
+        await this.hotelService.removedFromVacancy(user, deleteEmployeeFromVacancyDTO.userId, deleteEmployeeFromVacancyDTO.vacancyId)
+      }
+
+
 }
