@@ -5,12 +5,6 @@ import TextfieldComponent from '../../Components/TextfieldComponent';
 import { newDashboardWindow } from '../../DashboardPage';
 import EditVacancyData from '../../EditData/EditVacancyData';
 
-interface ResponsiveAppBarProps {
-  vacancyData?: any;
-  vacancyid?: string;
-  hotelId: string;
-}
-
 async function getVacancyDataHttp(vacancyid:string){
   try {
     const response = await fetch("http://localhost:3000/hotels/GetVacancyDays", {
@@ -35,11 +29,18 @@ async function getVacancyDataHttp(vacancyid:string){
 
 }
 
+interface ResponsiveAppBarProps {
+  vacancyData?: any;
+  vacancyid?: string;
+  hotelId: string;
+}
+
 var _setVacancyDataStored: React.Dispatch<React.SetStateAction<any>>
 
 function HotelVacancyOwner({ vacancyData, vacancyid }: ResponsiveAppBarProps) {
   const [vacancyDataStored, setVacancyDataStored] = useState<any>([]);
   _setVacancyDataStored = setVacancyDataStored;
+
     useEffect(() => {
     if (vacancyid !== undefined){
       getVacancyDataHttp(vacancyid);
@@ -47,6 +48,7 @@ function HotelVacancyOwner({ vacancyData, vacancyid }: ResponsiveAppBarProps) {
       setVacancyDataStored(vacancyData);
     }
   }, [vacancyData, vacancyid]);
+
   return (
     <>
     <Grid container
@@ -80,6 +82,8 @@ function HotelVacancyOwner({ vacancyData, vacancyid }: ResponsiveAppBarProps) {
           >edit</Button>
         </Grid>
       </Grid>
+      show all applicants, only their name (more info could be added, like email, location, address, info, etc,
+      even a work history tab)
     </>
   );
 }

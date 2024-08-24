@@ -22,9 +22,7 @@ async function getOwnerHotelRooms(hotelId: string){
       body: JSON.stringify(credentials),
     });
     if (!response.ok) {
-      if (response.status === 404){
-        // const errorData = await response.json();
-      }
+      //handleError
     }
     else {
       const data = await response.json();

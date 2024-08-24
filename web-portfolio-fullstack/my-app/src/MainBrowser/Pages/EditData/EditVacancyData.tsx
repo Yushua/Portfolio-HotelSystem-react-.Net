@@ -79,14 +79,15 @@ async function PatchVacancyData(
   formStateString: FormStateString,
   formStateNumber: FormStateNumber){
 
+    console.log(vacancyId)
     const credentials = {
-      vacancyId: vacancyId, 
-      jobdescription: formStateString.jobDescription,
+      VacancyId: vacancyId, 
+      jobDescription: formStateString.jobDescription,
       jobName: formStateString.jobName,
       jobPay: formStateNumber.jobPay,
     };
   try {
-    const response = await fetch("http://localhost:3000/hotels/PatchHotelVacancyOwner", {
+    const response = await fetch("http://localhost:3000/hotels/PatchHotelVacancyDataOwner", {
       method: "PATCH",
       headers: {
         Accept: 'application/json',
@@ -103,7 +104,7 @@ async function PatchVacancyData(
     }
     else {
       // newDashboardWindow(<ShowHotelDataOwner hotelId={hotelId}/>)
-      _setOpen(false);
+      // _setOpen(false);
     }
     return response;
   } catch (error: any) {
@@ -121,6 +122,7 @@ interface ResponsiveAppBarProps {
 }
 
 function EditVacancyData({ vacancyData }: ResponsiveAppBarProps) {
+
   const [open, setOpen] = useState(true);
   _setOpen = setOpen;
 
@@ -145,6 +147,7 @@ function EditVacancyData({ vacancyData }: ResponsiveAppBarProps) {
     jobDescription: vacancyData.jobDescription,
     jobTitle: vacancyData.jobTitle,
   });
+
   const handleOnChangeValueString = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setFormStateString({
@@ -173,12 +176,11 @@ function EditVacancyData({ vacancyData }: ResponsiveAppBarProps) {
   };
 
   const handleSave = async () => {
-    await PatchVacancyData(vacancyData.vacancyId ,formStateString, formStateNumber);
+    await PatchVacancyData(vacancyData.VacancyId ,formStateString, formStateNumber);
   };
 
   return (
     <>
-      EditVacancyData
       <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth={true}>
         <DialogTitle>Edit vacancy</DialogTitle>
         <Grid container className='dialogContainer' spacing={6} >

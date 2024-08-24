@@ -120,10 +120,6 @@ export class PatchHotelVacancyPatchDto {
   @IsString()
   VacancyId: string;
 
-  @IsNotEmpty()
-  @IsString()
-  HotelId: string;
-
   @IsString()
   @IsNotEmpty()
   jobDescription: string;
@@ -132,11 +128,7 @@ export class PatchHotelVacancyPatchDto {
   @IsNotEmpty()
   jobName: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   jobPay: number;
-
-  @IsBoolean()
-  @IsNotEmpty()
-  filled: string;
 }

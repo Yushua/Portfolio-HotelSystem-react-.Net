@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, GetHotelData, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { HotelRooms } from './hotelsRooms.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
 
@@ -201,22 +201,66 @@ export class HotelsService {
     return (userWithHotels.hotels)
   }
 
+  async getVacanciesData(user: User, getHotelData: GetHotelData):Promise <any[]> {
+
+    //check to see if I am allowed to get it, what if someone steals the hotelId and the bearer token
+    await this.ft_getHotelData(getHotelData.HotelId, user.id);
+
+    const vacancies = await this.HotelVacancyEntity.find({
+      where: {
+        hotel: { hotelId: getHotelData.HotelId },
+      },
+      relations: ['hotel'],
+    });
+    return vacancies
+  }
+
   async getHotelData(hotelId: string, user: User):Promise<Hotels> {
     const userWithHotels = await this.userEntity.findOne({
       where: { id: user.id },
-      relations: ['hotels'], // Ensure this matches the relation name in User entity
+      relations: ['hotels'],
     });
 
     if (!userWithHotels) {
       throw new UnauthorizedException();
     }
+    return (await this.ft_getHotelData(hotelId, user.id))
+  }
 
-    const hotel = await this.HotelsEntity.findOne({
-      where: { hotelId: hotelId, user: { id: user.id } },
+  /* function get the info */
+
+  /**
+   * return the hotel based on the hotelID and userID
+   * if failed, it means unauthorized access
+   * @returns 
+   */
+  async ft_getHotelData(hotelId: string, userId: string):Promise <Hotels> {
+    const hotel: Hotels = await this.HotelsEntity.findOne({
+      where: { hotelId: hotelId, user: { id: userId } },
       relations: ['user', 'hotelrooms'], // Load related entities as needed
     });
 
-    return (hotel)
+    if (!hotel) {
+      throw new UnauthorizedException();
+    }
+    return hotel
+  }
+
+  /**
+   * with vacancy ID you get the vacancy back
+   * if failed, it means unauthorized access
+   * @returns 
+   */
+  async ft_getVacancyData(vacancyId: string):Promise <HotelVacancy> {
+    const vacancy = await this.HotelVacancyEntity.findOne({
+      where: { VacancyId: vacancyId },
+      relations: ['hotel'], // This loads the hotel data in the vacancy
+    });
+
+    if (!vacancy) {
+      throw new UnauthorizedException();
+    }
+    return vacancy
   }
 
   async getHotelRoomsData(hotelId: string, user: User):Promise<HotelRooms[]> {
@@ -229,14 +273,7 @@ export class HotelsService {
       throw new UnauthorizedException();
     }
 
-    const hotel = await this.HotelsEntity.findOne({
-      where: { hotelId: hotelId, user: { id: user.id } },
-      relations: ['user', 'hotelrooms'], // Load related entities as needed
-    });
-
-    if (!hotel) {
-      throw new UnauthorizedException();
-    }
+    const hotel = await this.ft_getHotelData(hotelId, user.id);
 
     return (hotel.hotelrooms)
   }
@@ -256,6 +293,14 @@ export class HotelsService {
       hotel.hotelName = hotelData.HotelName;
       hotel.hotelDescription = hotelData.Description;
       await this.HotelsEntity.save(hotel);
+  }
+
+  async PatchVacancyData(patchHotelVacancyPatchDto: PatchHotelVacancyPatchDto, user: User) {
+
+    const vacancy = this.ft_getVacancyData(patchHotelVacancyPatchDto.VacancyId);
+    await this.ft_getHotelData((await vacancy).hotel.hotelId, user.id)
+    
+    
   }
 
   // /* check information */

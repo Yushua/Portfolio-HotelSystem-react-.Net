@@ -6,7 +6,7 @@ export class HotelVacancy {
   @PrimaryGeneratedColumn('uuid')
   VacancyId: string;
 
-  @ManyToOne(() => Hotels, (hotels) => hotels.hotelrooms)
+  @ManyToOne(() => Hotels, (hotels) => hotels.hotelVacancy)
   hotel: Hotels;
 
   @Column()
