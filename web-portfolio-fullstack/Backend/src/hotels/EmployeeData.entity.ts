@@ -7,7 +7,7 @@ import { User } from 'src/user/user.entity';
  * the user.id tells you who the owner is and where that goes. super simple
  */
 @Entity()
-export class EmployeeData {
+export class EmployeeDataEntity {
   @PrimaryGeneratedColumn('uuid')
   EmployeeyId: string;
 

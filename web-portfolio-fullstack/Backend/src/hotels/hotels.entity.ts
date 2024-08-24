@@ -2,7 +2,6 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne,
 import { HotelRooms } from './hotelsRooms.entity';
 import { User } from 'src/user/user.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
-import { HotelEmployee } from 'src/user/hotel-employee.entity';
 
 @Entity()
 export class Hotels {

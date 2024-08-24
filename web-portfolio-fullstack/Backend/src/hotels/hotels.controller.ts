@@ -5,12 +5,14 @@ import { User } from 'src/user/user.entity';
 import { CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { Hotels } from './hotels.entity';
 import { HotelRooms } from './hotelsRooms.entity';
+import { UserService } from 'src/user/user.service';
 
 @Controller('hotels')
 @UseGuards(AuthGuard('jwt'))
 export class HotelsController {
     constructor(
         private hotelService: HotelsService,
+        private userService: UserService,
       ) {}
 
       @Post(`CreateHotel`)
@@ -151,10 +153,13 @@ export class HotelsController {
         @Request() req,
         @Body() deleteEmployeeFromVacancyDTO: DeleteEmployeeFromVacancyDTO,
       ) {
-        console.log("hello")
-        const user: User = req.user;
-        //you have the userId, so you can remove the vacancy and then add them to the job... although... then you dont know... who you... get in...
-        //create a job entity... connect that to the Owner.... and to the User...
+        const boss: User = req.user;
+
+        const employee: User = await this.userService.getUseryId(deleteEmployeeFromVacancyDTO.userId);
+        /*
+          the employeeEntity needs a user that wants the job, connect to the user deleteEmployeeFromVacancyDTO.userId
+          and the owner, the boss. connect to the boss user
+        */
         // await this.hotelService.removedFromVacancy(user, deleteEmployeeFromVacancyDTO.userId, deleteEmployeeFromVacancyDTO.vacancyId)
       }
 }
