@@ -46,26 +46,26 @@ function ShowHotelDataOwner({ hotelId }: ResponsiveAppBarProps) {
 
   const fetchOwnerHotels = useCallback(async () => {
     await getOwnerHotelData(hotelId);
-  }, [hotelId]);
+  }, []);
 
   useEffect(() => {
     fetchOwnerHotels();
-  }, [fetchOwnerHotels]);
+  }, [hotelId]);
 
   return (
     <>
     <Grid container className='container' spacing={6}>
       <Grid item xs={4}>
-        <TextfieldComponent value={hotel.hotelName} helpertext={"Hotel Name"}/>
+        <TextfieldComponent value={hotel.hotelName || ''} helpertext={"Hotel Name"}/>
       </Grid>
       <Grid item xs={4}>
-        <TextfieldComponent value={hotel.hotelId} helpertext={"Hotel Id"}/>
+        <TextfieldComponent value={hotel.hotelId || ''} helpertext={"Hotel Id"}/>
       </Grid>
       <Grid item xs={4}>
-        <TextfieldComponent value={hotel.hotelOwner} helpertext={"Hotel Owner"}/>
+        <TextfieldComponent value={hotel.hotelOwner || ''} helpertext={"Hotel Owner"}/>
       </Grid>
       <Grid item xs={12}>
-        <TextfieldComponentDescription value={hotel.hotelDescription} size={4}/>
+        <TextfieldComponentDescription value={hotel.hotelDescription || ''} size={4}/>
       </Grid>
 
       <Grid item xs={12}>

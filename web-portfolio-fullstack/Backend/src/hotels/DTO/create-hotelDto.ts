@@ -1,4 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Hotels } from '../hotels.entity';
 
 export class CreateHotelDto {
   @IsNotEmpty()
@@ -156,4 +157,14 @@ export class HotelVacancyAllInfoDto {
   hotelName: string;
   hotelOwner: string;
   hotelId: string;
+}
+
+export class HotelAllVacanciesDataDto {
+  hotel: Hotels;
+  VacancyId: string;
+  jobName: string;
+  jobPay: number;
+  jobTitle: string;
+  jobDescription: string;
+  jobApplicants: number;
 }

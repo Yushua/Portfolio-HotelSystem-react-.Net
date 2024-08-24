@@ -71,7 +71,7 @@ function HotelVacancies({ hotelId }: ResponsiveAppBarProps) {
             <TextfieldComponent value={vacancy.jobPay} helpertext={"Job Payment"}/>
           </Grid>
           <Grid item xs={3}>
-            <TextfieldComponent value={vacancy.jobPay} helpertext={"Job Applicants"}/>
+            <TextfieldComponent value={vacancy.jobApplicants} helpertext={"Job Applicants"}/>
           </Grid>
           <Grid item xs={12}>
             <TextfieldComponentDescription value={vacancy.jobDescription} size={4}/>

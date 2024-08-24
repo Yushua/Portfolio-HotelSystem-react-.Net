@@ -7,13 +7,20 @@
 .global {
     font-size: 16px; /* Set a default root font size */
   }
-  .MuiInputLabel-root {
-    font-size: 16px; /* Adjust as needed */
+
+  .MuiFormLabel-root {
+    font-size: 1rem; /* Adjust the font size as needed */
   }
   
-  .MuiInputLabel-shrink {
-    font-size: 14px; /* Adjust as needed */
+  .Mui-focused .MuiFormLabel-root {
+    font-size: 0.8rem; /* Adjust the font size when focused */
   }
+  
+  /* If you want to keep the label size consistent when floating */
+  .MuiFormLabel-root.MuiInputLabel-shrink {
+    font-size: 1rem; /* Same as the non-focused state */
+  }
+  
   html, body {
     margin: 0;
     display: flex;

@@ -16,7 +16,7 @@ function TextfieldComponent({ value, helpertext }: ResponsiveAppBarProps) {
       className="gridTextfieldInput"
       fullWidth
       // {required}
-      label={helpertext}
+      label={helpertext || ''}
       style={{ marginTop: 10 }}
       variant="filled"
     />

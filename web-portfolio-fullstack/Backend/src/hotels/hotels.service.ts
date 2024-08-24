@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, GetHotelData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, GetHotelData, HotelAllVacanciesDataDto, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { HotelRooms } from './hotelsRooms.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
 
@@ -208,9 +208,19 @@ export class HotelsService {
       where: {
         hotel: { hotelId: getHotelData.HotelId },
       },
-      relations: ['hotel'],
+      relations: ['hotel', 'users'],
     });
-    return vacancies
+
+    const vacanciesData: HotelAllVacanciesDataDto[] = vacancies.map(vacancy => ({
+      hotel: vacancy.hotel,
+      VacancyId: vacancy.VacancyId,
+      jobName: vacancy.jobName,
+      jobPay: vacancy.jobPay,
+      jobTitle: vacancy.jobTitle,
+      jobDescription: vacancy.jobDescription,
+      jobApplicants: vacancy.users.length,
+    }));
+    return vacanciesData
   }
 
   //return all employees
