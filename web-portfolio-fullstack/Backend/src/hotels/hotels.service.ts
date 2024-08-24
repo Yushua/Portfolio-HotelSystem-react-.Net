@@ -213,6 +213,31 @@ export class HotelsService {
     return vacancies
   }
 
+  //return all employees
+  async getVacancyEmployeeData(user: User, vacancyId: string):Promise<any[]> {
+
+    const vacancy = await this.HotelVacancyEntity.findOne({
+      where: { VacancyId: vacancyId },
+      relations: ['users', 'hotel'],  // Include users and hotel data
+    });
+
+    if (!vacancy) {
+      throw new NotFoundException(`Vacancy with ID ${vacancyId} not found`);
+    }
+
+    if (vacancy.hotel.hotelOwner !== user.username){
+      throw new UnauthorizedException();
+    }
+    const employeesData = vacancy.users.map(emp => ({
+      employeeId: emp.id,
+      employeeUsername: emp.username,
+      employeeDescription: emp.description,
+      employeeEmail: emp.email,
+    }));
+
+    return employeesData;
+  }
+
   async getHotelData(hotelId: string, user: User):Promise<Hotels> {
     const userWithHotels = await this.userEntity.findOne({
       where: { id: user.id },

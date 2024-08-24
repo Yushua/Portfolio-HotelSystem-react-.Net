@@ -1,15 +1,13 @@
 
 import { useEffect, useState } from 'react';
-import { Button, Checkbox, FormControlLabel, Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import TextfieldComponent from '../../Components/TextfieldComponent';
-import { newDashboardWindow } from '../../DashboardPage';
 import EditVacancyData from '../../EditData/EditVacancyData';
 import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
-import HotelVacancies from './HotelVacancies';
 
 async function getVacancyDataHttp(vacancyid:string){
   try {
-    const response = await fetch("http://localhost:3000/hotels/GetVacancyDays", {
+    const response = await fetch("http://localhost:3000/hotels/GetVacanciesData", {
       method: "POST",
       headers: {
         Accept: 'application/json',
@@ -28,9 +26,30 @@ async function getVacancyDataHttp(vacancyid:string){
     return response;
   } catch (error: any) {
   }
-
 }
 
+
+async function getVacancyEmployeeDataHttp(vacancyid:string){
+  try {
+    const response = await fetch("http://localhost:3000/hotels/GetVacancyEmployeeData", {
+      method: "POST",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('jwtToken'),
+      },
+      body: JSON.stringify({vacancyId: vacancyid}),
+    });
+    if (!response.ok) {
+    }
+    else {
+      const data = await response.json();
+      _setEmployeeDataStored(data["vacancyEmplyeeData"])
+    }
+    return response;
+  } catch (error: any) {
+  }
+}
 interface ResponsiveAppBarProps {
   vacancyData?: any;
   vacancyid?: string;
@@ -38,17 +57,22 @@ interface ResponsiveAppBarProps {
   locationReturn: JSX.Element;
 }
 
-var _setVacancyDataStored: React.Dispatch<React.SetStateAction<any>>
+var _setVacancyDataStored: React.Dispatch<React.SetStateAction<any[]>>
+var _setEmployeeDataStored: React.Dispatch<React.SetStateAction<any[]>>
 
 function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: ResponsiveAppBarProps) {
   const [vacancyDataStored, setVacancyDataStored] = useState<any>([]);
   _setVacancyDataStored = setVacancyDataStored;
+
+  const [EmployeeDataStored, setEmployeeDataStored] = useState<any[]>([]);
+  _setEmployeeDataStored = setEmployeeDataStored;
 
     useEffect(() => {
     if (vacancyid !== undefined){
       getVacancyDataHttp(vacancyid);
     } else {
       setVacancyDataStored(vacancyData);
+      getVacancyEmployeeDataHttp(vacancyData.VacancyId)
     }
   }, [vacancyData, vacancyid]);
 
@@ -67,12 +91,6 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: 
         <Grid item xs={4}>
           <TextfieldComponent value={vacancyDataStored.jobPay}/>
         </Grid>
-        <Grid item xs={4}>
-          <FormControlLabel control={<Checkbox
-            defaultChecked
-            checked={vacancyDataStored.filled}
-            />} label="jobStatus" />
-        </Grid>
         <Grid item xs={12}>
           <TextfieldComponent value={vacancyDataStored.jobDescription}/>
         </Grid>
@@ -86,9 +104,55 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: 
               />)}
           >edit</Button>
         </Grid>
+      {EmployeeDataStored.length > 0 ? (
+        EmployeeDataStored.map((employee) => (
+        <Grid item xs={4} key={employee.employeeId}>
+          <Grid container direction="column" spacing={1} className='containerTabsDataEmployee'>
+            <Grid item xs={6}>
+              <TextfieldComponent value={employee.employeeUsername} />
+            </Grid>
+            <Grid item xs={6}>
+              <TextfieldComponent value={employee.employeeEmail} />
+            </Grid>
+            <Grid item xs={12}>
+              <TextfieldComponent value={employee.employeeDescription} />
+            </Grid>
+            <Grid item xs={12}
+              justifyContent="center" 
+              alignItems="center"
+              className='employeeDataVacancyButtonBox'
+            >
+              <Button
+                variant="contained"
+                className='employeeDataVacancyButton'
+                onClick={() => newHotelDataWindow(<EditVacancyData
+                  vacancyData={vacancyDataStored}
+                  hotelId={hotelId}
+                  locationReturn={locationReturn}
+                  />)}
+                >Accept
+              </Button>
+              <Button
+                variant="contained"
+                className='employeeDataVacancyButton'
+                onClick={() => newHotelDataWindow(<EditVacancyData
+                  vacancyData={vacancyDataStored}
+                  hotelId={hotelId}
+                  locationReturn={locationReturn}
+                  />)}
+                >Decline
+              </Button>
+            
+            </Grid>
+          </Grid>
+
+        </Grid>
+          
+        ))
+      ) : (
+        <p>No employees found</p>
+      )}
       </Grid>
-      show all applicants, only their name (more info could be added, like email, location, address, info, etc,
-      even a work history tab)
     </>
   );
 }

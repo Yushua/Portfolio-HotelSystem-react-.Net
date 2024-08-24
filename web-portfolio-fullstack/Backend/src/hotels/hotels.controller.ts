@@ -60,6 +60,16 @@ export class HotelsController {
         return {vacanciesData}
       }
 
+      @Post(`GetVacancyEmployeeData`)
+      async GetVacancyEmployeeData(
+        @Request() req,
+        @Body() getVacancyData: GetVacancyData,
+      ): Promise<{ vacancyEmplyeeData: any[] }> {
+        const user: User = req.user;
+        const vacancyEmplyeeData = await this.hotelService.getVacancyEmployeeData(user, getVacancyData.vacancyId);
+        return {vacancyEmplyeeData: vacancyEmplyeeData}
+      }
+
       @Patch(`PatchHotel`)
       async PatchHotel(
         @Request() req,
