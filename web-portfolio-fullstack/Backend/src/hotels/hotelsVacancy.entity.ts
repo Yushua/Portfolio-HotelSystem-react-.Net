@@ -23,6 +23,6 @@ export class HotelVacancy {
   jobDescription: string;
 
   //add an emplpyee here, so I can see, oh... this one applied to this vacancy
-  @OneToMany(() => User, (employees) => employees.vacancy)
-  employees: User;
+  @OneToMany(() => User, (user) => user.vacancy)
+  users: User[];
 }

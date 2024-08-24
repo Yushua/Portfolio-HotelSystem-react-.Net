@@ -36,6 +36,6 @@ export class User {
 
   //employeeData
 
-  @ManyToOne(() => HotelVacancy, vacancy => vacancy.employees)
+  @ManyToOne(() => HotelVacancy, vacancy => vacancy.users)
   vacancy: HotelVacancy;
 }

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
 import { Repository } from 'typeorm';
@@ -261,6 +261,14 @@ export class HotelsService {
     return vacancy
   }
 
+  async ft_getUser(userId: string):Promise <User> {
+    const user = await this.userEntity.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+    return user;
+  }
+
   async getHotelRoomsData(hotelId: string, user: User):Promise<HotelRooms[]> {
     const userWithHotels = await this.userEntity.findOne({
       where: { id: user.id },
@@ -307,7 +315,7 @@ export class HotelsService {
     const errors = [];
       if (jobNameVacancyExists) {
         errors.push('jobName for this hotel already exists');
-      }
+      }//apply error
 
     vacancy.jobName = patchHotelVacancyPatchDto.jobName;
     vacancy.jobTitle = patchHotelVacancyPatchDto.jobTitle;
@@ -316,14 +324,17 @@ export class HotelsService {
     await this.HotelVacancyEntity.save(vacancy);
   }
 
-  async GetAllVacancies():Promise<HotelVacancyAllInfoDto[]>{
+  async GetAllVacancies(userId: string): Promise<HotelVacancyAllInfoDto[]> {
     const vacancies = await this.HotelVacancyEntity.find({
-      relations: ['hotel'],  // Include the 'hotel' relation to get associated hotel data
+      relations: ['hotel', 'users'],
     });
+    const filteredVacancies = vacancies.filter(vacancy =>
+      vacancy.hotel && 
+      vacancy.hotel.hotelId && 
+      !vacancy.users.some(employee => employee.id === userId)
+    );
 
-    const VacanciesData: HotelVacancyAllInfoDto[] = vacancies
-    .filter(vacancy => vacancy.hotel && vacancy.hotel.hotelId)
-    .map(vacancy => ({
+    const VacanciesData: HotelVacancyAllInfoDto[] = filteredVacancies.map(vacancy => ({
       VacancyId: vacancy.VacancyId,
       jobName: vacancy.jobName,
       jobPay: vacancy.jobPay,
@@ -333,7 +344,26 @@ export class HotelsService {
       hotelOwner: vacancy.hotel.hotelOwner,
       hotelId: vacancy.hotel.hotelId,
     }));
+  
     return VacanciesData;
+  }
+
+  async applyToVacancy(user: User, vacancyId: string){
+
+    const vacancy = await this.HotelVacancyEntity.findOne({
+      where: { VacancyId: vacancyId },
+      relations: ['users'],  // Fetch the users related to this vacancy
+    });
+    if (!vacancy) {
+      throw new NotFoundException(`Vacancy with ID ${vacancyId} not found`);
+    }
+
+    const hasAlreadyApplied = vacancy.users.some(u => u.id === user.id);
+    if (hasAlreadyApplied) {
+      throw new BadRequestException('User has already applied to this vacancy.');
+    }//apply error 404
+    vacancy.users.push(user);
+    await this.HotelVacancyEntity.save(vacancy);
   }
 
   // /* check information */

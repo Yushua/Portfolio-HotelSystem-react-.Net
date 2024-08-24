@@ -2,6 +2,8 @@ import { Button, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import TextfieldComponent from "../Components/TextfieldComponent";
 import TextfieldComponentDescription from "../Components/TextfieldComponentDescription";
+import { newBrowserWindow } from "../../MainBrowser";
+import { Dashboard } from "@mui/icons-material";
 
 async function getAllVacanciesData(){
   try {
@@ -39,10 +41,9 @@ async function ApplyToVacancy(VacancyId: string){
       body: JSON.stringify({vacancyId: VacancyId}),
     });
     if (!response.ok) {
-      //handleError
     }
     else {
-      //return to All Vacancies
+      getAllVacanciesData();
     }
     return response;
   } catch (error: any) {

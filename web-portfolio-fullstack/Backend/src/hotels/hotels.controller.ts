@@ -110,8 +110,10 @@ export class HotelsController {
 
       @Get("GetAllVacanciesUser")
       async GetAllVacanciesUser(
+        @Request() req,
       ): Promise<{ vacanciesData: HotelVacancyAllInfoDto[] }> {
-        const vacanciesData: HotelVacancyAllInfoDto[] = await this.hotelService.GetAllVacancies();
+        const user: User = req.user;
+        const vacanciesData: HotelVacancyAllInfoDto[] = await this.hotelService.GetAllVacancies(user.id);
         return { vacanciesData };
       }
 
@@ -121,6 +123,6 @@ export class HotelsController {
         @Body() getVacancyData: GetVacancyData,
       ) {
         const user: User = req.user;
-        // await this.hotelService.PatchVacancyData(getVacancyData, user);
+        await this.hotelService.applyToVacancy(user, getVacancyData.vacancyId);
       }
 }
