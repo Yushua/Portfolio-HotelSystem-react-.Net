@@ -24,7 +24,7 @@ export class Hotels {
   hotelrooms: HotelRooms[];
 
   @Column('text', { array: true, default: ['cleaner', 'secretary', 'cook'] })
-  jobOffers: string[];
+  hotelTitles: string[];
 
   @OneToMany(() => HotelVacancy, (hotelVacancy) => hotelVacancy.hotel)
   hotelVacancy: HotelVacancy[];

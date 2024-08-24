@@ -52,11 +52,14 @@ function HotelVacancies({ hotelId }: ResponsiveAppBarProps) {
         <Grid container
         className='containerTabs'
         spacing={3}
-        onClick={() => newHotelDataWindow(
-        <HotelVacancyOwner
-        hotelId={hotelId}
-        vacancyData={vacancy}
-        />)}
+        // on click, show the data again and the application
+        // onClick={() => newHotelDataWindow(
+        // <HotelVacancyOwner
+        // hotelId={hotelId}
+        // vacancyData={vacancy}
+        // // locationReturn={<HotelVacancies hotelId={hotelId}/>}
+        // key={hotelId}
+        // />)}
         >
           <Grid item xs={4}>
             <TextfieldComponent value={vacancy.jobName}/>

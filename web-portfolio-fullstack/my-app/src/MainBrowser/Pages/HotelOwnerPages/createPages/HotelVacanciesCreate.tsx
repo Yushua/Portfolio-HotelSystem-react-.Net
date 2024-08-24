@@ -4,6 +4,7 @@ import { FormBoolean } from '../HotelDataOverTabs/CreateFunctions';
 import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
 import { Button, Grid, TextField } from '@mui/material';
 import HotelVacancyOwner from '../showPages/HotelVacancyOwner';
+import HotelVacancies from '../showPages/HotelVacancies';
 
 type FormStateString = {
   jobName: string;
@@ -96,8 +97,10 @@ async function createNewVacancyHttp(
         }
       } else {
         const data = await response.json();
-        console.log("hello")
-        newHotelDataWindow(<HotelVacancyOwner hotelId={hotelId} vacancyData={data["vacancyData"]}/>)
+        newHotelDataWindow(<HotelVacancyOwner
+          hotelId={hotelId}
+          vacancyData={data["vacancyData"]}
+          locationReturn={<HotelVacancies hotelId={hotelId}/>}/>)
       }
       return response;
     } catch (error: any) {
@@ -112,6 +115,13 @@ interface ResponsiveAppBarProps {
 var _setFormErrors: React.Dispatch<React.SetStateAction<FormBoolean>>
 var _setFormMessage: React.Dispatch<React.SetStateAction<FormStateMessage>>
 
+/**
+ * create vacacancies.
+ * upon creating, return to
+ * <HotelVacancies hotelId={hotelId}/>
+ * @param param0 
+ * @returns 
+ */
 function HotelVacanciesCreate({ hotelId }: ResponsiveAppBarProps) {
   const [formErrors, setFormErrors] = React.useState<FormBoolean>({});
   _setFormErrors = setFormErrors;

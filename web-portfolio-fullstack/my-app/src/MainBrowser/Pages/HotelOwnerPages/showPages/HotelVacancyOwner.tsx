@@ -35,11 +35,12 @@ interface ResponsiveAppBarProps {
   vacancyData?: any;
   vacancyid?: string;
   hotelId: string;
+  locationReturn: JSX.Element;
 }
 
 var _setVacancyDataStored: React.Dispatch<React.SetStateAction<any>>
 
-function HotelVacancyOwner({ vacancyData, vacancyid, hotelId }: ResponsiveAppBarProps) {
+function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: ResponsiveAppBarProps) {
   const [vacancyDataStored, setVacancyDataStored] = useState<any>([]);
   _setVacancyDataStored = setVacancyDataStored;
 
@@ -81,7 +82,7 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId }: ResponsiveAppBar
             onClick={() => newHotelDataWindow(<EditVacancyData
               vacancyData={vacancyDataStored}
               hotelId={hotelId}
-              locationReturn={<HotelVacancies hotelId={hotelId}/>}
+              locationReturn={locationReturn}
               />)}
           >edit</Button>
         </Grid>

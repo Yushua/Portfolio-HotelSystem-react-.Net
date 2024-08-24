@@ -136,3 +136,14 @@ export class PatchHotelVacancyPatchDto {
   @IsNotEmpty()
   jobPay: number;
 }
+
+export class HotelVacancyAllInfoDto {
+  VacancyId: string;
+  jobName: string;
+  jobPay: number;
+  jobTitle: string;
+  jobDescription: string;
+  hotelName: string;
+  hotelOwner: string;
+  hotelId: string;
+}

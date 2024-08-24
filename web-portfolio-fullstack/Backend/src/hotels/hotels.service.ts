@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, GetHotelData, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, GetHotelData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { HotelRooms } from './hotelsRooms.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
 
@@ -314,6 +314,26 @@ export class HotelsService {
     vacancy.jobPay = patchHotelVacancyPatchDto.jobPay;
     vacancy.jobDescription = patchHotelVacancyPatchDto.jobDescription;
     await this.HotelVacancyEntity.save(vacancy);
+  }
+
+  async GetAllVacancies():Promise<HotelVacancyAllInfoDto[]>{
+    const vacancies = await this.HotelVacancyEntity.find({
+      relations: ['hotel'],  // Include the 'hotel' relation to get associated hotel data
+    });
+
+    const VacanciesData: HotelVacancyAllInfoDto[] = vacancies
+    .filter(vacancy => vacancy.hotel && vacancy.hotel.hotelId)
+    .map(vacancy => ({
+      VacancyId: vacancy.VacancyId,
+      jobName: vacancy.jobName,
+      jobPay: vacancy.jobPay,
+      jobTitle: vacancy.jobTitle,
+      jobDescription: vacancy.jobDescription,
+      hotelName: vacancy.hotel.hotelName,
+      hotelOwner: vacancy.hotel.hotelOwner,
+      hotelId: vacancy.hotel.hotelId,
+    }));
+    return VacanciesData;
   }
 
   // /* check information */

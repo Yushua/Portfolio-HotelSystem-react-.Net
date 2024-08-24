@@ -1,14 +1,12 @@
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import { newHotelDataWindow } from "./ShowHotelDataOwnerTabs";
-import HotelVacancyOwner from "./showPages/HotelVacancyOwner";
 import TextfieldComponent from "../Components/TextfieldComponent";
 import TextfieldComponentDescription from "../Components/TextfieldComponentDescription";
 
 async function getAllVacanciesData(){
   try {
     const response = await fetch("http://localhost:3000/hotels/GetAllVacanciesUser", {
-      method: "POST",
+      method: "GET",
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -21,6 +19,30 @@ async function getAllVacanciesData(){
     else {
       const data = await response.json();
       _setVacanciesDataStored(data["vacanciesData"])
+      console.log(data["vacanciesData"])
+    }
+    return response;
+  } catch (error: any) {
+    console.log(error)
+  }  
+}
+
+async function ApplyToVacancy(VacancyId: string){
+  try {
+    const response = await fetch("http://localhost:3000/hotels/ApplyToVacancy", {
+      method: "PATCH",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('jwtToken'),
+      },
+      body: JSON.stringify({vacancyId: VacancyId}),
+    });
+    if (!response.ok) {
+      //handleError
+    }
+    else {
+      //return to All Vacancies
     }
     return response;
   } catch (error: any) {
@@ -39,19 +61,22 @@ function AllVacancies() {
     getAllVacanciesData();
   }, []);
 
+  const handleApply = async (VacancyId: string) => {
+    await ApplyToVacancy(VacancyId);
+  };
   return (
     <>
       {vacanciesDataStored.map((vacancy) => (
         <Grid container
         className='containerTabs'
         spacing={3}
-        // applyforJob(see more info)
-        // onClick={() => newHotelDataWindow(
-        // <HotelVacancyOwner
-        // hotelId={hotelId}
-        // vacancyData={vacancy}
-        // />)}
         >
+          <Grid item xs={6}>
+            <TextfieldComponent value={vacancy.hotelName}/>
+          </Grid>
+          <Grid item xs={6}>
+            <TextfieldComponent value={vacancy.hotelOwner}/>
+          </Grid>
           <Grid item xs={4}>
             <TextfieldComponent value={vacancy.jobName}/>
           </Grid>
@@ -63,6 +88,11 @@ function AllVacancies() {
           </Grid>
           <Grid item xs={12}>
             <TextfieldComponentDescription value={vacancy.jobDescription} size={4}/>
+          </Grid>
+          <Grid item xs={12}>
+            <Button onClick={() => handleApply(vacancy.VacancyId)} variant="contained" color="primary">
+              Apply
+            </Button>
           </Grid>
         </Grid>
     ))}

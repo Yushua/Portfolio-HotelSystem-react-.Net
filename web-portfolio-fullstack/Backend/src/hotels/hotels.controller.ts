@@ -2,7 +2,7 @@ import { Body, Controller, Get, Patch, Post, Request, UseGuards } from '@nestjs/
 import { HotelsService } from './hotels.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, GetHotelData, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { Hotels } from './hotels.entity';
 import { HotelRooms } from './hotelsRooms.entity';
 
@@ -110,12 +110,17 @@ export class HotelsController {
 
       @Get("GetAllVacanciesUser")
       async GetAllVacanciesUser(
+      ): Promise<{ vacanciesData: HotelVacancyAllInfoDto[] }> {
+        const vacanciesData: HotelVacancyAllInfoDto[] = await this.hotelService.GetAllVacancies();
+        return { vacanciesData };
+      }
+
+      @Patch("ApplyToVacancy")
+      async ApplyToVacancy(
         @Request() req,
+        @Body() getVacancyData: GetVacancyData,
       ) {
         const user: User = req.user;
-        
-        // await this.hotelService.PatchVacancyData(patchHotelVacancyPatchDto, user);
-
-        // return(vacancyData: await this.hotelService.GetAllVacancyData(patchHotelVacancyPatchDto, user))
+        // await this.hotelService.PatchVacancyData(getVacancyData, user);
       }
 }
