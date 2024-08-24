@@ -1,10 +1,7 @@
 
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogTitle, Grid, TextField } from '@mui/material';
 import React, { useState } from 'react';
-import { newDashboardWindow } from '../DashboardPage';
-import ShowHotelDataOwner from '../HotelOwnerPages/ShowHotelDataOwner';
 import { FormBoolean } from './EditHotelRoomData';
-import HotelVacancies from '../HotelOwnerPages/showPages/HotelVacancies';
 import { newHotelDataWindow } from '../HotelOwnerPages/ShowHotelDataOwnerTabs';
 
 type FormStateString = {
@@ -24,11 +21,6 @@ type FormStateMessage = {
   jobTitle: string;
   jobPay: string;
   [key: string]: string;
-};
-
-type FormStateBoolean = {
-  filled: boolean,
-  [key: string]: boolean; // Allows additional properties with boolean values
 };
 
 async function resetErrorAndMessage(){
@@ -80,7 +72,8 @@ async function PatchVacancyData(
   vacancyId: string,
   hotelId: string,
   formStateString: FormStateString,
-  formStateNumber: FormStateNumber){
+  formStateNumber: FormStateNumber,
+  locationReturn: JSX.Element){
     const credentials = {
       VacancyId: vacancyId, 
       jobDescription: formStateString.jobDescription,
@@ -88,6 +81,7 @@ async function PatchVacancyData(
       jobPay: formStateNumber.jobPay,
       jobTitle: formStateString.jobTitle,
     };
+  resetErrorAndMessage()
   try {
     const response = await fetch("http://localhost:3000/hotels/PatchHotelVacancyDataOwner", {
       method: "PATCH",
@@ -106,7 +100,7 @@ async function PatchVacancyData(
     }
     else {
       _setOpen(false);
-      newHotelDataWindow(<HotelVacancies hotelId={hotelId}/>)
+      newHotelDataWindow(locationReturn)
     }
     return response;
   } catch (error: any) {
@@ -122,16 +116,17 @@ var _setOpen: React.Dispatch<React.SetStateAction<boolean>>
 interface ResponsiveAppBarProps {
   vacancyData: any;
   hotelId: string;
+  locationReturn: JSX.Element;
 }
 
-function EditVacancyData({ vacancyData, hotelId }: ResponsiveAppBarProps) {
+function EditVacancyData({ vacancyData, hotelId, locationReturn }: ResponsiveAppBarProps) {
 
   const [open, setOpen] = useState(true);
   _setOpen = setOpen;
 
   const handleClose = async () => {
     setOpen(false);
-    newHotelDataWindow(<HotelVacancies hotelId={hotelId}/>)
+    newHotelDataWindow(locationReturn)
   };
 
   const [formErrors, setFormErrors] = React.useState<FormBoolean>({});
@@ -179,7 +174,7 @@ function EditVacancyData({ vacancyData, hotelId }: ResponsiveAppBarProps) {
   };
 
   const handleSave = async () => {
-    await PatchVacancyData(vacancyData.VacancyId, hotelId ,formStateString, formStateNumber);
+    await PatchVacancyData(vacancyData.VacancyId, hotelId ,formStateString, formStateNumber, locationReturn);
   };
 
   return (

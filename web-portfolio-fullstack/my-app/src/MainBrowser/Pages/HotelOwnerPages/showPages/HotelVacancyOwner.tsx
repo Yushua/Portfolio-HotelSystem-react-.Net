@@ -5,6 +5,7 @@ import TextfieldComponent from '../../Components/TextfieldComponent';
 import { newDashboardWindow } from '../../DashboardPage';
 import EditVacancyData from '../../EditData/EditVacancyData';
 import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
+import HotelVacancies from './HotelVacancies';
 
 async function getVacancyDataHttp(vacancyid:string){
   try {
@@ -80,6 +81,7 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId }: ResponsiveAppBar
             onClick={() => newHotelDataWindow(<EditVacancyData
               vacancyData={vacancyDataStored}
               hotelId={hotelId}
+              locationReturn={<HotelVacancies hotelId={hotelId}/>}
               />)}
           >edit</Button>
         </Grid>
