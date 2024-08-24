@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn
 import { UserStatus } from './user.model';
 import { Hotels } from 'src/hotels/hotels.entity';
 import { HotelVacancy } from 'src/hotels/hotelsVacancy.entity';
+import { EmployeeData } from 'src/hotels/EmployeeData.entity';
 
 @Entity()
 export class User {
@@ -39,4 +40,13 @@ export class User {
   @ManyToMany(() => HotelVacancy, vacancy => vacancy.users)
   @JoinTable() // Join table to manage the many-to-many relationship
   vacancies: HotelVacancy[];
+   //
+
+  @OneToMany(() => EmployeeData, employeeData => employeeData.bosses)
+  @JoinTable() // Join table to manage the many-to-many relationship
+  employeed: EmployeeData[];
+
+  @OneToOne(() => EmployeeData, employeeData => employeeData.EmployeeUser)
+  @JoinTable() // Join table to manage the many-to-many relationship
+  employedTo: EmployeeData[];
 }

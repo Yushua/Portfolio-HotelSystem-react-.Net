@@ -65,13 +65,13 @@ function ShowAllOwnerRoomsFromHotel({ hotelId }: ResponsiveAppBarProps) {
           onClick={() => handleGridClick(hotel)}
           >
             <Grid item xs={4}>
-              <TextfieldComponent value={hotel.hotelRoomNumber}/>
+              <TextfieldComponent value={hotel.hotelRoomNumber} helpertext={"Room Number"}/>
             </Grid>
             <Grid item xs={4}>
-              <TextfieldComponent value={hotel.hotelRoomName}/>
+              <TextfieldComponent value={hotel.hotelRoomName} helpertext={"Room Name"}/>
             </Grid>
             <Grid item xs={4}>
-              <TextfieldComponent value={hotel.hotelRoomEmployee}/>
+              <TextfieldComponent value={hotel.hotelRoomEmployee} helpertext={"Assigned Employee"}/>
             </Grid>
             <Grid item xs={12}>
               <TextfieldComponentDescription value={hotel.hotelRoomDescription} size={4}/>

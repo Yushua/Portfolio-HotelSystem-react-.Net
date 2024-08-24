@@ -4,6 +4,7 @@ import { Button, Grid } from '@mui/material';
 import TextfieldComponent from '../../Components/TextfieldComponent';
 import EditVacancyData from '../../EditData/EditVacancyData';
 import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
+import TextfieldComponentDescription from '../../Components/TextfieldComponentDescription';
 
 async function getVacancyDataHttp(vacancyid:string){
   try {
@@ -44,12 +45,42 @@ async function getVacancyEmployeeDataHttp(vacancyid:string){
     }
     else {
       const data = await response.json();
+      console.log(data["vacancyEmplyeeData"])
       _setEmployeeDataStored(data["vacancyEmplyeeData"])
     }
     return response;
   } catch (error: any) {
   }
 }
+
+async function DeleteEmployeeFromVacancy(userId: string,  vacancyId: string){
+  const credentials = {
+    vacancyId: vacancyId,
+    userId: userId
+  };
+  
+  try {
+    const response = await fetch("http://localhost:3000/hotels/DeleteEmployeeFromVacancy", {
+      method: "DELETE",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('jwtToken'),
+      },
+      body: JSON.stringify(credentials),
+    });
+    if (!response.ok) {
+    }
+    else {
+      const data = await response.json();
+      console.log(data["vacancyEmplyeeData"])
+      _setEmployeeDataStored(data["vacancyEmplyeeData"])
+    }
+    return response;
+  } catch (error: any) {
+  }
+}
+
 interface ResponsiveAppBarProps {
   vacancyData?: any;
   vacancyid?: string;
@@ -76,6 +107,14 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: 
     }
   }, [vacancyData, vacancyid]);
 
+  const handleAccept = async (userId: string,  vacancyid: string) => {
+    //accept
+  }
+
+  const handleDecline = async (userId: string,  vacancyId: string) => {
+    await DeleteEmployeeFromVacancy(userId,  vacancyId)
+    await getVacancyEmployeeDataHttp(vacancyId)
+  }
   return (
     <>
     <Grid container
@@ -83,16 +122,16 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: 
       spacing={3}
       >
         <Grid item xs={4}>
-          <TextfieldComponent value={vacancyDataStored.jobName}/>
+          <TextfieldComponent value={vacancyDataStored.jobName} helpertext={"Job Name"}/>
         </Grid>
         <Grid item xs={4}>
-          <TextfieldComponent value={vacancyDataStored.jobTitle}/>
+          <TextfieldComponent value={vacancyDataStored.jobTitle} helpertext={"Job Title"}/>
         </Grid>
         <Grid item xs={4}>
-          <TextfieldComponent value={vacancyDataStored.jobPay}/>
+          <TextfieldComponent value={vacancyDataStored.jobPay} helpertext={"Job Payment"}/>
         </Grid>
         <Grid item xs={12}>
-          <TextfieldComponent value={vacancyDataStored.jobDescription}/>
+          <TextfieldComponentDescription value={vacancyDataStored.jobDescription} size={4}/>
         </Grid>
         <Grid item xs={12}>
           <Button
@@ -109,13 +148,13 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: 
         <Grid item xs={4} key={employee.employeeId}>
           <Grid container direction="column" spacing={1} className='containerTabsDataEmployee'>
             <Grid item xs={6}>
-              <TextfieldComponent value={employee.employeeUsername} />
+              <TextfieldComponent value={employee.employeeUsername} helpertext={"Employee"}/>
             </Grid>
             <Grid item xs={6}>
-              <TextfieldComponent value={employee.employeeEmail} />
+              <TextfieldComponent value={employee.employeeEmail} helpertext={"Email"}/>
             </Grid>
             <Grid item xs={12}>
-              <TextfieldComponent value={employee.employeeDescription} />
+              <TextfieldComponentDescription value={employee.employeeDescription} size={4}/>
             </Grid>
             <Grid item xs={12}
               justifyContent="center" 
@@ -125,21 +164,13 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: 
               <Button
                 variant="contained"
                 className='employeeDataVacancyButton'
-                onClick={() => newHotelDataWindow(<EditVacancyData
-                  vacancyData={vacancyDataStored}
-                  hotelId={hotelId}
-                  locationReturn={locationReturn}
-                  />)}
+                onClick={() => handleAccept(employee.employeeId, vacancyDataStored.VacancyId)}
                 >Accept
               </Button>
               <Button
                 variant="contained"
                 className='employeeDataVacancyButton'
-                onClick={() => newHotelDataWindow(<EditVacancyData
-                  vacancyData={vacancyDataStored}
-                  hotelId={hotelId}
-                  locationReturn={locationReturn}
-                  />)}
+                onClick={() => handleDecline(employee.employeeId, vacancyDataStored.VacancyId)}
                 >Decline
               </Button>
             
@@ -150,7 +181,7 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: 
           
         ))
       ) : (
-        <p>No employees found</p>
+        <></>
       )}
       </Grid>
     </>

@@ -7,7 +7,13 @@
 .global {
     font-size: 16px; /* Set a default root font size */
   }
-
+  .MuiInputLabel-root {
+    font-size: 16px; /* Adjust as needed */
+  }
+  
+  .MuiInputLabel-shrink {
+    font-size: 14px; /* Adjust as needed */
+  }
   html, body {
     margin: 0;
     display: flex;
@@ -26,7 +32,7 @@
     width: 92%;
     align-items: center;
     justify-content: center!important;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     top: 4rem;
     left: 0;
     padding: 1rem;
@@ -153,9 +159,6 @@
     border: 4px solid #B6E0C5;
     max-width: '100%';
     margin-top: 4rem;
-    width: 80%; /* Make the TextField take full width of its container */
-    display: flex; /* Flex display for centering content */
-    align-items: center; /* Center items vertically */
     box-sizing: border-box;
   }
 

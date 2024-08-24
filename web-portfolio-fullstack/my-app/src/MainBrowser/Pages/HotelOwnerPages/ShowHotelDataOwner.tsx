@@ -56,13 +56,13 @@ function ShowHotelDataOwner({ hotelId }: ResponsiveAppBarProps) {
     <>
     <Grid container className='container' spacing={6}>
       <Grid item xs={4}>
-        <TextfieldComponent value={hotel.hotelName}/>
+        <TextfieldComponent value={hotel.hotelName} helpertext={"Hotel Name"}/>
       </Grid>
       <Grid item xs={4}>
-        <TextfieldComponent value={hotel.hotelId}/>
+        <TextfieldComponent value={hotel.hotelId} helpertext={"Hotel Id"}/>
       </Grid>
       <Grid item xs={4}>
-        <TextfieldComponent value={hotel.hotelOwner}/>
+        <TextfieldComponent value={hotel.hotelOwner} helpertext={"Hotel Owner"}/>
       </Grid>
       <Grid item xs={12}>
         <TextfieldComponentDescription value={hotel.hotelDescription} size={4}/>

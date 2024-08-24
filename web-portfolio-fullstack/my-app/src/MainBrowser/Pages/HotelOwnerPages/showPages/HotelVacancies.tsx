@@ -61,14 +61,17 @@ function HotelVacancies({ hotelId }: ResponsiveAppBarProps) {
         key={hotelId}
         />)}
         >
-          <Grid item xs={4}>
-            <TextfieldComponent value={vacancy.jobName}/>
+          <Grid item xs={3}>
+            <TextfieldComponent value={vacancy.jobName} helpertext={"Job Name"}/>
           </Grid>
-          <Grid item xs={4}>
-            <TextfieldComponent value={vacancy.jobTitle}/>
+          <Grid item xs={3}>
+            <TextfieldComponent value={vacancy.jobTitle} helpertext={"Job Title"}/>
           </Grid>
-          <Grid item xs={4}>
-            <TextfieldComponent value={vacancy.jobPay}/>
+          <Grid item xs={3}>
+            <TextfieldComponent value={vacancy.jobPay} helpertext={"Job Payment"}/>
+          </Grid>
+          <Grid item xs={3}>
+            <TextfieldComponent value={vacancy.jobPay} helpertext={"Job Applicants"}/>
           </Grid>
           <Grid item xs={12}>
             <TextfieldComponentDescription value={vacancy.jobDescription} size={4}/>

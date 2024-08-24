@@ -141,9 +141,20 @@ export class HotelsController {
         @Request() req,
         @Body() deleteEmployeeFromVacancyDTO: DeleteEmployeeFromVacancyDTO,
       ) {
+        console.log("hello")
         const user: User = req.user;
         await this.hotelService.removedFromVacancy(user, deleteEmployeeFromVacancyDTO.userId, deleteEmployeeFromVacancyDTO.vacancyId)
       }
 
-
+      @Delete("DeleteAcceptEmployee")
+      async DeleteAcceptEmployee(
+        @Request() req,
+        @Body() deleteEmployeeFromVacancyDTO: DeleteEmployeeFromVacancyDTO,
+      ) {
+        console.log("hello")
+        const user: User = req.user;
+        //you have the userId, so you can remove the vacancy and then add them to the job... although... then you dont know... who you... get in...
+        //create a job entity... connect that to the Owner.... and to the User...
+        // await this.hotelService.removedFromVacancy(user, deleteEmployeeFromVacancyDTO.userId, deleteEmployeeFromVacancyDTO.vacancyId)
+      }
 }

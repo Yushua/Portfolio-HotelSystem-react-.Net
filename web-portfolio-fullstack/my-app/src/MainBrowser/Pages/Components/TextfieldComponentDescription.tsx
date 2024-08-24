@@ -5,6 +5,7 @@ import React from 'react';
 interface ResponsiveAppBarProps {
   value: string;
   size: number;
+
 }
 
 function TextfieldComponentDescription({ value, size }: ResponsiveAppBarProps) {
@@ -14,8 +15,10 @@ function TextfieldComponentDescription({ value, size }: ResponsiveAppBarProps) {
       className="gridTextfieldInput"
       fullWidth
       multiline
+      label={"Description"}
       style={{ marginTop: 10 }}
       rows={size}
+      variant="filled"
     />
   );
 }

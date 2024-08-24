@@ -4,7 +4,7 @@ import React from 'react';
 function ShowAllRooms() {
   return (
     <>
-      ShowAllRooms
+      All Rooms the User applied to
     </>
   );
 }

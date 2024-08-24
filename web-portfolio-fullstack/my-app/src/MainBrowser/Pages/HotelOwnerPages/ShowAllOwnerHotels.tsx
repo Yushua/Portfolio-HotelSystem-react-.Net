@@ -49,8 +49,8 @@ function ShowAllOwnerHotels() {
       <Grid container className='container' spacing={6}>
       {hotels.map((hotel) => (
         <Grid item xs={4} key={hotel.hotelId}>
-          <TextfieldComponent value={hotel.hotelName}/>
-          <TextfieldComponent value={hotel.hotelOwner}/>
+          <TextfieldComponent value={hotel.hotelName} helpertext={"Hotel Name"}/>
+          <TextfieldComponent value={hotel.hotelOwner} helpertext={"Hotel Owner"}/>
           <TextfieldComponentDescription value={hotel.hotelDescription} size={4}/>
           <Grid container spacing={6}>
             <Grid item xs={2}>

@@ -18,8 +18,6 @@ const WebPages: Array<[string, JSX.Element]> = [
   ['Employees', <ShowAllEmployees/>],
   //User
   ['Rooms', <ShowAllRooms/>],
-  ['Hotels', <ShowAllRooms/>],
-  ['Vacancies', <Vacancies/>],
 ];
 
 // const filterWebPages = (pageNames: string[]): Array<[string, JSX.Element]> => {

@@ -3,6 +3,7 @@ import TextfieldComponent from '../../Components/TextfieldComponent';
 import { newDashboardWindow } from '../../DashboardPage';
 import EditHotelRoomData from '../../EditData/EditHotelRoomData';
 import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
+import TextfieldComponentDescription from '../../Components/TextfieldComponentDescription';
 
 interface ResponsiveAppBarProps {
   hotelData?: any;
@@ -18,13 +19,13 @@ function ShowRoomDataOwner({ hotelData, hotelId }: ResponsiveAppBarProps) {
       spacing={3}
       >
         <Grid item xs={4}>
-          <TextfieldComponent value={hotelData.hotelRoomNumber}/>
+          <TextfieldComponent value={hotelData.hotelRoomNumber} helpertext={"Room Number"}/>
         </Grid>
         <Grid item xs={4}>
-          <TextfieldComponent value={hotelData.hotelRoomName}/>
+          <TextfieldComponent value={hotelData.hotelRoomName} helpertext={"Room Name"}/>
         </Grid>
         <Grid item xs={4}>
-          <TextfieldComponent value={hotelData.hotelRoomEmployee}/>
+          <TextfieldComponent value={hotelData.hotelRoomEmployee} helpertext={"Assigned Employee"}/>
         </Grid>
         <Grid item xs={4}>
           <FormControlLabel control={<Checkbox
@@ -57,16 +58,16 @@ function ShowRoomDataOwner({ hotelData, hotelId }: ResponsiveAppBarProps) {
             />} label="Animals" />
         </Grid>
         <Grid item xs={4}>
-          <TextfieldComponent value={hotelData.BigBed}/>
+          <TextfieldComponent value={hotelData.BigBed} helpertext={"Big Beds"}/>
         </Grid>
         <Grid item xs={4}>
-          <TextfieldComponent value={hotelData.SmallBed}/>
+          <TextfieldComponent value={hotelData.SmallBed} helpertext={"Small Beds"}/>
         </Grid>
         <Grid item xs={4}>
-          <TextfieldComponent value={hotelData.Rooms}/>
+          <TextfieldComponent value={hotelData.Rooms} helpertext={"Amount Rooms"}/>
         </Grid>
         <Grid item xs={12}>
-          <TextfieldComponent value={hotelData.roomDescription}/>
+          <TextfieldComponentDescription value={hotelData.roomDescription} size={4}/>
         </Grid>
         <Grid item xs={12}>
           <Button

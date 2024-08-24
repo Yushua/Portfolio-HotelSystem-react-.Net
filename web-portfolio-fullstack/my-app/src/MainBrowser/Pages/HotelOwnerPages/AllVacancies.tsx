@@ -73,19 +73,19 @@ function AllVacancies() {
         spacing={3}
         >
           <Grid item xs={6}>
-            <TextfieldComponent value={vacancy.hotelName}/>
+            <TextfieldComponent value={vacancy.hotelName} helpertext={"Hotel Name"}/>
           </Grid>
           <Grid item xs={6}>
-            <TextfieldComponent value={vacancy.hotelOwner}/>
+            <TextfieldComponent value={vacancy.hotelOwner} helpertext={"Hotel Owner"}/>
           </Grid>
           <Grid item xs={4}>
-            <TextfieldComponent value={vacancy.jobName}/>
+            <TextfieldComponent value={vacancy.jobName} helpertext={"Job Name"}/>
           </Grid>
           <Grid item xs={4}>
-            <TextfieldComponent value={vacancy.jobTitle}/>
+            <TextfieldComponent value={vacancy.jobTitle} helpertext={"Job Title"}/>
           </Grid>
           <Grid item xs={4}>
-            <TextfieldComponent value={vacancy.jobPay}/>
+            <TextfieldComponent value={vacancy.jobPay} helpertext={"AMount Rooms"}/>
           </Grid>
           <Grid item xs={12}>
             <TextfieldComponentDescription value={vacancy.jobDescription} size={4}/>
