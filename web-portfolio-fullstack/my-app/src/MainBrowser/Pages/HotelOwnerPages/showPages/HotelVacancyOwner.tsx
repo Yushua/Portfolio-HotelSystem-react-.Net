@@ -4,6 +4,7 @@ import { Button, Checkbox, FormControlLabel, Grid } from '@mui/material';
 import TextfieldComponent from '../../Components/TextfieldComponent';
 import { newDashboardWindow } from '../../DashboardPage';
 import EditVacancyData from '../../EditData/EditVacancyData';
+import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
 
 async function getVacancyDataHttp(vacancyid:string){
   try {
@@ -37,7 +38,7 @@ interface ResponsiveAppBarProps {
 
 var _setVacancyDataStored: React.Dispatch<React.SetStateAction<any>>
 
-function HotelVacancyOwner({ vacancyData, vacancyid }: ResponsiveAppBarProps) {
+function HotelVacancyOwner({ vacancyData, vacancyid, hotelId }: ResponsiveAppBarProps) {
   const [vacancyDataStored, setVacancyDataStored] = useState<any>([]);
   _setVacancyDataStored = setVacancyDataStored;
 
@@ -76,8 +77,9 @@ function HotelVacancyOwner({ vacancyData, vacancyid }: ResponsiveAppBarProps) {
         <Grid item xs={12}>
           <Button
             variant="contained"
-            onClick={() => newDashboardWindow(<EditVacancyData
+            onClick={() => newHotelDataWindow(<EditVacancyData
               vacancyData={vacancyDataStored}
+              hotelId={hotelId}
               />)}
           >edit</Button>
         </Grid>

@@ -3,6 +3,8 @@ import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Fo
 import React, { useState } from 'react';
 import { newDashboardWindow } from '../DashboardPage';
 import ShowHotelDataOwner from '../HotelOwnerPages/ShowHotelDataOwner';
+import { newHotelDataWindow } from '../HotelOwnerPages/ShowHotelDataOwnerTabs';
+import ShowAllOwnerRoomsFromHotel from '../HotelOwnerPages/showPages/ShowAllOwnerRoomsFromHotel';
 
 type FormStateString = {
   RoomNumber: string;
@@ -135,7 +137,7 @@ async function PatchHotelData(
       }
     }
     else {
-      newDashboardWindow(<ShowHotelDataOwner hotelId={hotelId}/>)
+      newHotelDataWindow(<ShowAllOwnerRoomsFromHotel hotelId={hotelId}/>)
       _setOpen(false);
     }
     return response;
@@ -153,12 +155,13 @@ interface ResponsiveAppBarProps {
   hotelRoomData: any;
   hotelId:string;
 }
+//problem, when getting here. I need the NEW data
 function EditHotelRoomData({ hotelRoomData, hotelId }: ResponsiveAppBarProps) {
   const [open, setOpen] = useState(true);
   _setOpen = setOpen;
   const handleClose = async () => {
     setOpen(false);
-    newDashboardWindow(<ShowHotelDataOwner hotelId={hotelId}/>)
+    newHotelDataWindow(<ShowAllOwnerRoomsFromHotel hotelId={hotelId}/>)
   };
 
   const [formErrors, setFormErrors] = React.useState<FormBoolean>({});

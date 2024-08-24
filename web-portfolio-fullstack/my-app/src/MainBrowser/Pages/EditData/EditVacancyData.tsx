@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { newDashboardWindow } from '../DashboardPage';
 import ShowHotelDataOwner from '../HotelOwnerPages/ShowHotelDataOwner';
 import { FormBoolean } from './EditHotelRoomData';
+import HotelVacancies from '../HotelOwnerPages/showPages/HotelVacancies';
+import { newHotelDataWindow } from '../HotelOwnerPages/ShowHotelDataOwnerTabs';
 
 type FormStateString = {
   jobName: string;
@@ -76,10 +78,9 @@ var _setFormMessage: React.Dispatch<React.SetStateAction<FormStateMessage>>
 
 async function PatchVacancyData(
   vacancyId: string,
+  hotelId: string,
   formStateString: FormStateString,
   formStateNumber: FormStateNumber){
-
-    console.log(vacancyId)
     const credentials = {
       VacancyId: vacancyId, 
       jobDescription: formStateString.jobDescription,
@@ -103,8 +104,8 @@ async function PatchVacancyData(
       }
     }
     else {
-      // newDashboardWindow(<ShowHotelDataOwner hotelId={hotelId}/>)
       // _setOpen(false);
+      // newHotelDataWindow(<HotelVacancies hotelId={hotelId}/>)
     }
     return response;
   } catch (error: any) {
@@ -119,16 +120,17 @@ var _setOpen: React.Dispatch<React.SetStateAction<boolean>>
 
 interface ResponsiveAppBarProps {
   vacancyData: any;
+  hotelId: string;
 }
 
-function EditVacancyData({ vacancyData }: ResponsiveAppBarProps) {
+function EditVacancyData({ vacancyData, hotelId }: ResponsiveAppBarProps) {
 
   const [open, setOpen] = useState(true);
   _setOpen = setOpen;
 
   const handleClose = async () => {
     setOpen(false);
-    // newDashboardWindow(<ShowHotelDataOwner hotelId={hotelId}/>)
+    newHotelDataWindow(<HotelVacancies hotelId={hotelId}/>)
   };
 
   const [formErrors, setFormErrors] = React.useState<FormBoolean>({});
@@ -176,7 +178,7 @@ function EditVacancyData({ vacancyData }: ResponsiveAppBarProps) {
   };
 
   const handleSave = async () => {
-    await PatchVacancyData(vacancyData.VacancyId ,formStateString, formStateNumber);
+    await PatchVacancyData(vacancyData.VacancyId, hotelId ,formStateString, formStateNumber);
   };
 
   return (

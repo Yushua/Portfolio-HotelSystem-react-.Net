@@ -2,6 +2,7 @@ import { Button, Checkbox, FormControlLabel, Grid } from '@mui/material';
 import TextfieldComponent from '../../Components/TextfieldComponent';
 import { newDashboardWindow } from '../../DashboardPage';
 import EditHotelRoomData from '../../EditData/EditHotelRoomData';
+import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
 
 interface ResponsiveAppBarProps {
   hotelData?: any;
@@ -70,7 +71,7 @@ function ShowRoomDataOwner({ hotelData, hotelId }: ResponsiveAppBarProps) {
         <Grid item xs={12}>
           <Button
             variant="contained"
-            onClick={() => newDashboardWindow(<EditHotelRoomData
+            onClick={() => newHotelDataWindow(<EditHotelRoomData
               hotelRoomData={hotelData}
               hotelId={hotelId}
               />)}
