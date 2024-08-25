@@ -19,7 +19,7 @@ export class JobDataEntity {
   @ManyToOne(() => User, user => user.employedTo)
   EmployeeUser: User;
 
-  @ManyToOne(() => Hotels, hotel => hotel.employeeData)
+  @ManyToOne(() => Hotels, hotel => hotel.jobData)
   hotel: Hotels;
   
   @Column()

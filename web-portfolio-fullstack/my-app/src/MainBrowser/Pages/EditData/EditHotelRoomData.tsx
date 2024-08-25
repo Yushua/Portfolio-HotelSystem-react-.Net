@@ -71,28 +71,6 @@ const handleErrors = (messages: string[], credentials: any) => {
   });
 };
 
-async function resetErrorAndMessage(){
-  _setFormMessage({
-    RoomNumber: "",
-    RoomName: "",
-    Employee: "",
-    HotelDescription: "",
-    BigBeds: "",
-    SmallBeds: "",
-    Rooms: "",
-  });
-
-  _setFormErrors({
-    RoomNumber: false,
-    RoomName: false,
-    Employee: false,
-    HotelDescription: false,
-    BigBeds: false,
-    SmallBeds: false,
-    Rooms: false,
-  });
-}
-
 var _setFormErrors: React.Dispatch<React.SetStateAction<FormBoolean>>
 var _setFormMessage: React.Dispatch<React.SetStateAction<FormStateMessage>>
 

@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn
 import { UserStatus } from './user.model';
 import { Hotels } from 'src/hotels/hotels.entity';
 import { HotelVacancy } from 'src/hotels/hotelsVacancy.entity';
-import { JobDataEntity } from 'src/hotels/EmployeeData.entity';
+import { JobDataEntity } from 'src/hotels/JobDataEntity.entity';
 import { RoomBooking } from 'src/hotels/hotelRoomBooking';
 
 @Entity()

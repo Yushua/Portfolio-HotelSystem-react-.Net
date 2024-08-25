@@ -1,12 +1,12 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, GetHotelData, HotelAllVacanciesDataDto, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
+import { CreateHotelDto, GetHotelData, HotelAllVacanciesDataDto, HotelVacancyAllInfoDto, OwnerPatchJobByIdDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { HotelRooms } from './hotelsRooms.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
-import { JobDataEntity } from './EmployeeData.entity';
+import { JobDataEntity } from './JobDataEntity.entity';
 
 @Injectable()
 export class HotelsService {
@@ -96,6 +96,25 @@ export class HotelsService {
     return newRoom;
   }
 
+  async ft_checkJobNameInHotel(hotel, jobName: string){
+    const existingVacancies = await this.HotelVacancyEntity.find({
+      where: { hotel: hotel, jobName: jobName },
+    });
+
+    const existingJobs = await this.jobDataEntity.find({
+      where: { hotel: hotel, jobName: jobName },
+    });
+
+    if (existingVacancies.length > 0 || existingJobs.length > 0) {
+      const errors = [];
+      errors.push('JobName for this hotel already exists');
+      throw new HttpException(
+        { message: errors },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+  
   async createVacancy(patchHotelVacancyCreateDto: PatchHotelVacancyCreateDto): Promise<any> {
     const hotel = await this.HotelsEntity.findOne({
       where: { hotelId: patchHotelVacancyCreateDto.HotelId },
@@ -104,21 +123,9 @@ export class HotelsService {
     if (!hotel) {
       throw new Error('Hotel not found');
     }
-    const vacancies = await this.HotelVacancyEntity.find({
-      where: { hotel: hotel },
-    });
 
-    const jobNameVacancyExists = vacancies.some(room => room.jobName === patchHotelVacancyCreateDto.jobName);
-    const errors = [];
-      if (jobNameVacancyExists) {
-        errors.push('jobName for this hotel already exists');
-      }
-    if (jobNameVacancyExists){
-      throw new HttpException(
-        { message: errors },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    await this.ft_checkJobNameInHotel(hotel, patchHotelVacancyCreateDto.jobName)
+
     const newVacancy = this.HotelVacancyEntity.create({
       hotel: hotel,
       jobName: patchHotelVacancyCreateDto.jobName,
@@ -399,13 +406,13 @@ async ownerGetAllFromEmployeeIdJobsRelatedToOwner(owner: User, employeeId: strin
     if (!userWithEmployees || !userWithEmployees.employeed) {
       return [];
     }
-    const relatedJobsForEmployee = userWithEmployees.employeed.filter(emp => emp.EmployeeUser.id === employeeId);
-    const AllData = relatedJobsForEmployee.map(emp => ({
-      jobId: emp.JobId,
-      jobName: emp.jobName,
-      jobTitle: emp.jobTitle,
-      jobPay: emp.jobPay,
-      jobDescription: emp.jobDescription,
+    const relatedJobsForEmployee = userWithEmployees.employeed.filter(job => job.EmployeeUser.id === employeeId);
+    const AllData = relatedJobsForEmployee.map(job => ({
+      jobId: job.JobId,
+      jobName: job.jobName,
+      jobTitle: job.jobTitle,
+      jobPay: job.jobPay,
+      jobDescription: job.jobDescription,
     }));
     return AllData;
   } catch (error) {
@@ -420,15 +427,12 @@ async ownerRemoveJobFromEmployee(owner: User, jobId: string) {
       where: { JobId: jobId },
       relations: ['bosses'], // Ensure we load the related boss
     });
-    console.log(job)
     if (!job) {
       throw new Error('Job not found');
     }
-    console.log("hello1")
     if (job.bosses.id !== owner.id) {
       throw new Error('You are not authorized to delete this job');
     }
-    console.log("hello2")
     await this.jobDataEntity.remove(job);
 
   } catch (error) {
@@ -436,7 +440,29 @@ async ownerRemoveJobFromEmployee(owner: User, jobId: string) {
   }
 }
 
+async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
 
+  const job = await this.jobDataEntity.findOne({
+    where: { JobId: ownerPatchJobByIdDto.jobId },
+    relations: ['bosses', 'hotel'], // Load the related boss
+  });
+
+  if (!job) {
+    throw new NotFoundException('Job not found');
+  }
+  if (job.bosses.id !== user.id) {
+    throw new UnauthorizedException('You are not authorized to update this job');
+  }
+  
+  await this.ft_checkJobNameInHotel(job.hotel, ownerPatchJobByIdDto.JobName)
+
+  job.jobName = ownerPatchJobByIdDto.JobName;
+  job.jobTitle = ownerPatchJobByIdDto.JobTitle;
+  job.jobDescription = ownerPatchJobByIdDto.JobDescription;
+  job.jobPay = ownerPatchJobByIdDto.JobPay;
+
+  await this.jobDataEntity.save(job);
+}
 
   async getHotelRoomsData(hotelId: string, user: User):Promise<HotelRooms[]> {
     const userWithHotels = await this.userEntity.findOne({

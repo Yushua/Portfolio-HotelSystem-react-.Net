@@ -7,7 +7,7 @@ import { HotelRooms } from './hotelsRooms.entity';
 import { User } from 'src/user/user.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
 import { UserService } from 'src/user/user.service';
-import { JobDataEntity } from './EmployeeData.entity';
+import { JobDataEntity } from './JobDataEntity.entity';
 import { RoomBooking } from './hotelRoomBooking';
 
 @Module({

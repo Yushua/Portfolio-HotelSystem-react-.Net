@@ -2,12 +2,12 @@ import { Body, Controller, Delete, Get, Patch, Post, Request, UseGuards } from '
 import { HotelsService } from './hotels.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/user.entity';
-import { AddBookingByUserDto, CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetemployeeDataDto, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto, RemoveJobWithJobIdDto } from './DTO/create-hotelDto';
+import { AddBookingByUserDto, CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetemployeeDataDto, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, OwnerPatchJobByIdDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto, RemoveJobWithJobIdDto } from './DTO/create-hotelDto';
 import { Hotels } from './hotels.entity';
 import { HotelRooms } from './hotelsRooms.entity';
 import { UserService } from 'src/user/user.service';
 import { HotelVacancy } from './hotelsVacancy.entity';
-import { JobDataEntity } from './EmployeeData.entity';
+import { JobDataEntity } from './JobDataEntity.entity';
 
 @Controller('hotels')
 @UseGuards(AuthGuard('jwt'))
@@ -257,7 +257,6 @@ export class HotelsController {
         @Request() req,
         @Body() getemployeeDataDto: GetemployeeDataDto,
       ):Promise<{AllData: any[]}> {
-        console.log("hello")
         return{AllData: await this.hotelService.ownerGetAllFromEmployeeIdJobsRelatedToOwner(req.user, getemployeeDataDto.employeeId)};
       }
 
@@ -267,6 +266,14 @@ export class HotelsController {
         @Body() removeJobWithJobIdDto: RemoveJobWithJobIdDto,
       ) {
         await this.hotelService.ownerRemoveJobFromEmployee(req.user, removeJobWithJobIdDto.jobId)
+      }
+
+      @Patch("OwnerPatchJobFromEmployee")
+      async OwnerPatchJobFromEmployee(
+        @Request() req,
+        @Body() OwnerPatchJobByIdDto: OwnerPatchJobByIdDto,
+      ) {
+        await this.hotelService.ownerUpdateJob(req.user, OwnerPatchJobByIdDto)
       }
 
 }

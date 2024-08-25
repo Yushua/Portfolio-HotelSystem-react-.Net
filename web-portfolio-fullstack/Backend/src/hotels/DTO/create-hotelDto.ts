@@ -180,6 +180,28 @@ export class AddBookingByUserDto {
   hotelRoomId?: string;
 }
 
+export class OwnerPatchJobByIdDto {
+  @IsNotEmpty()
+  @IsString()
+  JobName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  JobTitle: string;
+
+  @IsNotEmpty()
+  @IsString()
+  JobDescription: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  JobPay: number;
+  
+  @IsNotEmpty()
+  @IsString()
+  jobId: string;
+}
+
 export class HotelVacancyAllInfoDto {
   VacancyId: string;
   jobName: string;

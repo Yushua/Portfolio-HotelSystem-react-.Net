@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne,
 import { HotelRooms } from './hotelsRooms.entity';
 import { User } from 'src/user/user.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
-import { JobDataEntity } from './EmployeeData.entity';
+import { JobDataEntity } from './JobDataEntity.entity';
 
 @Entity()
 export class Hotels {
@@ -31,5 +31,5 @@ export class Hotels {
   hotelVacancy: HotelVacancy[];
 
   @ManyToOne(() => JobDataEntity, employeeData => employeeData.hotel)
-  employeeData: JobDataEntity;
+  jobData: JobDataEntity;
 }
