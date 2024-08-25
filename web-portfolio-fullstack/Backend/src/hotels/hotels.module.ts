@@ -7,7 +7,7 @@ import { HotelRooms } from './hotelsRooms.entity';
 import { User } from 'src/user/user.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
 import { UserService } from 'src/user/user.service';
-import { EmployeeDataEntity } from './EmployeeData.entity';
+import { JobDataEntity } from './EmployeeData.entity';
 import { RoomBooking } from './hotelRoomBooking';
 
 @Module({
@@ -16,7 +16,7 @@ import { RoomBooking } from './hotelRoomBooking';
     HotelRooms,
     User,
     HotelVacancy,
-    EmployeeDataEntity,
+    JobDataEntity,
     RoomBooking])],
   controllers: [HotelsController],
   providers: [HotelsService, UserService],

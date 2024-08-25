@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn
 import { UserStatus } from './user.model';
 import { Hotels } from 'src/hotels/hotels.entity';
 import { HotelVacancy } from 'src/hotels/hotelsVacancy.entity';
-import { EmployeeDataEntity } from 'src/hotels/EmployeeData.entity';
+import { JobDataEntity } from 'src/hotels/EmployeeData.entity';
 import { RoomBooking } from 'src/hotels/hotelRoomBooking';
 
 @Entity()
@@ -39,17 +39,18 @@ export class User {
   //employeeData
 
   @ManyToMany(() => HotelVacancy, vacancy => vacancy.users)
-  @JoinTable() // Join table to manage the many-to-many relationship
+  @JoinTable() 
   vacancies: HotelVacancy[];
-   //
 
-  @OneToMany(() => EmployeeDataEntity, employeeDataEntity => employeeDataEntity.bosses)
-  @JoinTable() // Join table to manage the many-to-many relationship
-  employeed: EmployeeDataEntity[];
+  //who I employed
+  @OneToMany(() => JobDataEntity, JobDataEntity => JobDataEntity.bosses)
+  @JoinTable() 
+  employeed: JobDataEntity[];
 
-  @OneToOne(() => EmployeeDataEntity, employeeDataEntity => employeeDataEntity.EmployeeUser)
-  @JoinTable() // Join table to manage the many-to-many relationship
-  employedTo: EmployeeDataEntity[];
+  //where I am employed
+  @OneToOne(() => JobDataEntity, JobDataEntity => JobDataEntity.EmployeeUser)
+  @JoinTable() 
+  employedTo: JobDataEntity[];
 
   @OneToMany(() => RoomBooking, roomBooking => roomBooking.user)
   bookings: RoomBooking[];

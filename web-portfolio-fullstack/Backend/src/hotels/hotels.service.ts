@@ -6,7 +6,7 @@ import { User } from 'src/user/user.entity';
 import { CreateHotelDto, GetHotelData, HotelAllVacanciesDataDto, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { HotelRooms } from './hotelsRooms.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
-import { EmployeeDataEntity } from './EmployeeData.entity';
+import { JobDataEntity } from './EmployeeData.entity';
 
 @Injectable()
 export class HotelsService {
@@ -19,8 +19,8 @@ export class HotelsService {
     private readonly HotelRoomsEntity: Repository<HotelRooms>,
     @InjectRepository(HotelVacancy)
     private readonly HotelVacancyEntity: Repository<HotelVacancy>,
-    @InjectRepository(EmployeeDataEntity)
-    private readonly EmployeeDataEntity: Repository<EmployeeDataEntity>,
+    @InjectRepository(JobDataEntity)
+    private readonly jobDataEntity: Repository<JobDataEntity>,
   ) {}
 
 
@@ -312,10 +312,16 @@ export class HotelsService {
     return user;
   }
 
-async getAllHotelEmployeeData(user: User, hotelId: string): Promise<EmployeeDataEntity[]> {
+/**
+ * based on the hotel
+ * @param user 
+ * @param hotelId 
+ * @returns 
+ */
+async getAllHotelEmployeeDataOnHotelId(user: User, hotelId: string): Promise<JobDataEntity[]> {
   try {
-    // Query for EmployeeDataEntity with a specific hotel and user
-    const employeeData = await this.EmployeeDataEntity.find({
+    // Query for JobDataEntity with a specific hotel and user
+    const employeeData = await this.jobDataEntity.find({
       where: {
         bosses: user,
         hotel: { hotelId: hotelId },  // Adjusted to filter by hotelId
@@ -329,6 +335,108 @@ async getAllHotelEmployeeData(user: User, hotelId: string): Promise<EmployeeData
     throw new Error('Error fetching employee data');
   }
 }
+
+async getAllHotelEmployeeData(user: User): Promise<any[]> {
+  try {
+    const userWithEmployees = await this.userEntity.findOne({
+      where: { id: user.id },
+      relations: ['employeed', 'employeed.EmployeeUser'],
+    });
+    if (!userWithEmployees || !userWithEmployees.employeed) {
+      return [];
+    }
+    const employeeData = userWithEmployees.employeed.map(emp => ({
+      employeeId: emp.EmployeeUser.id,
+      employeeUsername: emp.EmployeeUser.username,
+      employeeDescription: emp.EmployeeUser.description,
+      employeeEmail: emp.EmployeeUser.email,
+    }));
+
+    const uniqueEmployees = Array.from(
+      new Map(employeeData.map((item) => [item.employeeId, item])).values()
+    );
+
+    return uniqueEmployees;
+  } catch (error) {
+    console.error('Error fetching employee data:', error);
+    throw new Error('Error fetching employee data');
+  }
+}
+
+async getAllHotelEmployeeDataId(user: User): Promise<any[]> {
+  try {
+    const userWithEmployees = await this.userEntity.findOne({
+      where: { id: user.id },
+      relations: ['employeed', 'employeed.EmployeeUser'],
+    });
+
+    if (!userWithEmployees || !userWithEmployees.employeed) {
+      return [];
+    }
+    const employeeData = userWithEmployees.employeed.map(emp => ({
+      employeeId: emp.EmployeeUser.id,
+      employeeUsername: emp.EmployeeUser.username,
+    }));
+
+    const uniqueEmployees = Array.from(
+      new Map(employeeData.map((item) => [item.employeeId, item])).values()
+    );
+
+    return uniqueEmployees;
+  } catch (error) {
+    console.error('Error fetching employee data:', error);
+    throw new Error('Error fetching employee data');
+  }
+}
+
+async ownerGetAllFromEmployeeIdJobsRelatedToOwner(owner: User, employeeId: string): Promise<any[]> {
+  try {
+    const userWithEmployees = await this.userEntity.findOne({
+      where: { id: owner.id },
+      relations: ['employeed', 'employeed.EmployeeUser'],
+    });
+
+    if (!userWithEmployees || !userWithEmployees.employeed) {
+      return [];
+    }
+    const relatedJobsForEmployee = userWithEmployees.employeed.filter(emp => emp.EmployeeUser.id === employeeId);
+    const AllData = relatedJobsForEmployee.map(emp => ({
+      jobId: emp.JobId,
+      jobName: emp.jobName,
+      jobTitle: emp.jobTitle,
+      jobPay: emp.jobPay,
+      jobDescription: emp.jobDescription,
+    }));
+    return AllData;
+  } catch (error) {
+    console.error('Error fetching employee data:', error);
+    throw new Error('Error fetching employee data');
+  }
+}
+
+async ownerRemoveJobFromEmployee(owner: User, jobId: string) {
+  try {
+    const job = await this.jobDataEntity.findOne({
+      where: { JobId: jobId },
+      relations: ['bosses'], // Ensure we load the related boss
+    });
+    console.log(job)
+    if (!job) {
+      throw new Error('Job not found');
+    }
+    console.log("hello1")
+    if (job.bosses.id !== owner.id) {
+      throw new Error('You are not authorized to delete this job');
+    }
+    console.log("hello2")
+    await this.jobDataEntity.remove(job);
+
+  } catch (error) {
+    throw new Error('Error removing job from employee');
+  }
+}
+
+
 
   async getHotelRoomsData(hotelId: string, user: User):Promise<HotelRooms[]> {
     const userWithHotels = await this.userEntity.findOne({
@@ -453,7 +561,7 @@ async getAllHotelEmployeeData(user: User, hotelId: string): Promise<EmployeeData
 
   async acceptVacancy(boss: User, employee: User, vacancy: HotelVacancy, hotel: Hotels){
 
-    const neweEmployee = this.EmployeeDataEntity.create({
+    const neweEmployee = this.jobDataEntity.create({
       bosses: boss,
       EmployeeUser: employee,
       hotel: hotel,
@@ -464,7 +572,7 @@ async getAllHotelEmployeeData(user: User, hotelId: string): Promise<EmployeeData
       email: employee.email,
     });
     try {
-      await this.EmployeeDataEntity.save(neweEmployee);
+      await this.jobDataEntity.save(neweEmployee);
     } catch (error) {
       console.error('Error saving newEmployee:', error);
       throw new Error('Error saving Employee');
@@ -484,208 +592,4 @@ async getAllHotelEmployeeData(user: User, hotelId: string): Promise<EmployeeData
     }
   }
 
-  // /* check information */
-  // async checkHotel(hotelId: string): Promise<Hotels>{
-  //   const hotel = await this.HotelsEntity.findOne({
-  //     where: { hotelId: hotelId },
-  //   });
-  //   if (!hotel) {
-  //     throw new NotFoundException('Hotel not found');
-  //   }
-  //   return hotel;
-  // }
-
-  // async checkRoomNumber(hotel: Hotels, hotelNumber: number): Promise<void> {
-  //   const existingRoom = await this.HotelRoomsEntity.findOne({
-  //     where: { hotel, hotelRoomNumber: hotelNumber },
-  //   });
-
-  //   if (existingRoom) {
-  //     throw new ConflictException('Room number already exists');
-  //   }
-  // }
-  
-  // async findRoomByNumber(
-  //   hotel: Hotels,
-  //   hotelNumber: number,
-  // ): Promise<HotelRooms> {
-  //   const existingRoom = await this.HotelRoomsEntity.findOne({
-  //     where: { hotel, hotelRoomNumber: hotelNumber },
-  //   });
-
-  //   if (!existingRoom) {
-  //     throw new ConflictException('Room number already exists');
-  //   }
-  //   return existingRoom;
-  // }
-
-  // async checkHotelName(hotelName: string): Promise<void> {
-  //   const Hotels = await this.HotelsEntity.findOne({
-  //     where: { hotelName: hotelName },
-  //   });
-
-  //   if (Hotels) {
-  //     throw new ConflictException('Hotel name already exists');
-  //   }
-  // }
-
-  /* create information information */
-
-  // async createRoom(roomData: CreateHotelRoomDto): Promise<HotelRooms> {
-  //   const {
-  //     hotelRoomNumber,
-  //     hotelId,
-  //     hotelRoomDescription,
-  //     BigBed,
-  //     SmallBed,
-  //     Rooms,
-  //     Kitchen,
-  //     Wifi,
-  //   } = roomData;
-  //   const hotel = await this.checkHotel(hotelId);
-  //   await this.checkRoomNumber(hotel, hotelRoomNumber);
-
-  //   const room = this.HotelRoomsEntity.create({
-  //     hotelRoomNumber,
-  //     hotelId,
-  //     hotelRoomDescription,
-  //     BigBed,
-  //     SmallBed,
-  //     Rooms,
-  //     Kitchen,
-  //     Wifi,
-  //     hotel,
-  //   });
-  //   return await this.HotelRoomsEntity.save(room);
-  // }
-
-  /* Patch hotel Data*/
-
-  // async changeOwnerName(
-  //   hotelId: string,
-  //   newOwnerName: string,
-  // ): Promise<Hotels> {
-  //   const hotel = await this.checkHotel(hotelId);
-  //   hotel.hotelOwner = newOwnerName; // multiple hotels can be owned by the same owner
-  //   //you use the ID not the actual owner name, because id can't change
-  //   return await this.HotelsEntity.save(hotel);
-  // }
-
-  // async changeHotelName(
-  //   hotelId: string,
-  //   newHotelName: string,
-  // ): Promise<Hotels> {
-  //   await this.checkHotelName(newHotelName);
-  //   const hotel = await this.checkHotel(hotelId);
-  //   hotel.hotelName = newHotelName;
-  //   return await this.HotelsEntity.save(hotel);
-  // }
-
-  // async changeHotelRoomNumber(
-  //   hotel: Hotels,
-  //   roomNumber: number,
-  //   newRoomNumber: number,
-  // ): Promise<HotelRooms> {
-  //   this.checkRoomNumber(hotel, newRoomNumber); //check if the new number already exist
-  //   const existingRoom = await this.HotelRoomsEntity.findOne({
-  //     where: { hotel, hotelRoomNumber: roomNumber },
-  //   });
-
-  //   if (!existingRoom) {
-  //     throw new ConflictException('Room number given does not exist');
-  //   }
-  //   existingRoom.hotelRoomNumber = newRoomNumber;
-  //   return await this.HotelRoomsEntity.save(existingRoom);
-  // }
-
-  // async changeHotelDescription(
-  //   hotelId: string,
-  //   newDescription: string,
-  // ): Promise<Hotels> {
-  //   const hotel = await this.checkHotel(hotelId);
-  //   hotel.hotelDescription = newDescription;
-  //   return await this.HotelsEntity.save(hotel);
-  // }
-
-  // async changeRoomDescription(
-  //   hotel: Hotels,
-  //   roomNumber: number,
-  //   newDescription: string,
-  // ): Promise<HotelRooms> {
-  //   const room = await this.findRoomByNumber(hotel, roomNumber);
-  //   room.hotelRoomDescription = newDescription;
-  //   return await this.HotelRoomsEntity.save(room);
-  // }
-
-  // async changeRoomBigBed(
-  //   hotel: Hotels,
-  //   roomNumber: number,
-  //   newBigBed: number,
-  // ): Promise<HotelRooms> {
-  //   const room = await this.findRoomByNumber(hotel, roomNumber);
-  //   if (newBigBed < 0) {
-  //     throw new ConflictException('BigRoom number too low');
-  //   }
-  //   room.BigBed = newBigBed;
-  //   return await this.HotelRoomsEntity.save(room);
-  // }
-
-  // async changeRoomSmallBed(
-  //   hotel: Hotels,
-  //   roomNumber: number,
-  //   newSmallBed: number,
-  // ): Promise<HotelRooms> {
-  //   const room = await this.findRoomByNumber(hotel, roomNumber);
-  //   if (newSmallBed < 0) {
-  //     throw new ConflictException('SmallRoom number too low');
-  //   }
-  //   room.SmallBed = newSmallBed;
-  //   return await this.HotelRoomsEntity.save(room);
-  // }
-
-  // async changeRoomsize(
-  //   hotel: Hotels,
-  //   roomNumber: number,
-  //   newsizeRooms: number,
-  // ): Promise<HotelRooms> {
-  //   const room = await this.findRoomByNumber(hotel, roomNumber);
-  //   if (newsizeRooms < 0){
-  //     throw new ConflictException('BigRoom number too low');
-  //   }
-  //   room.Rooms = newsizeRooms;
-  //   return await this.HotelRoomsEntity.save(room);
-  // }
-
-  // async changeRoomKitchen(
-  //   hotel: Hotels,
-  //   roomNumber: number,
-  // ): Promise<HotelRooms> {
-  //   const room = await this.findRoomByNumber(hotel, roomNumber);
-  //   if (room.Kitchen === true) room.Kitchen = false;
-  //   else {
-  //     room.Kitchen = true;
-  //   }
-  //   return await this.HotelRoomsEntity.save(room);
-  // }
-
-  // async changeRoomWifi(hotel: Hotels, roomNumber: number): Promise<HotelRooms> {
-  //   const room = await this.findRoomByNumber(hotel, roomNumber);
-  //   if (room.Wifi === true) room.Wifi = false;
-  //   else {
-  //     room.Wifi = true;
-  //   }
-  //   return await this.HotelRoomsEntity.save(room);
-  // }
-
-  // /* remove hotel Data */
-
-  // async removeHotelRoom(hotel, Hotels, roomNumber: number): Promise<void> {
-  //   const room = await this.findRoomByNumber(hotel, roomNumber);
-  //   await this.HotelRoomsEntity.remove(room);
-  // }
-
-  // async removeHotelAndRooms(hotelId: string): Promise<void> {
-  //   const hotel = await this.checkHotel(hotelId);
-  //   await this.HotelsEntity.remove(hotel);
-  // }
 }

@@ -17,9 +17,6 @@ async function getOwnerHotelData(){
       },
     });
     if (!response.ok) {
-      if (response.status === 404){
-        // const errorData = await response.json();
-      }
     }
     else {
       const data = await response.json();

@@ -23,6 +23,19 @@ export class GetVacancyData {
   vacancyId: string;
 }
 
+export class GetemployeeDataDto {
+  @IsNotEmpty()
+  @IsString()
+  employeeId: string;
+}
+
+export class RemoveJobWithJobIdDto {
+  @IsNotEmpty()
+  @IsString()
+  jobId: string;
+}
+
+
 export class DeleteEmployeeFromVacancyDTO {
   @IsNotEmpty()
   @IsString()

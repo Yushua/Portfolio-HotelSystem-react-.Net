@@ -2,12 +2,12 @@ import { Body, Controller, Delete, Get, Patch, Post, Request, UseGuards } from '
 import { HotelsService } from './hotels.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/user.entity';
-import { AddBookingByUserDto, CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
+import { AddBookingByUserDto, CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetemployeeDataDto, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto, RemoveJobWithJobIdDto } from './DTO/create-hotelDto';
 import { Hotels } from './hotels.entity';
 import { HotelRooms } from './hotelsRooms.entity';
 import { UserService } from 'src/user/user.service';
 import { HotelVacancy } from './hotelsVacancy.entity';
-import { EmployeeDataEntity } from './EmployeeData.entity';
+import { JobDataEntity } from './EmployeeData.entity';
 
 @Controller('hotels')
 @UseGuards(AuthGuard('jwt'))
@@ -139,9 +139,9 @@ export class HotelsController {
       async HotelEmployeeDataOwner(
         @Request() req,
         @Body() GetHotelData: GetHotelData,
-      ): Promise<{ EmployeeData: EmployeeDataEntity[] }> {
+      ): Promise<{ EmployeeData: JobDataEntity[] }> {
         const user: User = req.user;
-        const EmployeeData = await this.hotelService.getAllHotelEmployeeData(user, GetHotelData.HotelId);
+        const EmployeeData = await this.hotelService.getAllHotelEmployeeDataOnHotelId(user, GetHotelData.HotelId);
         return {EmployeeData}
       }
 
@@ -177,7 +177,6 @@ export class HotelsController {
         @Request() req,
         @Body() deleteEmployeeFromVacancyDTO: DeleteEmployeeFromVacancyDTO,
       ) {
-        console.log("hello")
         const user: User = req.user;
         await this.hotelService.removedFromVacancy(user, deleteEmployeeFromVacancyDTO.userId, deleteEmployeeFromVacancyDTO.vacancyId)
       }
@@ -236,4 +235,38 @@ export class HotelsController {
       ) {
         //delete booking/ seperate because maybe a message is send to the User
       }
+
+      /* employee */
+
+      @Post("OwnerGetAllEmployeeData")
+      async OwnerGetAllEmployeeData(
+        @Request() req,
+      ):Promise<{AllData: any[]}> {
+        return{AllData: await this.hotelService.getAllHotelEmployeeData(req.user)};
+      }
+
+      @Post("OwnerGetAllEmployeeId")
+      async OwnerGetAllEmployeeId(
+        @Request() req,
+      ):Promise<{AllData: any[]}> {
+        return{AllData: await this.hotelService.getAllHotelEmployeeDataId(req.user)};
+      }
+
+      @Post("OwnerGetAllEmployeeJobINfoRelatedToOwner")
+      async OwnerGetAllEmployeeJobINfoRelatedToOwner(
+        @Request() req,
+        @Body() getemployeeDataDto: GetemployeeDataDto,
+      ):Promise<{AllData: any[]}> {
+        console.log("hello")
+        return{AllData: await this.hotelService.ownerGetAllFromEmployeeIdJobsRelatedToOwner(req.user, getemployeeDataDto.employeeId)};
+      }
+
+      @Delete("OwnerRemoveJobFromEmployee")
+      async OwnerRemoveJobFromEmployee(
+        @Request() req,
+        @Body() removeJobWithJobIdDto: RemoveJobWithJobIdDto,
+      ) {
+        await this.hotelService.ownerRemoveJobFromEmployee(req.user, removeJobWithJobIdDto.jobId)
+      }
+
 }

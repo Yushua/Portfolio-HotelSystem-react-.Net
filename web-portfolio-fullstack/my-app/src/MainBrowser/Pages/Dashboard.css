@@ -87,6 +87,16 @@
     width: 100%;
   }
 
+  .containerInfoItems {
+    padding: 1rem;
+  }
+
+  .containerInfo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
   .tabContainer {
     padding: 4rem;
     margin-top: 10rem;

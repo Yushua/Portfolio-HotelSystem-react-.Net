@@ -7,16 +7,16 @@ import { User } from 'src/user/user.entity';
  * the user.id tells you who the owner is and where that goes. super simple
  */
 @Entity()
-export class EmployeeDataEntity {
+export class JobDataEntity {
   @PrimaryGeneratedColumn('uuid')
-  EmployeeyId: string;
+  JobId: string;
 
-  //you only have one boss, bos gets multille EMployeeData
-  @ManyToOne(() => User, user => user.vacancies)
+  //you only have one boss, boss gets multille EMployeeData
+  @ManyToOne(() => User, user => user.employeed)
   bosses: User;
 
-  //you can have more than one job, user has more than one EmployeData
-  @ManyToOne(() => User, user => user.vacancies)
+  //you can have more than one job, user has more than one EmployeeData
+  @ManyToOne(() => User, user => user.employedTo)
   EmployeeUser: User;
 
   @ManyToOne(() => Hotels, hotel => hotel.employeeData)
