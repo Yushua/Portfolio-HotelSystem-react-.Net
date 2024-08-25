@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { Hotels } from './hotels.entity';
+import { RoomBooking } from './hotelRoomBooking';
 
 @Entity()
 export class HotelRooms {
@@ -44,4 +45,7 @@ export class HotelRooms {
 
   @ManyToOne(() => Hotels, (hotels) => hotels.hotelrooms)
   hotel: Hotels;
+
+  @OneToMany(() => RoomBooking, roomBooking => roomBooking.hotelRoom)
+  bookings: RoomBooking[];
 }

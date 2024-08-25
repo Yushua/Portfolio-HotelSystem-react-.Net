@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Patch, Post, Request, UseGuards } from '
 import { HotelsService } from './hotels.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/user.entity';
-import { CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
+import { AddBookingByUserDto, CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { Hotels } from './hotels.entity';
 import { HotelRooms } from './hotelsRooms.entity';
 import { UserService } from 'src/user/user.service';
@@ -17,6 +17,9 @@ export class HotelsController {
         private userService: UserService,
       ) {}
 
+
+      /* hotel */
+
       @Post(`CreateHotel`)
       async loginUser(
         @Request() req,
@@ -27,6 +30,44 @@ export class HotelsController {
         return { hotelID };
       }
 
+      @Get(`HotelOwner`)
+      async HotelOwner(
+        @Request() req,
+      ): Promise<{ userWithHotels: any }> {
+        const user: User = req.user;
+        const userWithHotels = await this.hotelService.getAllOwnerHotels(user);
+        return {userWithHotels}
+      }
+
+      @Patch(`PatchHotel`)
+      async PatchHotel(
+        @Request() req,
+        @Body() patchHotelDto: PatchHotelDto,
+      ) {
+        const user: User = req.user;
+        await this.hotelService.PatchHotelData(user, patchHotelDto);
+      }
+
+      @Post(`GetHotelData`)
+      async GetHotelData(
+        @Request() req,
+        @Body() GetHotelData: GetHotelData,
+      ): Promise<{ HotelData: Hotels }> {
+        const user: User = req.user;
+        const HotelData = await this.hotelService.getHotelData(GetHotelData.HotelId, user);
+        return {HotelData}
+      }
+      
+      @Delete("DeleteHotelByOwner")
+      async DeleteHotelByOwner(
+        @Request() req,
+        @Body() getHotelData: GetHotelData,
+      ) {
+        //delete hotel
+      }
+
+      /* room */
+      
       @Post(`CreateRoom`)
       async CreateRoom(
         @Request() req,
@@ -36,6 +77,35 @@ export class HotelsController {
         return { hotelData: await this.hotelService.createRoom(patchHotelRoomDto) };
       }
 
+      @Patch(`PatchHotelRoom`)
+      async PatchHotelRoom(
+        @Request() req,
+        @Body() patchHotelRoomDto: PatchHotelRoomDto,
+      ) {
+        const user: User = req.user;
+        await this.hotelService.PatchHotelRoomOwner(patchHotelRoomDto);
+      }
+
+      @Post(`HotelRooms`)
+      async GetHotelRoomsData(
+        @Request() req,
+        @Body() GetHotelData: GetHotelData,
+      ): Promise<{ HotelRoomsData: HotelRooms[] }> {
+        const user: User = req.user;
+        const HotelRoomsData = await this.hotelService.getHotelRoomsData(GetHotelData.HotelId, user);
+        return {HotelRoomsData}
+      }
+
+      @Delete("DeleteHotelRoomByOwner")
+      async DeleteHotelRoomByOwner(
+        @Request() req,
+        @Body() getHotelData: GetHotelData,
+      ) {
+        //delete hotel
+      }
+
+      /*vacancy */
+
       @Post(`CreateVacancy`)
       async CreateVacancy(
         @Request() req,
@@ -43,15 +113,6 @@ export class HotelsController {
       ):Promise<{vacancyData: any}> {
         const user: User = req.user;
         return { vacancyData: await this.hotelService.createVacancy(patchHotelVacancyCreateDto) };
-      }
-
-      @Get(`HotelOwner`)
-      async HotelOwner(
-        @Request() req,
-      ): Promise<{ userWithHotels: any }> {
-        const user: User = req.user;
-        const userWithHotels = await this.hotelService.getAllOwnerHotels(user);
-        return {userWithHotels}
       }
 
       @Post(`GetVacanciesData`)
@@ -72,45 +133,6 @@ export class HotelsController {
         const user: User = req.user;
         const vacancyEmplyeeData = await this.hotelService.getVacancyEmployeeData(user, getVacancyData.vacancyId);
         return {vacancyEmplyeeData: vacancyEmplyeeData}
-      }
-
-      @Patch(`PatchHotel`)
-      async PatchHotel(
-        @Request() req,
-        @Body() patchHotelDto: PatchHotelDto,
-      ) {
-        const user: User = req.user;
-        await this.hotelService.PatchHotelData(user, patchHotelDto);
-      }
-
-
-      @Patch(`PatchHotelRoom`)
-      async PatchHotelRoom(
-        @Request() req,
-        @Body() patchHotelRoomDto: PatchHotelRoomDto,
-      ) {
-        const user: User = req.user;
-        await this.hotelService.PatchHotelRoomOwner(patchHotelRoomDto);
-      }
-
-      @Post(`GetHotelData`)
-      async GetHotelData(
-        @Request() req,
-        @Body() GetHotelData: GetHotelData,
-      ): Promise<{ HotelData: Hotels }> {
-        const user: User = req.user;
-        const HotelData = await this.hotelService.getHotelData(GetHotelData.HotelId, user);
-        return {HotelData}
-      }
-
-      @Post(`HotelRooms`)
-      async GetHotelRoomsData(
-        @Request() req,
-        @Body() GetHotelData: GetHotelData,
-      ): Promise<{ HotelRoomsData: HotelRooms[] }> {
-        const user: User = req.user;
-        const HotelRoomsData = await this.hotelService.getHotelRoomsData(GetHotelData.HotelId, user);
-        return {HotelRoomsData}
       }
 
       @Post(`GetAllHotelEmployeeDataOwner`)
@@ -172,5 +194,46 @@ export class HotelsController {
         const hotel: Hotels = await this.hotelService.ft_getHotelData(deleteEmployeeFromVacancyDTO.hotelId, boss.id);
         await this.hotelService.acceptVacancy(boss, employee, vacancy, hotel);
         await this.hotelService.RemoveVacancy(vacancy);
+      }
+
+      /* Booking controller */
+
+      @Patch("AddBookingByUserDto ")
+      async AdBookingByUser(
+        @Request() req,
+        @Body() addBookingByUserDto: AddBookingByUserDto,
+      ) {
+        //Add booking by user
+      }
+
+      @Delete("DeleteBookingByUser")
+      async DeleteBookingByUser(
+        @Request() req,
+        @Body() getVacancyData: GetVacancyData,
+      ) {
+        //if cancelled, maybe the same issue arises
+
+      }
+      
+      @Post("ShowAllUserBookings")
+      async ShowAllUserBookings(
+        @Request() req,
+      ) {
+        //show all user bookings
+      }
+      
+      @Post("ShowAllHotelOwnerBookings")
+      async ShowAllHotelOwnerBookings(
+        @Request() req,
+      ) {
+        //show all Hotel Bookings
+      }
+
+      @Delete("DeleteBookingByOwner")
+      async DeleteBookingByOwner(
+        @Request() req,
+        @Body() getVacancyData: GetVacancyData,
+      ) {
+        //delete booking/ seperate because maybe a message is send to the User
       }
 }

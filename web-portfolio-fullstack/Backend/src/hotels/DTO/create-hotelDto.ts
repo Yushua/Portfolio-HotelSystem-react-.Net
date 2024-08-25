@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Hotels } from '../hotels.entity';
 
 export class CreateHotelDto {
@@ -150,6 +150,21 @@ export class PatchHotelVacancyPatchDto {
   @IsNumber()
   @IsNotEmpty()
   jobPay: number;
+}
+
+
+export class AddBookingByUserDto {
+  @IsNotEmpty()
+  @IsDate()
+  startDate: Date;
+
+  @IsNotEmpty()
+  @IsDate()
+  endDate: Date;
+
+  @IsNotEmpty()
+  @IsString()
+  hotelRoomId?: string;
 }
 
 export class HotelVacancyAllInfoDto {

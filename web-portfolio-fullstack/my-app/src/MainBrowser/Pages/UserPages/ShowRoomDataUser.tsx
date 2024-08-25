@@ -8,7 +8,10 @@ interface ResponsiveAppBarProps {
 function ShowRoomDataUser({ roomId }: ResponsiveAppBarProps) {
   return (
     <>
-      Show Room User on ID
+      show hotel Data 
+      show room data
+      option to show the start and end Date 
+      Accept
     </>
   );
 }

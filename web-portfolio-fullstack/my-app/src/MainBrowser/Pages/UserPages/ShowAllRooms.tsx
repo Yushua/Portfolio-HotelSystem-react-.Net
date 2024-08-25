@@ -1,12 +1,16 @@
 
 import React from 'react';
 
-function ShowAllRooms() {
+function ShowAllHotelRooms() {
+
+  /* 
+  on click newWindow(<howRoomDataUser roomId={roomId})
+  */
   return (
     <>
-      All Rooms the User applied to
+      Search for rooms
     </>
   );
 }
 
-export default ShowAllRooms;
+export default ShowAllHotelRooms;
