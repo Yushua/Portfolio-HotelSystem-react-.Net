@@ -6,6 +6,8 @@ import { CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetHotelData, GetVacancyD
 import { Hotels } from './hotels.entity';
 import { HotelRooms } from './hotelsRooms.entity';
 import { UserService } from 'src/user/user.service';
+import { HotelVacancy } from './hotelsVacancy.entity';
+import { EmployeeDataEntity } from './EmployeeData.entity';
 
 @Controller('hotels')
 @UseGuards(AuthGuard('jwt'))
@@ -111,6 +113,16 @@ export class HotelsController {
         return {HotelRoomsData}
       }
 
+      @Post(`GetAllHotelEmployeeDataOwner`)
+      async HotelEmployeeDataOwner(
+        @Request() req,
+        @Body() GetHotelData: GetHotelData,
+      ): Promise<{ EmployeeData: EmployeeDataEntity[] }> {
+        const user: User = req.user;
+        const EmployeeData = await this.hotelService.getAllHotelEmployeeData(user, GetHotelData.HotelId);
+        return {EmployeeData}
+      }
+
       @Patch("PatchHotelVacancyDataOwner")
       async PatchHotelVacancyDataOwner(
         @Request() req,
@@ -148,7 +160,7 @@ export class HotelsController {
         await this.hotelService.removedFromVacancy(user, deleteEmployeeFromVacancyDTO.userId, deleteEmployeeFromVacancyDTO.vacancyId)
       }
 
-      @Delete("DeleteAcceptEmployee")
+      @Delete("AcceptEmployeeForVacancy")
       async DeleteAcceptEmployee(
         @Request() req,
         @Body() deleteEmployeeFromVacancyDTO: DeleteEmployeeFromVacancyDTO,
@@ -156,10 +168,9 @@ export class HotelsController {
         const boss: User = req.user;
 
         const employee: User = await this.userService.getUseryId(deleteEmployeeFromVacancyDTO.userId);
-        /*
-          the employeeEntity needs a user that wants the job, connect to the user deleteEmployeeFromVacancyDTO.userId
-          and the owner, the boss. connect to the boss user
-        */
-        // await this.hotelService.removedFromVacancy(user, deleteEmployeeFromVacancyDTO.userId, deleteEmployeeFromVacancyDTO.vacancyId)
+        const vacancy: HotelVacancy = await this.hotelService.ft_GetVacancyData(boss, deleteEmployeeFromVacancyDTO.vacancyId);
+        const hotel: Hotels = await this.hotelService.ft_getHotelData(deleteEmployeeFromVacancyDTO.hotelId, boss.id);
+        await this.hotelService.acceptVacancy(boss, employee, vacancy, hotel);
+        await this.hotelService.RemoveVacancy(vacancy);
       }
 }

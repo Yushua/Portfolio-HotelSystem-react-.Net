@@ -7,7 +7,7 @@ export class HotelVacancy {
   @PrimaryGeneratedColumn('uuid')
   VacancyId: string;
 
-  @ManyToOne(() => Hotels, (hotels) => hotels.hotelVacancy)
+  @ManyToOne(() => Hotels, (hotels) => hotels.hotelVacancy, { onDelete: 'CASCADE' })
   hotel: Hotels;
 
   @Column()
@@ -22,7 +22,6 @@ export class HotelVacancy {
   @Column()
   jobDescription: string;
 
-  //add an emplpyee here, so I can see, oh... this one applied to this vacancy
-  @ManyToMany(() => User, user => user.vacancies)
+  @ManyToMany(() => User, user => user.vacancies, { cascade: true })
   users: User[];
 }

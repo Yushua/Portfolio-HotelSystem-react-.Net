@@ -13,12 +13,15 @@ export class EmployeeDataEntity {
 
   //you only have one boss, bos gets multille EMployeeData
   @ManyToOne(() => User, user => user.vacancies)
-  bosses: User[];
+  bosses: User;
 
   //you can have more than one job, user has more than one EmployeData
   @ManyToOne(() => User, user => user.vacancies)
-  EmployeeUser: User[];
+  EmployeeUser: User;
 
+  @ManyToOne(() => Hotels, hotel => hotel.employeeData)
+  hotel: Hotels;
+  
   @Column()
   jobName: string;
 

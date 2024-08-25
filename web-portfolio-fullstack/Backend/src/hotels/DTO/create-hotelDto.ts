@@ -31,6 +31,10 @@ export class DeleteEmployeeFromVacancyDTO {
   @IsNotEmpty()
   @IsString()
   userId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  hotelId: string;
 }
 
 export class PatchHotelDto {

@@ -6,6 +6,7 @@ import { User } from 'src/user/user.entity';
 import { CreateHotelDto, GetHotelData, HotelAllVacanciesDataDto, HotelVacancyAllInfoDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto } from './DTO/create-hotelDto';
 import { HotelRooms } from './hotelsRooms.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
+import { EmployeeDataEntity } from './EmployeeData.entity';
 
 @Injectable()
 export class HotelsService {
@@ -18,6 +19,8 @@ export class HotelsService {
     private readonly HotelRoomsEntity: Repository<HotelRooms>,
     @InjectRepository(HotelVacancy)
     private readonly HotelVacancyEntity: Repository<HotelVacancy>,
+    @InjectRepository(EmployeeDataEntity)
+    private readonly EmployeeDataEntity: Repository<EmployeeDataEntity>,
   ) {}
 
 
@@ -222,6 +225,28 @@ export class HotelsService {
     }));
     return vacanciesData
   }
+  
+  /**
+   * get Vacancy, checks if the user getting it is the owner
+   * @param user 
+   * @param vacancyId 
+   */
+  async ft_GetVacancyData(user: User, vacancyId: string):Promise<any>{
+
+    const vacancy = await this.HotelVacancyEntity.findOne({
+      where: { VacancyId: vacancyId },
+      relations: ['users', 'hotel'],  // Include users and hotel data
+    });
+
+    if (!vacancy) {
+      throw new NotFoundException(`Vacancy with ID ${vacancyId} not found`);
+    }
+
+    if (vacancy.hotel && vacancy.hotel.user && vacancy.hotel.user.id !== user.id) {
+      throw new UnauthorizedException();
+    }
+    return vacancy;
+  }
 
   //return all employees
   async getVacancyEmployeeData(user: User, vacancyId: string):Promise<any[]> {
@@ -263,7 +288,7 @@ export class HotelsService {
   /* function get the info */
 
   /**
-   * return the hotel based on the hotelID and userID
+   * return the hotel based on the hotelID and User
    * if failed, it means unauthorized access
    * @returns 
    */
@@ -279,23 +304,6 @@ export class HotelsService {
     return hotel
   }
 
-  /**
-   * with vacancy ID you get the vacancy back
-   * if failed, it means unauthorized access
-   * @returns 
-   */
-  async ft_getVacancyData(vacancyId: string):Promise <HotelVacancy> {
-    const vacancy = await this.HotelVacancyEntity.findOne({
-      where: { VacancyId: vacancyId },
-      relations: ['hotel'], // This loads the hotel data in the vacancy
-    });
-
-    if (!vacancy) {
-      throw new UnauthorizedException();
-    }
-    return vacancy
-  }
-
   async ft_getUser(userId: string):Promise <User> {
     const user = await this.userEntity.findOne({ where: { id: userId } });
     if (!user) {
@@ -304,18 +312,34 @@ export class HotelsService {
     return user;
   }
 
+async getAllHotelEmployeeData(user: User, hotelId: string): Promise<EmployeeDataEntity[]> {
+  try {
+    // Query for EmployeeDataEntity with a specific hotel and user
+    const employeeData = await this.EmployeeDataEntity.find({
+      where: {
+        bosses: user,
+        hotel: { hotelId: hotelId },  // Adjusted to filter by hotelId
+      },
+      relations: ['bosses', 'EmployeeUser', 'hotel'], // Add hotel to relations if needed
+    });
+
+    return employeeData;
+  } catch (error) {
+    console.error('Error fetching employee data:', error);
+    throw new Error('Error fetching employee data');
+  }
+}
+
   async getHotelRoomsData(hotelId: string, user: User):Promise<HotelRooms[]> {
     const userWithHotels = await this.userEntity.findOne({
       where: { id: user.id },
-      relations: ['hotels'], // Ensure this matches the relation name in User entity
+      relations: ['hotels'],
     });
 
     if (!userWithHotels) {
       throw new UnauthorizedException();
     }
-
     const hotel = await this.ft_getHotelData(hotelId, user.id);
-
     return (hotel.hotelrooms)
   }
 
@@ -338,7 +362,7 @@ export class HotelsService {
 
   async PatchVacancyData(patchHotelVacancyPatchDto: PatchHotelVacancyPatchDto, user: User) {
 
-    const vacancy = await this.ft_getVacancyData(patchHotelVacancyPatchDto.VacancyId);
+    const vacancy = await this.ft_GetVacancyData(user, patchHotelVacancyPatchDto.VacancyId);
     
     const hotel = await this.ft_getHotelData(vacancy.hotel.hotelId, user.id);
 
@@ -426,6 +450,39 @@ export class HotelsService {
 
     await this.HotelVacancyEntity.save(vacancy);
   } 
+
+  async acceptVacancy(boss: User, employee: User, vacancy: HotelVacancy, hotel: Hotels){
+
+    const neweEmployee = this.EmployeeDataEntity.create({
+      bosses: boss,
+      EmployeeUser: employee,
+      hotel: hotel,
+      jobName: vacancy.jobName,
+      jobTitle: vacancy.jobTitle,
+      jobPay: vacancy.jobPay,
+      jobDescription: vacancy.jobDescription,
+      email: employee.email,
+    });
+    try {
+      await this.EmployeeDataEntity.save(neweEmployee);
+    } catch (error) {
+      console.error('Error saving newEmployee:', error);
+      throw new Error('Error saving Employee');
+    }
+  }
+
+  async RemoveVacancy(vacancy: HotelVacancy) {
+    try {
+      await this.HotelVacancyEntity.createQueryBuilder()
+        .relation(HotelVacancy, 'users')
+        .of(vacancy)  // The vacancy whose related users need to be removed
+        .remove(vacancy.users);  // Remove all related users to this vacancy
+      await this.HotelVacancyEntity.delete(vacancy.VacancyId);
+    } catch (error) {
+      console.error('Error removing vacancy:', error);
+      throw new Error('Error removing vacancy');
+    }
+  }
 
   // /* check information */
   // async checkHotel(hotelId: string): Promise<Hotels>{

@@ -5,6 +5,7 @@ import TextfieldComponent from '../../Components/TextfieldComponent';
 import EditVacancyData from '../../EditData/EditVacancyData';
 import { newHotelDataWindow } from '../ShowHotelDataOwnerTabs';
 import TextfieldComponentDescription from '../../Components/TextfieldComponentDescription';
+import HotelVacancies from './HotelVacancies';
 
 async function getVacancyDataHttp(vacancyid:string){
   try {
@@ -73,13 +74,40 @@ async function DeleteEmployeeFromVacancy(userId: string,  vacancyId: string){
     }
     else {
       const data = await response.json();
-      console.log(data["vacancyEmplyeeData"])
       _setEmployeeDataStored(data["vacancyEmplyeeData"])
     }
     return response;
   } catch (error: any) {
   }
 }
+
+async function AcceptEmployeeForVacancy(userId: string,  vacancyId: string, hotelId: string){
+  const credentials = {
+    vacancyId: vacancyId,
+    userId: userId,
+    hotelId: hotelId,
+  };
+  
+  try {
+    const response = await fetch("http://localhost:3000/hotels/AcceptEmployeeForVacancy", {
+      method: "DELETE",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('jwtToken'),
+      },
+      body: JSON.stringify(credentials),
+    });
+    if (!response.ok) {
+    }
+    else {
+      newHotelDataWindow(<HotelVacancies hotelId={hotelId}/>)
+    }
+    return response;
+  } catch (error: any) {
+  }
+}
+
 
 interface ResponsiveAppBarProps {
   vacancyData?: any;
@@ -108,7 +136,7 @@ function HotelVacancyOwner({ vacancyData, vacancyid, hotelId, locationReturn }: 
   }, [vacancyData, vacancyid]);
 
   const handleAccept = async (userId: string,  vacancyid: string) => {
-    //accept
+    AcceptEmployeeForVacancy(userId, vacancyid, hotelId)
   }
 
   const handleDecline = async (userId: string,  vacancyId: string) => {
