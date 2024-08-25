@@ -27,31 +27,31 @@ function ShowRoomDataOwner({ hotelData, hotelId }: ResponsiveAppBarProps) {
         <Grid item xs={4}>
           <TextfieldComponent value={hotelData.hotelRoomEmployee} helpertext={"Assigned Employee"}/>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={2}>
           <FormControlLabel control={<Checkbox
             defaultChecked
             checked={hotelData.Kitchen}
             />} label="Kitchen" />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={2}>
           <FormControlLabel control={<Checkbox
             defaultChecked
             checked={hotelData.Wifi}
             />} label="Wifi" />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={2}>
           <FormControlLabel control={<Checkbox
             defaultChecked
             checked={hotelData.Breakfast}
             />} label="Breakfast" />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={2}>
           <FormControlLabel control={<Checkbox
             defaultChecked
             checked={hotelData.Roomservice}
             />} label="Roomservice" />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={2}>
           <FormControlLabel control={<Checkbox
             defaultChecked
             checked={hotelData.Animals}

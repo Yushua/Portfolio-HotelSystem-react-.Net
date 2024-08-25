@@ -76,7 +76,7 @@ async function createNewVacancyHttp(
       jobName: formStateString.jobName,
       jobDescription: formStateString.jobDescription,
       jobTitle: formStateString.jobTitle,
-      jobPay: formStateNumber.jobPay,
+      jobPay: Number(formStateNumber.jobPay),
     };
     await resetErrorAndMessage();
     console.log("creating vacancy")

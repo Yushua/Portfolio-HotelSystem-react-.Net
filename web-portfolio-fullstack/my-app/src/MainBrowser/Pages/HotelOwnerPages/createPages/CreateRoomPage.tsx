@@ -15,14 +15,14 @@ type FormStateString = {
   RoomName: string;
   Employee: string;
   HotelDescription: string;
-  [key: string]: string; // This allows for dynamic form fields
+  [key: string]: string;
 };
 
 type FormStateNumber = {
   BigBeds: number;
   SmallBeds: number;
   Rooms: number;
-  [key: number]: string; // This allows for dynamic form fields
+  [key: number]: string;
 };
 
 type FormStateMessage = {
@@ -33,7 +33,7 @@ type FormStateMessage = {
   BigBeds: string;
   SmallBeds: string;
   Rooms: string;
-  [key: string]: string; // This allows for dynamic form fields
+  [key: string]: string;
 };
 
 type FormStateBoolean = {
@@ -43,21 +43,21 @@ type FormStateBoolean = {
   Roomservice: boolean,
   Shower: boolean,
   Animals: boolean,
-  [key: string]: boolean; // Allows additional properties with boolean values
+  [key: string]: boolean;
 };
 
 const validateFieldErrors = (name: string) => {
   let isError = true;
   _setFormErrors((prevErrors) => ({
     ...prevErrors,
-    [name]: isError, // Update the specific field's error state
+    [name]: isError,
   }));
 };
 
 const validateFieldmessage = (name: string, message: string) => {
   _setFormMessage((prevErrors) => ({
     ...prevErrors,
-    [name]: message, // Update the specific field's error state
+    [name]: message,
   }));
 };
 
@@ -105,9 +105,9 @@ async function createRoomHttp(
       RoomName: formStateString.RoomName,
       Employee: formStateString.Employee,
       HotelDescription: formStateString.HotelDescription,
-      BigBeds: formStateNumber.BigBeds,
-      SmallBeds: formStateNumber.SmallBeds,
-      Rooms: formStateNumber.Rooms,
+      BigBeds: Number(formStateNumber.BigBeds),
+      SmallBeds: Number(formStateNumber.SmallBeds),
+      Rooms: Number(formStateNumber.Rooms),
       Kitchen: checkboxes.Kitchen,
       Wifi: checkboxes.Wifi,
       Breakfast: checkboxes.Breakfast,
@@ -116,7 +116,6 @@ async function createRoomHttp(
     };
 
     await resetErrorAndMessage();
-    console.log("making room")
     try {
       const response = await fetch("http://localhost:3000/hotels/CreateRoom", {
         method: "POST",
@@ -173,6 +172,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
       ...formStateString,
       [name]: value,
     });
+    
   };
 
   const [formStateNumber, setFormStateNumber] = React.useState<FormStateNumber>({

@@ -477,6 +477,17 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
     return (hotel.hotelrooms)
   }
 
+  async getAllRoomsData():Promise<any[]> {
+    try {
+      // Fetch all hotel rooms using the Sequelize model
+      const allRooms = await this.HotelRoomsEntity.find()
+      return allRooms;
+    } catch (error) {
+      console.error('Error fetching hotel rooms:', error);
+      throw error;
+    }
+  }
+
   /* Patch data */
 
   async PatchHotelData(user: User, hotelData: PatchHotelDto) {

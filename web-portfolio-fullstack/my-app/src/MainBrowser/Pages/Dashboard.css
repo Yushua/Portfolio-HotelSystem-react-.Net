@@ -113,13 +113,38 @@
   }
   .containerTabsData {
     display: flex;
-    border: 4px solid #a0c2a0;
+    max-width: 105rem;
+    border: 1px solid #d5dfd5;
+    background-color: #ececec;
     margin-top: 3rem!important;
     margin-left: 0.5rem!important;
     margin-right: 0.5rem!important;
     flex-direction: column;
     padding-right: 2rem!important;
     padding-bottom: 2rem!important;
+  }
+
+  .containerTabsDataRooms {
+    display: flex;
+    max-width: 105rem;
+    margin-top: 3rem!important;
+    margin-left: 0.5rem!important;
+    margin-right: 0.5rem!important;
+    flex-direction: column;
+    padding-right: 2rem!important;
+    padding-bottom: 2rem!important;
+  }
+
+  .containerTabsDataRoomsData {
+    display: flex;
+    max-width: 105rem;
+    margin-top: 3rem!important;
+    margin-left: 0.5rem!important;
+    margin-right: 0.5rem!important;
+    flex-direction: column;
+    padding-right: 1rem!important;
+    padding-bottom: 2rem!important;
+    border: 4px solid #a0c2a0;
   }
 
   .containerTabsDataEmployee {

@@ -96,6 +96,13 @@ export class HotelsController {
         return {HotelRoomsData}
       }
 
+      @Get(`getAllRooms`)
+      async getAllRooms(
+      ): Promise<{ Data: any[] }> {
+        const Data = await this.hotelService.getAllRoomsData();
+        return {Data}
+      }
+
       @Delete("DeleteHotelRoomByOwner")
       async DeleteHotelRoomByOwner(
         @Request() req,
