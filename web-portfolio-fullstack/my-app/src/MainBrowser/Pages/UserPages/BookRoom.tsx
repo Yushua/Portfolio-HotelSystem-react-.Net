@@ -15,7 +15,6 @@ import TextfieldComponentDescription from '../Components/TextfieldComponentDescr
 function BookRoom({ hotelRoom }: ResponsiveAppBarProps) {
   return (
     <>
-    dilaogue
     </>
     //when clicked, Dialogue with the data send
 

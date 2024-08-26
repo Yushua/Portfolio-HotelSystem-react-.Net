@@ -7,6 +7,10 @@ the issue is this. that requires to changes. the room itself and the new booking
 but then cancelled, one should be able to book that room again.
 |
 
+!Important
+bOokings are done per day. not per period. you can't book a room for half a day. you book a room for the full day.
+thats jsut for now.Each booking starts at 10. at 9 the previous owners leave. so the room is based on 23 hours.
+
 So these steps
 
 one.

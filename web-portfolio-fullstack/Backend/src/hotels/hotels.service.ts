@@ -477,10 +477,32 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
     return (hotel.hotelrooms)
   }
 
-  async getAllRoomsData():Promise<any[]> {
+  async getAllRoomsData(): Promise<any[]> {
     try {
-      // Fetch all hotel rooms using the Sequelize model
-      const allRooms = await this.HotelRoomsEntity.find()
+      // Fetch all hotel rooms along with their associated bookings
+      const allRooms = await this.HotelRoomsEntity.find({
+        relations: ['bookings'], // Include the bookings relation
+        select: {
+          hotelRoomId: true,
+          hotelRoomNumber: true,
+          hotelRoomName: true,
+          hotelRoomEmployee: true,
+          hotelRoomDescription: true,
+          Kitchen: true,
+          Wifi: true,
+          Breakfast: true,
+          Roomservice: true,
+          Animals: true,
+          BigBed: true,
+          SmallBed: true,
+          Rooms: true,
+          bookings: {
+            startDate: true,
+            endDate: true,
+          },
+        },
+      });
+  
       return allRooms;
     } catch (error) {
       console.error('Error fetching hotel rooms:', error);

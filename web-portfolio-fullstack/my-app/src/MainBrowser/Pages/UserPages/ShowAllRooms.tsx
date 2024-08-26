@@ -371,7 +371,7 @@ function ShowAllHotelRooms() {
       </Grid>
       </Grid>
 
-      <ShowAllRoomData hotelRooms={filteredHotelsRooms}/>
+      <ShowAllRoomData hotelRoom={filteredHotelsRooms}/>
     </>
   );
 }
