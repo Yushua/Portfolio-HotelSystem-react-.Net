@@ -6,7 +6,6 @@ import ShowAllRoomData from './SearchForRooms';
 type FormStateString = {
   hotelRoomNumber: string;
   hotelRoomName: string;
-  hotelRoomEmployee: string;
   [key: string]: string;
 };
 
@@ -89,7 +88,6 @@ function ShowAllHotelRooms() {
   const [formStateString, setFormStateString] = React.useState<FormStateString>({
     hotelRoomNumber: "",
     hotelRoomName: "",
-    hotelRoomEmployee: "",
   });
 
   const [formStateNumber, setFormStateNumber] = React.useState<FormStateNumber>({
@@ -168,7 +166,6 @@ function ShowAllHotelRooms() {
     _setFormMessage({
       hotelRoomNumber: "",
       hotelRoomName: "",
-      hotelRoomEmployee: "",
       HotelDescription: "",
       BigBed: "",
       SmalBed: "",
@@ -178,7 +175,6 @@ function ShowAllHotelRooms() {
     _setFormErrors({
       hotelRoomNumber: false,
       hotelRoomName: false,
-      hotelRoomEmployee: false,
       HotelDescription: false,
       BigBed: false,
       SmalBed: false,
@@ -230,9 +226,15 @@ function ShowAllHotelRooms() {
       className='containerTabsData'
       spacing={3}
       >
-       <Grid item xs={4}>
+      <Grid item xs={3}>
+        startDate picker
+      </Grid>
+      <Grid item xs={3}>
+        endDate picker
+      </Grid>
+
+       <Grid item xs={3}>
         <TextField
-          required
           label="Room Number"
           className="gridTextfieldInput"
           fullWidth
@@ -242,27 +244,14 @@ function ShowAllHotelRooms() {
           onChange={handleOnChangeValueString}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <TextField
-          required
           label="Room Name"
           className="gridTextfieldInput"
           fullWidth
           name="hotelRoomName"
           style={{ marginTop: 10 }}
           value={formStateString.hotelRoomName}
-          onChange={handleOnChangeValueString}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <TextField
-          required
-          label="hotelRoomEmployee"
-          className="gridTextfieldInput"
-          fullWidth
-          name="hotelRoomEmployee"
-          style={{ marginTop: 10 }}
-          value={formStateString.hotelRoomEmployee}
           onChange={handleOnChangeValueString}
         />
       </Grid>
@@ -331,7 +320,6 @@ function ShowAllHotelRooms() {
       </Grid>
       <Grid item xs={4}>
         <TextField
-          required
           label="Big Beds"
           className="gridTextfieldInput"
           fullWidth
@@ -343,7 +331,6 @@ function ShowAllHotelRooms() {
       </Grid>
       <Grid item xs={4}>
         <TextField
-          required
           label="Small Beds"
           className="gridTextfieldInput"
           fullWidth
@@ -357,7 +344,6 @@ function ShowAllHotelRooms() {
       </Grid>
       <Grid item xs={4}>
         <TextField
-          required
           label="Rooms"
           className="gridTextfieldInput"
           fullWidth

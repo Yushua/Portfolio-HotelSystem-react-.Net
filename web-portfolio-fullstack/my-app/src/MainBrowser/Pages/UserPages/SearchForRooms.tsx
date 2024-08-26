@@ -60,14 +60,11 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
         spacing={3}
         onClick={() => handleBooking(hotel)}
         >
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <TextfieldComponent value={hotel.hotelRoomNumber} helpertext={"Room Number"}/>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <TextfieldComponent value={hotel.hotelRoomName} helpertext={"Room Name"}/>
-          </Grid>
-          <Grid item xs={4}>
-            <TextfieldComponent value={hotel.hotelRoomEmployee} helpertext={"Assigned Employee"}/>
           </Grid>
           <Grid item xs={12}>
             <TextfieldComponentDescription value={hotel.hotelRoomDescription} size={4}/>
@@ -78,8 +75,14 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
       <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth={true}>
         <DialogTitle>Book room</DialogTitle>
         <Grid container className='dialogContainer' spacing={6} >
-          
-          <Grid item xs={4}>
+          <Grid item xs={3}>
+            the startdate gets checked for the lowest startdate possible
+          </Grid>
+          <Grid item xs={3}>
+            endate gts checked for the next lowest startdate
+          </Grid>
+
+          <Grid item xs={3}>
             <TextField
               required
               label="Room Number"
@@ -90,7 +93,7 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
               value={HotelRoom.hotelRoomNumber}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <TextField
               required
               label="Room Name"
@@ -101,18 +104,6 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
               value={HotelRoom.hotelRoomName}
             />
           </Grid>
-          <Grid item xs={4}>
-            <TextField
-              required
-              label="Employee"
-              className="gridTextfieldInput"
-              fullWidth
-              name="Employee"
-              style={{ marginTop: 10 }}
-              value={HotelRoom.hotelRoomEmployee}
-            />
-          </Grid>
-
           <Grid item xs={12}>
             <TextField
               required

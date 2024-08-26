@@ -486,7 +486,6 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
           hotelRoomId: true,
           hotelRoomNumber: true,
           hotelRoomName: true,
-          hotelRoomEmployee: true,
           hotelRoomDescription: true,
           Kitchen: true,
           Wifi: true,
