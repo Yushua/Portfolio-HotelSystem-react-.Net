@@ -1,10 +1,11 @@
 
 import { Button, Checkbox, Dialog, DialogActions, DialogTitle, FormControlLabel, Grid, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import TextfieldComponent from '../Components/TextfieldComponent';
 import TextfieldComponentDescription from '../Components/TextfieldComponentDescription';
-import { newWindow } from '../../../App';
-import BookRoom from './BookRoom';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 
 async function PatchBookRoom(HotelRoom: any, startDate: Date, beginDate: Date){
 
@@ -38,6 +39,8 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
   const [HotelRoom, setHotelRoom] = useState<any>([]);
 
   const [open, setOpen] = useState<boolean>(false);
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(new Date('2022-04-17'));
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(new Date('2022-04-17'));
 
   const handleBooking= async (hotel: any) => {
     setHotelRoom(hotel);
@@ -50,8 +53,19 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
 
   const handleBookRoom = () => {
     setOpen(false);
-    newWindow(<BookRoom hotelRoom={HotelRoom}/>)
+    //afer
+    // newWindow(<BookRoom hotelRoom={HotelRoom}/>)
   };
+
+  const handleOnDateChange = (date: Date | null, type: string) => {
+    if (type === 'Start') {
+      setSelectedStartDate(date);
+    } else if (type === 'End') {
+      setSelectedEndDate(date);
+    }
+  }
+
+
   return (
     <>
       {hotelRoom.map((hotel) => (
@@ -76,10 +90,22 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
         <DialogTitle>Book room</DialogTitle>
         <Grid container className='dialogContainer' spacing={6} >
           <Grid item xs={3}>
-            the startdate gets checked for the lowest startdate possible
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Start Date"
+                value={selectedStartDate}
+                onChange={(newValue) => handleOnDateChange(newValue, 'Start')}
+              />
+            </LocalizationProvider>
           </Grid>
           <Grid item xs={3}>
-            endate gts checked for the next lowest startdate
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Start Date"
+                value={selectedEndDate}
+                onChange={(newValue) => handleOnDateChange(newValue, 'End')}
+              />
+            </LocalizationProvider>
           </Grid>
 
           <Grid item xs={3}>
@@ -102,6 +128,50 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
               name="RoomName"
               style={{ marginTop: 10 }}
               value={HotelRoom.hotelRoomName}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              required
+              label="Big Beds"
+              className="gridTextfieldInput"
+              fullWidth
+              name="BigBeds"
+              style={{ marginTop: 10 }}
+              value={HotelRoom.BigBed}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              required
+              label="Small Beds"
+              className="gridTextfieldInput"
+              fullWidth
+              name="SmallBeds"
+              style={{ marginTop: 10 }}
+              value={HotelRoom.SmallBed}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              required
+              label="Rooms"
+              className="gridTextfieldInput"
+              fullWidth
+              name="Rooms"
+              style={{ marginTop: 10 }}
+              value={HotelRoom.Rooms}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              required
+              label="Price"
+              className="gridTextfieldInput"
+              fullWidth
+              name="Price"
+              style={{ marginTop: 10 }}
+              value={HotelRoom.Price}
             />
           </Grid>
           <Grid item xs={12}>
@@ -170,40 +240,6 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
                 checked={HotelRoom.Animals}
               />}
               label="Animals"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              required
-              label="Big Beds"
-              className="gridTextfieldInput"
-              fullWidth
-              name="BigBeds"
-              style={{ marginTop: 10 }}
-              value={HotelRoom.BigBed}
-
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              required
-              label="Small Beds"
-              className="gridTextfieldInput"
-              fullWidth
-              name="SmallBeds"
-              style={{ marginTop: 10 }}
-              value={HotelRoom.SmallBed}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              required
-              label="Rooms"
-              className="gridTextfieldInput"
-              fullWidth
-              name="Rooms"
-              style={{ marginTop: 10 }}
-              value={HotelRoom.Rooms}
             />
           </Grid>
         </Grid>

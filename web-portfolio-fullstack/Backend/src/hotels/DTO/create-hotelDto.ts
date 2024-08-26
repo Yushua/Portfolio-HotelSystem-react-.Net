@@ -101,6 +101,10 @@ export class PatchHotelRoomDto {
   Rooms: number;
 
   @IsNotEmpty()
+  @IsNumber()
+  Price: number;
+
+  @IsNotEmpty()
   @IsBoolean()
   Kitchen: boolean;
 

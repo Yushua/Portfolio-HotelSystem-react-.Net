@@ -1,8 +1,6 @@
 
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, TextField } from '@mui/material';
+import { Button, Checkbox, Dialog, DialogActions, DialogTitle, FormControlLabel, Grid, TextField } from '@mui/material';
 import React, { useState } from 'react';
-import { newDashboardWindow } from '../DashboardPage';
-import ShowHotelDataOwner from '../HotelOwnerPages/ShowHotelDataOwner';
 import { newHotelDataWindow } from '../HotelOwnerPages/ShowHotelDataOwnerTabs';
 import ShowAllOwnerRoomsFromHotel from '../HotelOwnerPages/showPages/ShowAllOwnerRoomsFromHotel';
 
@@ -18,6 +16,7 @@ type FormStateNumber = {
   BigBeds: number;
   SmallBeds: number;
   Rooms: number;
+  Price: number;
   [key: number]: string; // This allows for dynamic form fields
 };
 
@@ -29,6 +28,7 @@ type FormStateMessage = {
   BigBeds: string;
   SmallBeds: string;
   Rooms: string;
+  Price: string;
   [key: string]: string; // This allows for dynamic form fields
 };
 
@@ -81,7 +81,6 @@ async function PatchHotelData(
   formStateNumber: FormStateNumber,
   checkboxes: FormStateBoolean){
 
-    console.log(hotelRoomId)
     const credentials = {
       HotelId: hotelId,
       hotelRoomId: hotelRoomId, 
@@ -97,6 +96,7 @@ async function PatchHotelData(
       Breakfast: checkboxes.Breakfast,
       Roomservice: checkboxes.Roomservice,
       Animals: checkboxes.Animals,
+      Price: formStateNumber.Price
     };
   try {
     const response = await fetch("http://localhost:3000/hotels/PatchHotelRoom", {
@@ -153,6 +153,7 @@ function EditHotelRoomData({ hotelRoomData, hotelId }: ResponsiveAppBarProps) {
     BigBeds: "",
     SmallBeds: "",
     Rooms: "",
+    Price: "",
   });
 
   _setFormMessage = setFormMessage;
@@ -174,6 +175,7 @@ function EditHotelRoomData({ hotelRoomData, hotelId }: ResponsiveAppBarProps) {
     BigBeds: 0,
     SmallBeds: 0,
     Rooms: 0,
+    Price: 0,
   });
   const handleOnChangeValueNumber = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -339,7 +341,7 @@ function EditHotelRoomData({ hotelRoomData, hotelId }: ResponsiveAppBarProps) {
               label="Animals"
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <TextField
               required
               label="Big Beds"
@@ -354,7 +356,7 @@ function EditHotelRoomData({ hotelRoomData, hotelId }: ResponsiveAppBarProps) {
 
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <TextField
               required
               label="Small Beds"
@@ -368,7 +370,7 @@ function EditHotelRoomData({ hotelRoomData, hotelId }: ResponsiveAppBarProps) {
               helperText={formMessage.SmallBeds}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <TextField
               required
               label="Rooms"
@@ -380,6 +382,20 @@ function EditHotelRoomData({ hotelRoomData, hotelId }: ResponsiveAppBarProps) {
               onChange={handleOnChangeValueNumber}
               error={!!formErrors.Rooms}
               helperText={formMessage.Rooms}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              required
+              label="Price"
+              className="gridTextfieldInput"
+              fullWidth
+              name="Price"
+              style={{ marginTop: 10 }}
+              value={formStateNumber.Price}
+              onChange={handleOnChangeValueNumber}
+              error={!!formErrors.Price}
+              helperText={formMessage.Price}
             />
           </Grid>
         </Grid>

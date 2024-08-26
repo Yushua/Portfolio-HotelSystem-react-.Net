@@ -20,6 +20,7 @@ type FormStateNumber = {
   BigBed: number;
   SmallBed: number;
   Rooms: number;
+  Price: number
   [key: number]: string;
 };
 
@@ -155,6 +156,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
     BigBed: "",
     SmallBed: "",
     Rooms: "",
+    Price: "",
   });
 
   _setFormMessage = setFormMessage;
@@ -177,6 +179,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
     BigBed: 0,
     SmallBed: 0,
     Rooms: 0,
+    Price: 0,
   });
   const handleOnChangeValueNumber = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -344,7 +347,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           label="Animals"
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <TextField
           required
           label="Big Beds"
@@ -358,7 +361,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           helperText={formMessage.BigBed}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <TextField
           required
           label="Small Beds"
@@ -372,7 +375,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           helperText={formMessage.SmallBed}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <TextField
           required
           label="Rooms"
@@ -384,6 +387,20 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           onChange={handleOnChangeValueNumber}
           error={!!formErrors.Rooms}
           helperText={formMessage.Rooms}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <TextField
+          required
+          label="Price"
+          className="gridTextfieldInput"
+          fullWidth
+          name="Price"
+          style={{ marginTop: 10 }}
+          value={formStateNumber.Price}
+          onChange={handleOnChangeValueNumber}
+          error={!!formErrors.Price}
+          helperText={formMessage.Price}
         />
       </Grid>
       <Grid item xs={12}>

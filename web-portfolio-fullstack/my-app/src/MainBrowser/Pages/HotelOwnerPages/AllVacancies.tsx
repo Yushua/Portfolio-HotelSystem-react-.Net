@@ -2,8 +2,6 @@ import { Button, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import TextfieldComponent from "../Components/TextfieldComponent";
 import TextfieldComponentDescription from "../Components/TextfieldComponentDescription";
-import { newBrowserWindow } from "../../MainBrowser";
-import { Dashboard } from "@mui/icons-material";
 
 async function getAllVacanciesData(){
   try {

@@ -13,6 +13,7 @@ type FormStateNumber = {
   BigBed: number;
   SmalBed: number;
   Rooms: number;
+  Price: number;
   [key: string]: number;
 };
 
@@ -30,6 +31,7 @@ type FormStateMessage = {
   BigBed: string;
   SmalBed: string;
   Rooms: string;
+  Price: string;
   [key: string]: string;
 };
 
@@ -94,6 +96,7 @@ function ShowAllHotelRooms() {
     BigBed: 0,
     SmalBed: 0,
     Rooms: 0,
+    Price: 0,
   });
 
   const [checkboxes, setCheckboxes] = React.useState<FormStateBoolean>({
@@ -148,6 +151,7 @@ function ShowAllHotelRooms() {
     BigBed: "",
     SmalBed: "",
     Rooms: "",
+    Price: "",
   });
   _setFormErrors = setFormErrors;
   _setFormMessage = setFormMessage;
@@ -170,6 +174,7 @@ function ShowAllHotelRooms() {
       BigBed: "",
       SmalBed: "",
       Rooms: "",
+      Price: "",
     });
   
     _setFormErrors({
@@ -179,6 +184,7 @@ function ShowAllHotelRooms() {
       BigBed: false,
       SmalBed: false,
       Rooms: false,
+      Price: false,
     });
   }
 
@@ -232,19 +238,7 @@ function ShowAllHotelRooms() {
       <Grid item xs={3}>
         endDate picker
       </Grid>
-
-       <Grid item xs={3}>
-        <TextField
-          label="Room Number"
-          className="gridTextfieldInput"
-          fullWidth
-          name="hotelRoomNumber"
-          style={{ marginTop: 10 }}
-          value={formStateString.hotelRoomNumber}
-          onChange={handleOnChangeValueString}
-        />
-      </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={6}>
         <TextField
           label="Room Name"
           className="gridTextfieldInput"
@@ -318,7 +312,7 @@ function ShowAllHotelRooms() {
           label="Animals"
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <TextField
           label="Big Beds"
           className="gridTextfieldInput"
@@ -329,7 +323,7 @@ function ShowAllHotelRooms() {
           onChange={handleOnChangeValueNumber}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <TextField
           label="Small Beds"
           className="gridTextfieldInput"
@@ -342,7 +336,7 @@ function ShowAllHotelRooms() {
           helperText={formMessage.SmalBed}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <TextField
           label="Rooms"
           className="gridTextfieldInput"
@@ -353,6 +347,19 @@ function ShowAllHotelRooms() {
           onChange={handleOnChangeValueNumber}
           error={!!formErrors.Rooms}
           helperText={formMessage.Rooms}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <TextField
+          label="Price"
+          className="gridTextfieldInput"
+          fullWidth
+          name="Price"
+          style={{ marginTop: 10 }}
+          value={formStateNumber.Price}
+          onChange={handleOnChangeValueNumber}
+          error={!!formErrors.Price}
+          helperText={formMessage.Price}
         />
       </Grid>
       </Grid>

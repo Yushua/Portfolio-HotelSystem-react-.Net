@@ -10,7 +10,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import './AppBarPage.css'
 import UserProfile from './Pages/UserPages/UserProfile';
 import { newDashboardWindow } from './Pages/DashboardPage';
@@ -18,6 +17,7 @@ import SettingsPage from './Pages/SettingPages/SettingsPage';
 import RolesManagement from './Pages/SettingPages/RolesManagement';
 import LogoutImageComponentSetup from './components/logoutImageComponentSetup';
 import DashboardPageInfo from './Pages/DashboardInfo';
+import AdbIcon from '@mui/icons-material/Adb';
 
 export const addPage = (pageName: string, pageElement: JSX.Element) => {
   //this will later be done in the backend

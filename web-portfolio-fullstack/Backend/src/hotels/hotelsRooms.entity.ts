@@ -43,6 +43,9 @@ export class HotelRooms {
   @Column()
   Rooms: number;
 
+  @Column({ default: 0 })
+  Price: number;
+
   @ManyToOne(() => Hotels, (hotels) => hotels.hotelrooms)
   hotel: Hotels;
 

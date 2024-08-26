@@ -22,4 +22,16 @@ export class RoomBooking {
   // End date of the booking
   @Column('date')
   endDate: Date;
+
+  //when true, the room is truly booked
+  @Column({ default: false })
+  Status: boolean;
+
+  private _passcode: string;
+
+  // Use a varchar column to store a 4-character passcode
+  @Column('varchar', { length: 4 })
+  get passcode(): string {
+    return this._passcode;
+  }
 }

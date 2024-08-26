@@ -85,6 +85,7 @@ export class HotelsService {
       BigBed: patchHotelRoomDto.BigBeds,
       SmallBed: patchHotelRoomDto.SmallBeds,
       Rooms: patchHotelRoomDto.Rooms,
+      Price: patchHotelRoomDto.Price,
       hotel: hotel
     });
     try {
@@ -190,6 +191,7 @@ export class HotelsService {
     existingRoom.BigBed = patchHotelRoomDto.BigBeds;
     existingRoom.SmallBed = patchHotelRoomDto.SmallBeds;
     existingRoom.Rooms = patchHotelRoomDto.Rooms;
+    existingRoom.Price = patchHotelRoomDto.Price;
     existingRoom.hotel = hotel;
     try {
       await this.HotelRoomsEntity.save(existingRoom);
@@ -494,6 +496,7 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
           Animals: true,
           BigBed: true,
           SmallBed: true,
+          Price: true,
           Rooms: true,
           bookings: {
             startDate: true,
