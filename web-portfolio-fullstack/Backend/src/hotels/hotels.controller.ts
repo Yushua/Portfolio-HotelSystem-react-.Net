@@ -211,10 +211,14 @@ export class HotelsController {
       ) {
         const user: User = req.user;
         console.log(addBookingByUserDto.hotelRoomId)
-        console.log(new Date(addBookingByUserDto.startDate))
-        console.log(new Date(addBookingByUserDto.endDate))
-        //create Booking. check ehre as well if the dates are ALLOWED. because maybe during this time
-        //someone booked the room as well
+        
+        let startDate:Date = new Date(addBookingByUserDto.startDate);
+        let endDate:Date = new Date(addBookingByUserDto.endDate);
+        await this.hotelService.bookRoomByUser(user,
+          addBookingByUserDto.hotelRoomId,
+          new Date(startDate),
+          new Date(endDate),
+        )
       }
 
       @Delete("DeleteBookingByUser")

@@ -13,6 +13,8 @@ async function PatchBookRoom(HotelRoom: any, startDate: Date, endDate: Date){
     startDate:  startDate,
     endDate: endDate,
   };
+  console.log(startDate)
+  console.log(endDate)
   try {
     const response = await fetch("http://localhost:3000/hotels/BookRoomByUser", {
       method: "POST",
@@ -83,7 +85,7 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
 
     var error: boolean = false;
     for (const booking of HotelRoom.bookings) {
-      if (date !== null && date >= booking.startDate && date <= booking.startDate){
+      if (date !== null && date >= booking.startDate + 1 && date <= booking.startDate + 1){
         if (type === 'Start') {
           setErrorMessageStartDate("Start Date Already occupied");
         } else if (type === 'End') {

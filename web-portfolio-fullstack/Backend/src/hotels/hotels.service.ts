@@ -7,6 +7,7 @@ import { CreateHotelDto, GetHotelData, HotelAllVacanciesDataDto, HotelVacancyAll
 import { HotelRooms } from './hotelsRooms.entity';
 import { HotelVacancy } from './hotelsVacancy.entity';
 import { JobDataEntity } from './JobDataEntity.entity';
+import { RoomBooking } from './hotelRoomBooking';
 
 @Injectable()
 export class HotelsService {
@@ -21,6 +22,8 @@ export class HotelsService {
     private readonly HotelVacancyEntity: Repository<HotelVacancy>,
     @InjectRepository(JobDataEntity)
     private readonly jobDataEntity: Repository<JobDataEntity>,
+    @InjectRepository(RoomBooking)
+    private readonly roomBooking: Repository<RoomBooking>,
   ) {}
 
 
@@ -512,6 +515,24 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
     }
   }
 
+  async getAllRoomsDatabyRoomId(roomId: string): Promise<HotelRooms | null> {
+    try {
+      const room = await this.HotelRoomsEntity.findOne({
+        where: { hotelRoomId: roomId },
+        relations: ['bookings'],
+      });
+      if (!room) {
+        console.log(`No room found with ID: ${roomId}`);
+        return null;
+      }
+  
+      return room;
+    } catch (error) {
+      console.error('Error fetching room data:', error);
+      throw error;
+    }
+  }
+
   /* Patch data */
 
   async PatchHotelData(user: User, hotelData: PatchHotelDto) {
@@ -543,8 +564,13 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
     const errors = [];
       if (jobNameVacancyExists) {
         errors.push('jobName for this hotel already exists');
-      }//apply error
-
+      }
+    if (jobNameVacancyExists){
+        throw new HttpException(
+          { message: errors },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
     vacancy.jobName = patchHotelVacancyPatchDto.jobName;
     vacancy.jobTitle = patchHotelVacancyPatchDto.jobTitle;
     vacancy.jobPay = patchHotelVacancyPatchDto.jobPay;
@@ -653,4 +679,58 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
     }
   }
 
+  /* booking */
+
+  async bookRoomByUser(user: User,
+    hotelRoomId: string,
+    startDate: Date,
+    endDate: Date,
+  ) {
+    const room: HotelRooms | null = await this.getAllRoomsDatabyRoomId(hotelRoomId);
+
+    const errors = [];
+    console.log("--start--")
+    console.log(new Date(startDate))
+    console.log(new Date(endDate))
+    for (const booking of room.bookings){
+      console.log("--stored--")
+      console.log(new Date(booking.startDate))
+      console.log(new Date(booking.endDate))
+      if (new Date(startDate) >= new Date(booking.startDate) && new Date(startDate) <= new Date(booking.endDate)){
+        errors.push('startDate room is already booked during this date');
+        console.log("errorstart")
+      }
+      if (new Date(endDate) >= new Date(booking.startDate) && new Date(endDate) <= new Date(booking.endDate)){
+        errors.push('endDate room is already booked during this date');
+        console.log("errorend")
+      }
+      if (errors.length > 0){
+        break ;
+      }
+    }
+  if (errors.length > 0){
+      throw new HttpException(
+        { message: errors },
+        HttpStatus.BAD_REQUEST,
+      );
+    } else {
+      const newBooking = this.roomBooking.create({
+        hotelRoom: room,
+        user: user,
+        startDate: startDate,
+        endDate: endDate,
+        Status: true,
+        passcode: Math.random().toString(36).substr(2, 4).toUpperCase()
+      });
+      try {
+        // await this.roomBooking.save(newBooking);
+        console.log(newBooking)
+        //here try to pay later. if pay fail. remove booking
+      } catch (error) {
+        console.error('Could not create booking:', error);
+        //in here, return the money or cancel
+        throw new Error('Error saving Booking');
+      }
+    }
+  }
 }

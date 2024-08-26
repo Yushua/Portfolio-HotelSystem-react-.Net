@@ -27,11 +27,6 @@ export class RoomBooking {
   @Column({ default: false })
   Status: boolean;
 
-  private _passcode: string;
-
-  // Use a varchar column to store a 4-character passcode
-  @Column('varchar', { length: 4 })
-  get passcode(): string {
-    return this._passcode;
-  }
+  @Column()
+  passcode: string;
 }

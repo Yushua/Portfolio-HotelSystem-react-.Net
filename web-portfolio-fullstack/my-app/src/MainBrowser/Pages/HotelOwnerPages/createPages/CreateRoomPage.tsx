@@ -107,6 +107,7 @@ async function createRoomHttp(
       BigBeds: Number(formStateNumber.BigBed),
       SmallBeds: Number(formStateNumber.SmallBed),
       Rooms: Number(formStateNumber.Rooms),
+      Price: Number(formStateNumber.Price),
       Kitchen: checkboxes.Kitchen,
       Wifi: checkboxes.Wifi,
       Breakfast: checkboxes.Breakfast,
