@@ -37,7 +37,7 @@ export class HotelsService {
       hotelName: hotelData.HotelName,
       hotelOwner: user.username,
       hotelDescription: hotelData.Description,
-      user: user,
+      boss: user,
     });
     const savedHotel = await this.HotelsEntity.save(newHotel);
 
@@ -249,7 +249,7 @@ export class HotelsService {
       throw new NotFoundException(`Vacancy with ID ${vacancyId} not found`);
     }
 
-    if (vacancy.hotel && vacancy.hotel.user && vacancy.hotel.user.id !== user.id) {
+    if (vacancy.hotel && vacancy.hotel.boss && vacancy.hotel.boss.id !== user.id) {
       throw new UnauthorizedException();
     }
     return vacancy;
@@ -301,7 +301,7 @@ export class HotelsService {
    */
   async ft_getHotelData(hotelId: string, userId: string):Promise <Hotels> {
     const hotel: Hotels = await this.HotelsEntity.findOne({
-      where: { hotelId: hotelId, user: { id: userId } },
+      where: { hotelId: hotelId, boss: { id: userId } },
       relations: ['user', 'hotelrooms'], // Load related entities as needed
     });
 
@@ -582,7 +582,7 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
       throw new UnauthorizedException();
     }
 
-    const isOwner = vacancy.hotel.user.id === user.id;  // Check if hotel owner matches the requesting user
+    const isOwner = vacancy.hotel.boss.id === user.id;  // Check if hotel owner matches the requesting user
     if (!isOwner) {
       throw new UnauthorizedException();
     }

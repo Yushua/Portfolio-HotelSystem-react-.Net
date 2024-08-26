@@ -1,0 +1,42 @@
+ROoms can be booked one way. you clikc a room. check the date that you arrive and leave.
+
+each booking then becomes its own entity with that date, BUT it needs to be told to the room itself
+when that room is booked. that data is send to the frontend.
+
+the issue is this. that requires to changes. the room itself and the new booking. because if a room is booked
+but then cancelled, one should be able to book that room again.
+|
+
+So these steps
+
+one.
+
+you get the room Data, inside of it, it shows the days that you can apply to.
+so this needs to be readable enough that the frondend can showcase it.
+
+search a room. search the date you want a booking.
+
+book a room. you send the begindate and endDate to the room. if this works then this new date period is added
+to the room AND the Booking is made. each roomEntity can see all the bookings it has made. a function is made to pull it
+all together showing the dates it is occupied.
+
+
+so these function
+
+all rooms are returned, this doesn't need to be... done like that
+got to think, do I give out all the dates that a room is occupied? should the costumer know? maybe so. either way
+this data is with AllRoomsData.
+
+CheckoomDateOccupied(roomId, beginDate, EndDate);
+
+this checks if the room can be booked.
+
+BookRoom(user, roomId, BeginDate, EndDate); creates a new booking thats added to the room
+
+RemoveBooking(User); //cancel
+
+check if the user.id is the owner of the hotel of the booking OR if its the user that booked it.
+when you cancle. it first looks if you are either the OWNER of the hotel OR the OWNER of the booking
+
+a booking can be removed if its Endate is there. however, this can be pushed by the Owner at the start of the week.
+automated system to do things on the website? maybe?

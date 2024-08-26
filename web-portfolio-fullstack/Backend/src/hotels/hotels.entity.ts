@@ -19,7 +19,7 @@ export class Hotels {
   hotelDescription: string;
 
   @ManyToOne(() => User, user => user.hotels)
-  user: User;
+  boss: User;
 
   @OneToMany(() => HotelRooms, (hotelrooms) => hotelrooms.hotel)
   hotelrooms: HotelRooms[];

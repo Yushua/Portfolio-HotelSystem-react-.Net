@@ -33,7 +33,7 @@ export class User {
 
   //Hotels.
 
-  @OneToMany(() => Hotels, hotels => hotels.user)
+  @OneToMany(() => Hotels, hotels => hotels.boss)
   hotels: Hotels[];
 
   //employeeData
