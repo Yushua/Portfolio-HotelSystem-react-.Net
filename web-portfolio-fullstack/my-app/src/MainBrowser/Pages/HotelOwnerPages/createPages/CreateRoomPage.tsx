@@ -1,5 +1,3 @@
-
-
 import { Button, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import React from 'react';
 import ShowRoomDataOwner from '../HotelDataOverTabs/ShowRoomDataOwner';
@@ -19,8 +17,8 @@ type FormStateString = {
 };
 
 type FormStateNumber = {
-  BigBeds: number;
-  SmallBeds: number;
+  BigBed: number;
+  SmallBed: number;
   Rooms: number;
   [key: number]: string;
 };
@@ -30,8 +28,8 @@ type FormStateMessage = {
   RoomName: string;
   Employee: string;
   HotelDescription: string;
-  BigBeds: string;
-  SmallBeds: string;
+  BigBed: string;
+  SmallBed: string;
   Rooms: string;
   [key: string]: string;
 };
@@ -77,8 +75,8 @@ async function resetErrorAndMessage(){
     RoomName: "",
     Employee: "",
     HotelDescription: "",
-    BigBeds: "",
-    SmallBeds: "",
+    BigBed: "",
+    SmallBed: "",
     Rooms: "",
   });
 
@@ -87,8 +85,8 @@ async function resetErrorAndMessage(){
     RoomName: false,
     Employee: false,
     HotelDescription: false,
-    BigBeds: false,
-    SmallBeds: false,
+    BigBed: false,
+    SmallBed: false,
     Rooms: false,
   });
 }
@@ -105,8 +103,8 @@ async function createRoomHttp(
       RoomName: formStateString.RoomName,
       Employee: formStateString.Employee,
       HotelDescription: formStateString.HotelDescription,
-      BigBeds: Number(formStateNumber.BigBeds),
-      SmallBeds: Number(formStateNumber.SmallBeds),
+      BigBeds: Number(formStateNumber.BigBed),
+      SmallBeds: Number(formStateNumber.SmallBed),
       Rooms: Number(formStateNumber.Rooms),
       Kitchen: checkboxes.Kitchen,
       Wifi: checkboxes.Wifi,
@@ -114,7 +112,7 @@ async function createRoomHttp(
       Roomservice: checkboxes.Roomservice,
       Animals: checkboxes.Animals,
     };
-
+    console.log(credentials);
     await resetErrorAndMessage();
     try {
       const response = await fetch("http://localhost:3000/hotels/CreateRoom", {
@@ -154,8 +152,8 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
     RoomName: "",
     Employee: "",
     HotelDescription: "",
-    BigBeds: "",
-    SmallBeds: "",
+    BigBed: "",
+    SmallBed: "",
     Rooms: "",
   });
 
@@ -172,12 +170,12 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
       ...formStateString,
       [name]: value,
     });
-    
+
   };
 
   const [formStateNumber, setFormStateNumber] = React.useState<FormStateNumber>({
-    BigBeds: 0,
-    SmallBeds: 0,
+    BigBed: 0,
+    SmallBed: 0,
     Rooms: 0,
   });
   const handleOnChangeValueNumber = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -207,13 +205,14 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
   
     setCheckboxes((prevCheckboxes) => ({
       ...prevCheckboxes,
-      [name]: checked, // Dynamically update the specific checkbox state
+      [name]: checked,
     }));
   };
 
   const handleSubmit = async () => {
     await createRoomHttp(hotelId, formStateString, formStateNumber, checkboxes);
   }
+
   return (
     <>
     <Grid container className='container' spacing={6}>
@@ -280,10 +279,13 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
       <Grid item xs={2}>
         <FormControlLabel
           required
-          control={<Checkbox 
-            checked={checkboxes.Kitchen}
-            onChange={handleCheckboxChange}
-          />}
+          control={
+            <Checkbox 
+              checked={checkboxes.Kitchen}
+              onChange={handleCheckboxChange}  // Ensure this line is correct
+              name="Kitchen"  // Ensure the name matches the state key
+            />
+          }
           label="Kitchen"
         />
       </Grid>
@@ -293,6 +295,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           control={<Checkbox 
             checked={checkboxes.Wifi}
             onChange={handleCheckboxChange}
+            name="Wifi"
           />}
           label="Wifi"
         />
@@ -303,6 +306,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           control={<Checkbox 
             checked={checkboxes.Breakfast}
             onChange={handleCheckboxChange}
+            name="Breakfast"
           />}
           label="Breakfast"
         />
@@ -313,6 +317,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           control={<Checkbox 
             checked={checkboxes.Roomservice}
             onChange={handleCheckboxChange}
+            name="Roomservice"
           />}
           label="Roomservice"
         />
@@ -323,6 +328,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           control={<Checkbox 
             checked={checkboxes.Shower}
             onChange={handleCheckboxChange}
+            name="Shower"
           />}
           label="Shower"
         />
@@ -333,6 +339,7 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           control={<Checkbox 
             checked={checkboxes.Animals}
             onChange={handleCheckboxChange}
+            name="Animals"
           />}
           label="Animals"
         />
@@ -343,12 +350,12 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           label="Big Beds"
           className="gridTextfieldInput"
           fullWidth
-          name="BigBeds"
+          name="BigBed"
           style={{ marginTop: 10 }}
-          value={formStateNumber.BigBeds}
+          value={formStateNumber.BigBed}
           onChange={handleOnChangeValueNumber}
-          error={!!formErrors.BigBeds}
-          helperText={formMessage.BigBeds}
+          error={!!formErrors.BigBed}
+          helperText={formMessage.BigBed}
         />
       </Grid>
       <Grid item xs={4}>
@@ -357,12 +364,12 @@ function CreateRoomPage({ hotelId }: ResponsiveAppBarProps) {
           label="Small Beds"
           className="gridTextfieldInput"
           fullWidth
-          name="SmallBeds"
+          name="SmallBed"
           style={{ marginTop: 10 }}
-          value={formStateNumber.SmallBeds}
+          value={formStateNumber.SmallBed}
           onChange={handleOnChangeValueNumber}
-          error={!!formErrors.SmallBeds}
-          helperText={formMessage.SmallBeds}
+          error={!!formErrors.SmallBed}
+          helperText={formMessage.SmallBed}
         />
       </Grid>
       <Grid item xs={4}>
