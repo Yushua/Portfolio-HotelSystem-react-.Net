@@ -739,6 +739,7 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
           Breakfast: true,
           Roomservice: true,
           Animals: true,
+          Shower: true,
           BigBed: true,
           SmallBed: true,
           Price: true,

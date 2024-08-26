@@ -151,16 +151,64 @@ function AllBookings() {
           <TextfieldComponentDescription value={BookingData.hotelRoom?.hotelRoomDescription || ''} size={4}/>
           </Grid>
           <Grid item xs={3}>
-            <TextfieldComponent value={BookingData.hotelRoom.Price || '1'} helpertext={"Price"}/>
+            <TextfieldComponent value={BookingData.hotelRoom.Price} helpertext={"Price"}/>
           </Grid>
           <Grid item xs={3}>
-            <TextfieldComponent value={BookingData.hotelRoom?.Rooms || ''} helpertext={"Rooms"}/>
+            <TextfieldComponent value={BookingData.hotelRoom.Rooms} helpertext={"Rooms"}/>
           </Grid>
           <Grid item xs={3}>
-            <TextfieldComponent value={BookingData.hotelRoom?.BigBed || ''} helpertext={"BigBed"}/>
+            <TextfieldComponent value={BookingData.hotelRoom.BigBed} helpertext={"Big Bed"}/>
           </Grid>
           <Grid item xs={3}>
-            <TextfieldComponent value={BookingData.hotelRoom?.SmallBed || ''} helpertext={"SmallBed"}/>
+            <TextfieldComponent value={BookingData.hotelRoom.SmallBed} helpertext={"Small Bed"}/>
+          </Grid>
+          <Grid item xs={2}>
+            <FormControlLabel
+              control={<Checkbox 
+                checked={BookingData.hotelRoom.Kitchen}
+              />}
+              label="Kitchen"
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <FormControlLabel
+              control={<Checkbox 
+                checked={BookingData.hotelRoom.Wifi}
+              />}
+              label="Wifi"
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <FormControlLabel
+              control={<Checkbox 
+                checked={BookingData.hotelRoom.Breakfast}
+              />}
+              label="Breakfast"
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <FormControlLabel
+              control={<Checkbox 
+                checked={BookingData.hotelRoom.RoomService}
+              />}
+              label="RoomService"
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <FormControlLabel
+              control={<Checkbox 
+                checked={BookingData.hotelRoom.Animals}
+              />}
+              label="Animals"
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <FormControlLabel
+              control={<Checkbox 
+                checked={BookingData.hotelRoom.Shower}
+              />}
+              label="Shower"
+            />
           </Grid>
         </Grid>
         <DialogActions>

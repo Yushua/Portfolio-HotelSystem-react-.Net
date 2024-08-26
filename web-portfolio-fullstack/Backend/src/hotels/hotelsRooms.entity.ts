@@ -34,6 +34,9 @@ export class HotelRooms {
   @Column({ default: false })
   Animals: boolean;
 
+  @Column({ default: false })
+  Shower: boolean;
+
   @Column()
   BigBed: number;
 
