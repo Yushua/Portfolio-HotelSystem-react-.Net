@@ -212,12 +212,10 @@ export class HotelsController {
         const user: User = req.user;
         console.log(addBookingByUserDto.hotelRoomId)
         
-        let startDate:Date = new Date(addBookingByUserDto.startDate);
-        let endDate:Date = new Date(addBookingByUserDto.endDate);
         await this.hotelService.bookRoomByUser(user,
           addBookingByUserDto.hotelRoomId,
-          new Date(startDate),
-          new Date(endDate),
+          new Date(addBookingByUserDto.startDate),
+          new Date(addBookingByUserDto.endDate),
         )
       }
 
@@ -233,15 +231,17 @@ export class HotelsController {
       @Post("ShowAllUserBookings")
       async ShowAllUserBookings(
         @Request() req,
-      ) {
-        //show all user bookings
+      ):Promise<{ BookingData: any[] }> {
+        const user: User = req.user;
+        return {BookingData: await this.hotelService.getAllUserBooking(user.id)}
       }
       
       @Post("ShowAllHotelOwnerBookings")
       async ShowAllHotelOwnerBookings(
         @Request() req,
       ) {
-        //show all Hotel Bookings
+        const user: User = req.user;
+        
       }
 
       @Delete("DeleteBookingByOwner")

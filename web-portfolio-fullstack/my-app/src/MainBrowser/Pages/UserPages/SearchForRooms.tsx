@@ -106,21 +106,21 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
 
   return (
     <>
-      {hotelRoom.map((hotel) => (
+      {hotelRoom.map((room) => (
         <Grid container
         className='containerTabsDataRoomsData'
         spacing={3}
-        onClick={() => handleBooking(hotel)}
-        key={hotel.hotelRoomId}
+        onClick={() => handleBooking(room)}
+        key={room.hotelRoomId}
         >
           <Grid item xs={6}>
-            <TextfieldComponent value={hotel.hotelRoomNumber} helpertext={"Room Number"}/>
+            <TextfieldComponent value={room.hotelRoomName} helpertext={"Room Name"}/>
           </Grid>
           <Grid item xs={6}>
-            <TextfieldComponent value={hotel.hotelRoomName} helpertext={"Room Name"}/>
+            <TextfieldComponent value={room.Price} helpertext={"Price"}/>
           </Grid>
           <Grid item xs={12}>
-            <TextfieldComponentDescription value={hotel.hotelRoomDescription} size={4}/>
+            <TextfieldComponentDescription value={room.hotelRoomDescription} size={4}/>
           </Grid>
         </Grid>
     ))}

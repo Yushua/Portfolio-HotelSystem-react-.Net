@@ -23,7 +23,7 @@ export class HotelsService {
     @InjectRepository(JobDataEntity)
     private readonly jobDataEntity: Repository<JobDataEntity>,
     @InjectRepository(RoomBooking)
-    private readonly roomBooking: Repository<RoomBooking>,
+    private readonly roomBookingEntity: Repository<RoomBooking>,
   ) {}
 
 
@@ -307,7 +307,7 @@ export class HotelsService {
   async ft_getHotelData(hotelId: string, userId: string):Promise <Hotels> {
     const hotel: Hotels = await this.HotelsEntity.findOne({
       where: { hotelId: hotelId, boss: { id: userId } },
-      relations: ['user', 'hotelrooms'], // Load related entities as needed
+      relations: ['boss', 'hotelrooms'], // Load related entities as needed
     });
 
     if (!hotel) {
@@ -474,7 +474,6 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
       where: { id: user.id },
       relations: ['hotels'],
     });
-
     if (!userWithHotels) {
       throw new UnauthorizedException();
     }
@@ -688,49 +687,45 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
   ) {
     const room: HotelRooms | null = await this.getAllRoomsDatabyRoomId(hotelRoomId);
 
-    const errors = [];
-    console.log("--start--")
-    console.log(new Date(startDate))
-    console.log(new Date(endDate))
-    for (const booking of room.bookings){
-      console.log("--stored--")
-      console.log(new Date(booking.startDate))
-      console.log(new Date(booking.endDate))
-      if (new Date(startDate) >= new Date(booking.startDate) && new Date(startDate) <= new Date(booking.endDate)){
-        errors.push('startDate room is already booked during this date');
-        console.log("errorstart")
-      }
-      if (new Date(endDate) >= new Date(booking.startDate) && new Date(endDate) <= new Date(booking.endDate)){
-        errors.push('endDate room is already booked during this date');
-        console.log("errorend")
-      }
-      if (errors.length > 0){
-        break ;
-      }
-    }
-  if (errors.length > 0){
+    if (!room) {
       throw new HttpException(
-        { message: errors },
-        HttpStatus.BAD_REQUEST,
+        { message: 'Room not found' },
+        HttpStatus.NOT_FOUND,
       );
-    } else {
-      const newBooking = this.roomBooking.create({
-        hotelRoom: room,
-        user: user,
-        startDate: startDate,
-        endDate: endDate,
-        Status: true,
-        passcode: Math.random().toString(36).substr(2, 4).toUpperCase()
-      });
-      try {
-        // await this.roomBooking.save(newBooking);
-        console.log(newBooking)
-        //here try to pay later. if pay fail. remove booking
-      } catch (error) {
-        console.error('Could not create booking:', error);
-        //in here, return the money or cancel
-        throw new Error('Error saving Booking');
+    }
+    const newBooking = this.roomBookingEntity.create({
+      hotelRoom: room,
+      user: user,
+      startDate: startDate,
+      endDate: endDate,
+      Status: true,
+      passcode: Math.random().toString(36).substr(2, 4).toUpperCase(),
+    });
+    for (const booking of room.bookings) {
+      const bookingStartDate = new Date(booking.startDate);
+      const bookingEndDate = new Date(booking.endDate);
+      if (startDate <= bookingEndDate && endDate >= bookingStartDate) {
+        throw new HttpException(
+          { message: 'The selected date range overlaps with an existing booking.' },
+          HttpStatus.BAD_REQUEST,
+        );
       }
     }
+
+    try {
+      await this.roomBookingEntity.save(newBooking);
+    } catch (error) {
+      console.error('Could not create booking:', error);
+      //in here, return the money or cancel
+      throw new Error('Error saving Booking');
+    }
+  }
+
+  async getAllUserBooking(userId: string):Promise<any[]> {
+    const bookings: any[] = await this.userEntity.find({
+      where: { id: userId },
+      relations: ['bookings'],
+    });
+    return bookings;
   }
 }
