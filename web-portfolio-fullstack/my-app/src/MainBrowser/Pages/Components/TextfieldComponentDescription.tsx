@@ -18,7 +18,7 @@ function TextfieldComponentDescription({ value, size }: ResponsiveAppBarProps) {
       label={"Description"}
       style={{ marginTop: 10 }}
       rows={size}
-      variant="filled"
+      variant="outlined"
     />
   );
 }

@@ -721,11 +721,32 @@ async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
     }
   }
 
-  async getAllUserBooking(userId: string):Promise<any[]> {
-    const bookings: any[] = await this.userEntity.find({
-      where: { id: userId },
-      relations: ['bookings'],
+  async getAllUserBookingsWithRoomDetails(userId: string): Promise<any[]> {
+    const bookings = await this.roomBookingEntity.find({
+      where: { user: { id: userId } },
+      relations: ['hotelRoom'],
+      select: {
+        id: true,
+        startDate: true,
+        endDate: true,
+        hotelRoom: {
+          hotelRoomId: true,
+          hotelRoomNumber: true,
+          hotelRoomName: true,
+          hotelRoomDescription: true,
+          Kitchen: true,
+          Wifi: true,
+          Breakfast: true,
+          Roomservice: true,
+          Animals: true,
+          BigBed: true,
+          SmallBed: true,
+          Price: true,
+          Rooms: true,
+        },
+      },
     });
+  
     return bookings;
   }
 }

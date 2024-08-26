@@ -233,7 +233,7 @@ export class HotelsController {
         @Request() req,
       ):Promise<{ BookingData: any[] }> {
         const user: User = req.user;
-        return {BookingData: await this.hotelService.getAllUserBooking(user.id)}
+        return {BookingData: await this.hotelService.getAllUserBookingsWithRoomDetails(user.id)}
       }
       
       @Post("ShowAllHotelOwnerBookings")

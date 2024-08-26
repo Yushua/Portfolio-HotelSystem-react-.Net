@@ -7,7 +7,7 @@ import AllVacancies from '../MainBrowser/Pages/HotelOwnerPages/AllVacancies';
 import ShowAllEmployees from '../MainBrowser/Pages/HotelOwnerPages/ShowHotelEmployees';
 import CreateHotelPage from '../MainBrowser/Pages/HotelOwnerPages/createPages/CreateHotelPage';
 import ShowAllHotelRooms from '../MainBrowser/Pages/UserPages/ShowAllRooms';
-import ShowAllAppliedRooms from '../MainBrowser/Pages/UserPages/ShowAllAppliedRooms';
+import AllBookings from '../MainBrowser/Pages/UserPages/AllBookings';
 
 const WebPages: Array<[string, JSX.Element]> = [
   ['Profile', <UserProfile />],
@@ -18,7 +18,7 @@ const WebPages: Array<[string, JSX.Element]> = [
   ['Employees', <ShowAllEmployees/>],
   //User
   ['Rooms', <ShowAllHotelRooms/>],
-  ['Applied Rooms', <ShowAllAppliedRooms/>],
+  ['Bookings', <AllBookings/>],
 ];
 
 // const filterWebPages = (pageNames: string[]): Array<[string, JSX.Element]> => {

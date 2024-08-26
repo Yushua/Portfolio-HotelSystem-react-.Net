@@ -18,7 +18,7 @@ function TextfieldComponent({ value, helpertext }: ResponsiveAppBarProps) {
       // {required}
       label={helpertext || ''}
       style={{ marginTop: 10 }}
-      variant="filled"
+      variant="outlined"
     />
   );
 }
