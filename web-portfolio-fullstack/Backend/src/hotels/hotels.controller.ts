@@ -204,12 +204,17 @@ export class HotelsController {
 
       /* Booking controller */
 
-      @Patch("AddBookingByUserDto ")
-      async AdBookingByUser(
+      @Post("BookRoomByUser")
+      async BookRoomByUser(
         @Request() req,
         @Body() addBookingByUserDto: AddBookingByUserDto,
       ) {
-        //Add booking by user
+        const user: User = req.user;
+        console.log(addBookingByUserDto.hotelRoomId)
+        console.log(new Date(addBookingByUserDto.startDate))
+        console.log(new Date(addBookingByUserDto.endDate))
+        //create Booking. check ehre as well if the dates are ALLOWED. because maybe during this time
+        //someone booked the room as well
       }
 
       @Delete("DeleteBookingByUser")
@@ -217,7 +222,7 @@ export class HotelsController {
         @Request() req,
         @Body() getVacancyData: GetVacancyData,
       ) {
-        //if cancelled, maybe the same issue arises
+        //only the user or the hotelOwner cna delete a booking
 
       }
       

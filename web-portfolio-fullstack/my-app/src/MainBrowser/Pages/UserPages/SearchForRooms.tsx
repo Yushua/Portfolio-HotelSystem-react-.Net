@@ -7,16 +7,21 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 
-async function PatchBookRoom(HotelRoom: any, startDate: Date, beginDate: Date){
-
+async function PatchBookRoom(HotelRoom: any, startDate: Date, endDate: Date){
+  const credentials = {
+    hotelRoomId: HotelRoom.hotelRoomId,
+    startDate:  startDate,
+    endDate: endDate,
+  };
   try {
-    const response = await fetch("http://localhost:3000/hotels/BookRoom", {
-      method: "GET",
+    const response = await fetch("http://localhost:3000/hotels/BookRoomByUser", {
+      method: "POST",
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('jwtToken'),
       },
+      body: JSON.stringify(credentials),
     });
     if (!response.ok) {
       //handleError
@@ -33,14 +38,31 @@ async function PatchBookRoom(HotelRoom: any, startDate: Date, beginDate: Date){
   interface ResponsiveAppBarProps {
     hotelRoom: any[];
   }
-  
+
+  const getTodayDate = () => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  };
+
+  const getMinDate = () => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+  };
+
+  const maxMinDate = () => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+  };
+
 function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
 
   const [HotelRoom, setHotelRoom] = useState<any>([]);
 
   const [open, setOpen] = useState<boolean>(false);
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(new Date('2022-04-17'));
-  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(new Date('2022-04-17'));
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(getTodayDate());
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(maxMinDate());
+  const [ErrorMessageStartDate, setErrorMessageStartDate] = useState<string>("");
+  const [ErrorMessageEndDate, setErrorMessageEndDate] = useState<string>("");
 
   const handleBooking= async (hotel: any) => {
     setHotelRoom(hotel);
@@ -51,16 +73,30 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
     setOpen(false);
   };
 
-  const handleBookRoom = () => {
+  const handleBookRoom = async () => {
     setOpen(false);
     //afer
-    // newWindow(<BookRoom hotelRoom={HotelRoom}/>)
+    await PatchBookRoom(HotelRoom, selectedStartDate as Date, selectedEndDate as Date);
   };
 
   const handleOnDateChange = (date: Date | null, type: string) => {
-    if (type === 'Start') {
+
+    var error: boolean = false;
+    for (const booking of HotelRoom.bookings) {
+      if (date !== null && date >= booking.startDate && date <= booking.startDate){
+        if (type === 'Start') {
+          setErrorMessageStartDate("Start Date Already occupied");
+        } else if (type === 'End') {
+          setErrorMessageEndDate("End Date Already occupied");
+        }
+        error = true
+        break;
+      }
+    }
+
+    if (type === 'Start' && error === false) {
       setSelectedStartDate(date);
-    } else if (type === 'End') {
+    } else if (type === 'End' && error === false) {
       setSelectedEndDate(date);
     }
   }
@@ -73,6 +109,7 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
         className='containerTabsDataRoomsData'
         spacing={3}
         onClick={() => handleBooking(hotel)}
+        key={hotel.hotelRoomId}
         >
           <Grid item xs={6}>
             <TextfieldComponent value={hotel.hotelRoomNumber} helpertext={"Room Number"}/>
@@ -95,6 +132,12 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
                 label="Start Date"
                 value={selectedStartDate}
                 onChange={(newValue) => handleOnDateChange(newValue, 'Start')}
+                minDate={getMinDate()}
+                slotProps={{
+                  textField: {
+                    helperText: ErrorMessageStartDate,
+                  },
+                }}
               />
             </LocalizationProvider>
           </Grid>
@@ -104,6 +147,12 @@ function ShowAllRoomData({ hotelRoom }: ResponsiveAppBarProps) {
                 label="Start Date"
                 value={selectedEndDate}
                 onChange={(newValue) => handleOnDateChange(newValue, 'End')}
+                minDate={maxMinDate()}
+                slotProps={{
+                  textField: {
+                    helperText: ErrorMessageEndDate,
+                  },
+                }}
               />
             </LocalizationProvider>
           </Grid>

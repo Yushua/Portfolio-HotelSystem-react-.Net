@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import TextfieldComponent from "../Components/TextfieldComponent";
 import TextfieldComponentDescription from "../Components/TextfieldComponentDescription";
 
+
 async function getAllVacanciesData(){
   try {
     const response = await fetch("http://localhost:3000/hotels/GetAllVacanciesUser", {

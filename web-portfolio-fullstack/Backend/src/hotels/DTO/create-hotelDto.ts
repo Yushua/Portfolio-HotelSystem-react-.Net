@@ -172,16 +172,16 @@ export class PatchHotelVacancyPatchDto {
 
 export class AddBookingByUserDto {
   @IsNotEmpty()
-  @IsDate()
-  startDate: Date;
-
-  @IsNotEmpty()
-  @IsDate()
-  endDate: Date;
+  @IsString()
+  startDate: string;
 
   @IsNotEmpty()
   @IsString()
-  hotelRoomId?: string;
+  endDate: string;
+
+  @IsNotEmpty()
+  @IsString()
+  hotelRoomId: string;
 }
 
 export class OwnerPatchJobByIdDto {
