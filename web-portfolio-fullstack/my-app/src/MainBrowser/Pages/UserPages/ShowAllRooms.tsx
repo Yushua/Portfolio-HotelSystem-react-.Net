@@ -4,15 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { FormBoolean } from '../EditData/EditHotelRoomData';
 import ShowAllRoomData from './SearchForRooms';
 type FormStateString = {
-  RoomNumber: string;
-  RoomName: string;
-  Employee: string;
+  hotelRoomNumber: string;
+  hotelRoomName: string;
+  hotelRoomEmployee: string;
   [key: string]: string;
 };
 
 type FormStateNumber = {
-  BigBeds: number;
-  SmallBeds: number;
+  BigBed: number;
+  SmalBed: number;
   Rooms: number;
   [key: string]: number;
 };
@@ -28,8 +28,8 @@ type FormStateBoolean = {
 };
 
 type FormStateMessage = {
-  BigBeds: string;
-  SmallBeds: string;
+  BigBed: string;
+  SmalBed: string;
   Rooms: string;
   [key: string]: string;
 };
@@ -65,6 +65,7 @@ async function getAllRooms(){
     else {
       const data = await response.json();
       _setHotelsRooms(data["Data"])
+      _setFilteredHotelsRooms(data["Data"])
       console.log(data)
     }
     return response;
@@ -72,7 +73,8 @@ async function getAllRooms(){
   }
 }
 
-var _setHotelsRooms: React.Dispatch<React.SetStateAction<any>>
+var _setHotelsRooms: React.Dispatch<React.SetStateAction<any[]>>
+var _setFilteredHotelsRooms: React.Dispatch<React.SetStateAction<any[]>>
 var _setFormErrors: React.Dispatch<React.SetStateAction<FormBoolean>>
 var _setFormMessage: React.Dispatch<React.SetStateAction<FormStateMessage>>
 
@@ -82,8 +84,30 @@ function ShowAllHotelRooms() {
   _setHotelsRooms = setHotelsRooms;
 
   const [filteredHotelsRooms, setFilteredHotelsRooms] = useState<any[]>([]);
+  _setFilteredHotelsRooms = setFilteredHotelsRooms
 
-  const filterRooms = async () => {
+  const [formStateString, setFormStateString] = React.useState<FormStateString>({
+    hotelRoomNumber: "",
+    hotelRoomName: "",
+    hotelRoomEmployee: "",
+  });
+
+  const [formStateNumber, setFormStateNumber] = React.useState<FormStateNumber>({
+    BigBed: 0,
+    SmalBed: 0,
+    Rooms: 0,
+  });
+
+  const [checkboxes, setCheckboxes] = React.useState<FormStateBoolean>({
+    Kitchen: false,
+    Wifi: false,
+    Breakfast: false,
+    Roomservice: false,
+    Shower: false,
+    Animals: false,
+  });
+
+  const filterRooms = () => {
     const filtered = hotelsRooms.filter((room) => {
       for (const key in checkboxes) {
         if (checkboxes[key] && !room[key]) {
@@ -91,47 +115,44 @@ function ShowAllHotelRooms() {
         }
       }
       for (const key in formStateString) {
-        if (formStateString[key] && formStateString[key].trim() !== "" && room[key] !== formStateString[key]) {
+        const formValue = formStateString[key];
+        if (
+          formValue &&
+          formValue.trim() !== "" &&
+          room[key] !== undefined && // Check if room[key] is not undefined
+          !room[key].toString().toLowerCase().includes(formValue.trim().toLowerCase())
+        ) {
           return false;
         }
       }
+
+      // Number filter
       for (const key in formStateNumber) {
         const formValue = formStateNumber[key];
-        if (room[key] !== formValue) {
+        const roomKey = key;
+        if (formValue !== 0 && room[roomKey] !== formValue) {
           return false;
         }
       }
+
       return true;
     });
-    console.log("roomfilter")
-    console.log(filtered)
+
     setFilteredHotelsRooms(filtered);
   };
 
-  const fetchOwnerHotelsRooms = async () => {
-    await getAllRooms();
-    await filterRooms();
-  }
-
   useEffect(() => {
-    fetchOwnerHotelsRooms();
-  }, []);
+    filterRooms();
+  }, [formStateString, formStateNumber, checkboxes]);
 
   const [formErrors, setFormErrors] = React.useState<FormBoolean>({});
   const [formMessage, setFormMessage] = React.useState<FormStateMessage>({
-    BigBeds: "",
-    SmallBeds: "",
+    BigBed: "",
+    SmalBed: "",
     Rooms: "",
   });
   _setFormErrors = setFormErrors;
   _setFormMessage = setFormMessage;
-
-
-  const [formStateString, setFormStateString] = React.useState<FormStateString>({
-    RoomNumber: "",
-    RoomName: "",
-    Employee: "",
-  });
 
   const handleOnChangeValueString = async (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>  {
     const { name, value } = event.target;
@@ -142,31 +163,25 @@ function ShowAllHotelRooms() {
     });
     await filterRooms()
   };
-  
-  const [formStateNumber, setFormStateNumber] = React.useState<FormStateNumber>({
-    BigBeds: 0,
-    SmallBeds: 0,
-    Rooms: 0,
-  });
 
   async function resetErrorAndMessage(){
     _setFormMessage({
-      RoomNumber: "",
-      RoomName: "",
-      Employee: "",
+      hotelRoomNumber: "",
+      hotelRoomName: "",
+      hotelRoomEmployee: "",
       HotelDescription: "",
-      BigBeds: "",
-      SmallBeds: "",
+      BigBed: "",
+      SmalBed: "",
       Rooms: "",
     });
   
     _setFormErrors({
-      RoomNumber: false,
-      RoomName: false,
-      Employee: false,
+      hotelRoomNumber: false,
+      hotelRoomName: false,
+      hotelRoomEmployee: false,
       HotelDescription: false,
-      BigBeds: false,
-      SmallBeds: false,
+      BigBed: false,
+      SmalBed: false,
       Rooms: false,
     });
   }
@@ -188,15 +203,6 @@ function ShowAllHotelRooms() {
       validateFieldmessage(name, "only use numbers");
     }
   };
-
-  const [checkboxes, setCheckboxes] = React.useState<FormStateBoolean>({
-    Kitchen: false,
-    Wifi: false,
-    Breakfast: false,
-    Roomservice: false,
-    Shower: false,
-    Animals: false,
-  });
   
   const handleCheckboxChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
@@ -210,6 +216,14 @@ function ShowAllHotelRooms() {
     await filterRooms();
   };
 
+  const fetchOwnerHotelsRooms = async () => {
+    await getAllRooms();
+  }
+
+  useEffect(() => {
+    fetchOwnerHotelsRooms();
+  }, []);
+
   return (
     <>
       <Grid container
@@ -222,9 +236,9 @@ function ShowAllHotelRooms() {
           label="Room Number"
           className="gridTextfieldInput"
           fullWidth
-          name="RoomNumber"
+          name="hotelRoomNumber"
           style={{ marginTop: 10 }}
-          value={formStateString.RoomNumber}
+          value={formStateString.hotelRoomNumber}
           onChange={handleOnChangeValueString}
         />
       </Grid>
@@ -234,21 +248,21 @@ function ShowAllHotelRooms() {
           label="Room Name"
           className="gridTextfieldInput"
           fullWidth
-          name="RoomName"
+          name="hotelRoomName"
           style={{ marginTop: 10 }}
-          value={formStateString.RoomName}
+          value={formStateString.hotelRoomName}
           onChange={handleOnChangeValueString}
         />
       </Grid>
       <Grid item xs={4}>
         <TextField
           required
-          label="Employee"
+          label="hotelRoomEmployee"
           className="gridTextfieldInput"
           fullWidth
-          name="Employee"
+          name="hotelRoomEmployee"
           style={{ marginTop: 10 }}
-          value={formStateString.Employee}
+          value={formStateString.hotelRoomEmployee}
           onChange={handleOnChangeValueString}
         />
       </Grid>
@@ -321,9 +335,9 @@ function ShowAllHotelRooms() {
           label="Big Beds"
           className="gridTextfieldInput"
           fullWidth
-          name="BigBeds"
+          name="BigBed"
           style={{ marginTop: 10 }}
-          value={formStateNumber.BigBeds}
+          value={formStateNumber.BigBed}
           onChange={handleOnChangeValueNumber}
         />
       </Grid>
@@ -333,12 +347,12 @@ function ShowAllHotelRooms() {
           label="Small Beds"
           className="gridTextfieldInput"
           fullWidth
-          name="SmallBeds"
+          name="SmalBed"
           style={{ marginTop: 10 }}
-          value={formStateNumber.SmallBeds}
+          value={formStateNumber.SmalBed}
           onChange={handleOnChangeValueNumber}
-          error={!!formErrors.SmallBeds}
-          helperText={formMessage.SmallBeds}
+          error={!!formErrors.SmalBed}
+          helperText={formMessage.SmalBed}
         />
       </Grid>
       <Grid item xs={4}>
