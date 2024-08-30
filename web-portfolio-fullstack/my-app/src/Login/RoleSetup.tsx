@@ -9,7 +9,7 @@ import CreateHotelPage from '../MainBrowser/Pages/HotelOwnerPages/createPages/Cr
 import ShowAllHotelRooms from '../MainBrowser/Pages/UserPages/ShowAllRooms';
 import AllBookings from '../MainBrowser/Pages/UserPages/AllBookings';
 
-const WebPages: Array<[string, JSX.Element]> = [
+export const WebPages: Array<[string, JSX.Element]> = [
   ['Profile', <UserProfile />],
   //owner
   ['Create Hotel', <CreateHotelPage/>],

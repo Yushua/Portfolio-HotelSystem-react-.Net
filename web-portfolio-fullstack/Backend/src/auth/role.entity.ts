@@ -10,4 +10,7 @@ export class RoleEntity {
 
   @OneToMany(() => User, (user) => user.role)
   users: User[];
+
+  @Column('text', { array: true, default: '{}' })
+  pages: string[];
 }

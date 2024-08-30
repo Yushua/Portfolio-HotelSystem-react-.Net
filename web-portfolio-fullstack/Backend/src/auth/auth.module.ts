@@ -9,6 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule, JwtService  } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { RoleEntity } from './role.entity';
+import { RolesInitializerService } from './roles-initializer.service';
 
 @Module({
   imports: [
@@ -23,7 +24,13 @@ import { RoleEntity } from './role.entity';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService, JwtService, JwtStrategy],
+  providers: [
+    AuthService,
+    UserService,
+    JwtService,
+    JwtStrategy,
+    RolesInitializerService,
+  ],
   exports: [JwtStrategy, PassportModule, AuthModule],
 })
 export class AuthModule {}

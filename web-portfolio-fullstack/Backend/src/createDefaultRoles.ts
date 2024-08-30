@@ -3,7 +3,7 @@ import { RoleEntity } from './auth/role.entity';
 
 async function createDefaultRoles() {
   const roleRepository = getRepository(RoleEntity);
-
+  
   // Check if "Admin" role exists
   let adminRole = await roleRepository.findOne({
     where: { roleName: 'Admin' },
@@ -17,7 +17,6 @@ async function createDefaultRoles() {
   }
 }
 
-// Call this function when your server starts
 createDefaultRoles().catch((error) =>
   console.error('Error creating default roles:', error),
 );
