@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { HotelRooms } from './hotelsRooms.entity';
 import { User } from 'src/user/user.entity';
 
@@ -7,11 +13,11 @@ export class RoomBooking {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => HotelRooms, hotelRoom => hotelRoom.bookings)
+  @ManyToOne(() => HotelRooms, (hotelRoom) => hotelRoom.bookings)
   @JoinColumn({ name: 'hotelRoomId' })
   hotelRoom: HotelRooms;
 
-  @ManyToOne(() => User, user => user.bookings)
+  @ManyToOne(() => User, (user) => user.bookings)
   @JoinColumn({ name: 'userId' })
   user: User;
 

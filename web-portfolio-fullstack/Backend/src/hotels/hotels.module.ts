@@ -19,6 +19,6 @@ import { RoomBooking } from './hotelRoomBooking';
     JobDataEntity,
     RoomBooking])],
   controllers: [HotelsController],
-  providers: [HotelsService, UserService],
+  providers: [HotelsService, UserService, ],
 })
 export class HotelsModule {}

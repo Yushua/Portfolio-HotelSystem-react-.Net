@@ -1,13 +1,39 @@
-import { Body, Controller, Delete, Get, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Request,
+  SetMetadata,
+  UseGuards,
+} from '@nestjs/common';
 import { HotelsService } from './hotels.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/user.entity';
-import { AddBookingByUserDto, CreateHotelDto, DeleteEmployeeFromVacancyDTO, GetemployeeDataDto, GetHotelData, GetVacancyData, HotelVacancyAllInfoDto, OwnerPatchJobByIdDto, PatchHotelDto, PatchHotelRoomDto, PatchHotelVacancyCreateDto, PatchHotelVacancyPatchDto, RemoveJobWithJobIdDto } from './DTO/create-hotelDto';
+import {
+  AddBookingByUserDto,
+  CreateHotelDto,
+  DeleteEmployeeFromVacancyDTO,
+  GetemployeeDataDto,
+  GetHotelData,
+  GetVacancyData,
+  HotelVacancyAllInfoDto,
+  OwnerPatchJobByIdDto,
+  PatchHotelDto,
+  PatchHotelRoomDto,
+  PatchHotelVacancyCreateDto,
+  PatchHotelVacancyPatchDto,
+  RemoveJobWithJobIdDto,
+} from './DTO/create-hotelDto';
 import { Hotels } from './hotels.entity';
 import { HotelRooms } from './hotelsRooms.entity';
 import { UserService } from 'src/user/user.service';
 import { HotelVacancy } from './hotelsVacancy.entity';
 import { JobDataEntity } from './JobDataEntity.entity';
+import { Permissions } from 'src/auth/permissions';
+import { CheckRolesGuard } from 'src/auth/auth-checkRoles';
 
 @Controller('hotels')
 @UseGuards(AuthGuard('jwt'))
@@ -17,36 +43,38 @@ export class HotelsController {
         private userService: UserService,
       ) {}
 
-
       /* hotel */
 
-      @Post(`CreateHotel`)
-      async loginUser(
-        @Request() req,
-        @Body() createHotelDto: CreateHotelDto,
-      ): Promise<{ hotelID: string }> {
-        const user: User = req.user;
-        const hotelID:string = await this.hotelService.createHotel(user, createHotelDto);
-        return { hotelID };
-      }
+  @Post(`CreateHotel`)
+  // @Permissions('CreateHotel')
+  // @UseGuards(CheckRolesGuard)
+  async loginUser(
+    @Request() req,
+    @Body() createHotelDto: CreateHotelDto,
+  ): Promise<{ hotelID: string }> {
+    console.log("I create hotel");
+    const user: User = req.user;
+    const hotelID:string = await this.hotelService.createHotel(user, createHotelDto);
+    return { hotelID };
+  }
 
-      @Get(`HotelOwner`)
-      async HotelOwner(
-        @Request() req,
-      ): Promise<{ userWithHotels: any }> {
-        const user: User = req.user;
-        const userWithHotels = await this.hotelService.getAllOwnerHotels(user);
-        return {userWithHotels}
-      }
+  @Get(`HotelOwner`)
+  async HotelOwner(
+    @Request() req,
+  ): Promise<{ userWithHotels: any }> {
+    const user: User = req.user;
+    const userWithHotels = await this.hotelService.getAllOwnerHotels(user);
+    return {userWithHotels}
+  }
 
-      @Patch(`PatchHotel`)
-      async PatchHotel(
-        @Request() req,
-        @Body() patchHotelDto: PatchHotelDto,
-      ) {
-        const user: User = req.user;
-        await this.hotelService.PatchHotelData(user, patchHotelDto);
-      }
+  @Patch(`PatchHotel`)
+  async PatchHotel(
+    @Request() req,
+    @Body() patchHotelDto: PatchHotelDto,
+  ) {
+    const user: User = req.user;
+    await this.hotelService.PatchHotelData(user, patchHotelDto);
+  }
 
       @Post(`GetHotelData`)
       async GetHotelData(
@@ -280,16 +308,16 @@ export class HotelsController {
       async OwnerRemoveJobFromEmployee(
         @Request() req,
         @Body() removeJobWithJobIdDto: RemoveJobWithJobIdDto,
-      ) {
+  ) {
         await this.hotelService.ownerRemoveJobFromEmployee(req.user, removeJobWithJobIdDto.jobId)
-      }
+  }
+  
 
-      @Patch("OwnerPatchJobFromEmployee")
-      async OwnerPatchJobFromEmployee(
-        @Request() req,
-        @Body() OwnerPatchJobByIdDto: OwnerPatchJobByIdDto,
-      ) {
-        await this.hotelService.ownerUpdateJob(req.user, OwnerPatchJobByIdDto)
-      }
-
+  @Patch('OwnerPatchJobFromEmployee')
+  async OwnerPatchJobFromEmployee(
+    @Request() req,
+    @Body() OwnerPatchJobByIdDto: OwnerPatchJobByIdDto,
+  ) {
+    await this.hotelService.ownerUpdateJob(req.user, OwnerPatchJobByIdDto);
+  }
 }

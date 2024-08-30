@@ -402,71 +402,70 @@ async getAllHotelEmployeeDataId(user: User): Promise<any[]> {
 }
 
 async ownerGetAllFromEmployeeIdJobsRelatedToOwner(owner: User, employeeId: string): Promise<any[]> {
-  try {
-    const userWithEmployees = await this.userEntity.findOne({
-      where: { id: owner.id },
-      relations: ['employeed', 'employeed.EmployeeUser'],
-    });
+    try {
+      const userWithEmployees = await this.userEntity.findOne({
+        where: { id: owner.id },
+        relations: ['employeed', 'employeed.EmployeeUser'],
+      });
 
-    if (!userWithEmployees || !userWithEmployees.employeed) {
-      return [];
+      if (!userWithEmployees || !userWithEmployees.employeed) {
+        return [];
+      }
+      const relatedJobsForEmployee = userWithEmployees.employeed.filter(job => job.EmployeeUser.id === employeeId);
+      const AllData = relatedJobsForEmployee.map(job => ({
+        jobId: job.JobId,
+        jobName: job.jobName,
+        jobTitle: job.jobTitle,
+        jobPay: job.jobPay,
+        jobDescription: job.jobDescription,
+      }));
+      return AllData;
+    } catch (error) {
+      console.error('Error fetching employee data:', error);
+      throw new Error('Error fetching employee data');
     }
-    const relatedJobsForEmployee = userWithEmployees.employeed.filter(job => job.EmployeeUser.id === employeeId);
-    const AllData = relatedJobsForEmployee.map(job => ({
-      jobId: job.JobId,
-      jobName: job.jobName,
-      jobTitle: job.jobTitle,
-      jobPay: job.jobPay,
-      jobDescription: job.jobDescription,
-    }));
-    return AllData;
-  } catch (error) {
-    console.error('Error fetching employee data:', error);
-    throw new Error('Error fetching employee data');
-  }
 }
 
-async ownerRemoveJobFromEmployee(owner: User, jobId: string) {
-  try {
-    const job = await this.jobDataEntity.findOne({
-      where: { JobId: jobId },
-      relations: ['bosses'], // Ensure we load the related boss
-    });
-    if (!job) {
-      throw new Error('Job not found');
+  async ownerRemoveJobFromEmployee(owner: User, jobId: string) {
+    try {
+      const job = await this.jobDataEntity.findOne({
+        where: { JobId: jobId },
+        relations: ['bosses'], // Ensure we load the related boss
+      });
+      if (!job) {
+        throw new Error('Job not found');
+      }
+      if (job.bosses.id !== owner.id) {
+        throw new Error('You are not authorized to delete this job');
+      }
+      await this.jobDataEntity.remove(job);
+    } catch (error) {
+      throw new Error('Error removing job from employee');
     }
-    if (job.bosses.id !== owner.id) {
-      throw new Error('You are not authorized to delete this job');
-    }
-    await this.jobDataEntity.remove(job);
-
-  } catch (error) {
-    throw new Error('Error removing job from employee');
   }
-}
 
 async ownerUpdateJob(user: User, ownerPatchJobByIdDto: OwnerPatchJobByIdDto) {
 
-  const job = await this.jobDataEntity.findOne({
-    where: { JobId: ownerPatchJobByIdDto.jobId },
-    relations: ['bosses', 'hotel'], // Load the related boss
-  });
+    const job = await this.jobDataEntity.findOne({
+      where: { JobId: ownerPatchJobByIdDto.jobId },
+      relations: ['bosses', 'hotel'], // Load the related boss
+    });
 
-  if (!job) {
-    throw new NotFoundException('Job not found');
-  }
-  if (job.bosses.id !== user.id) {
-    throw new UnauthorizedException('You are not authorized to update this job');
-  }
-  
-  await this.ft_checkJobNameInHotel(job.hotel, ownerPatchJobByIdDto.JobName)
+    if (!job) {
+      throw new NotFoundException('Job not found');
+    }
+    if (job.bosses.id !== user.id) {
+      throw new UnauthorizedException('You are not authorized to update this job');
+    }
 
-  job.jobName = ownerPatchJobByIdDto.JobName;
-  job.jobTitle = ownerPatchJobByIdDto.JobTitle;
-  job.jobDescription = ownerPatchJobByIdDto.JobDescription;
-  job.jobPay = ownerPatchJobByIdDto.JobPay;
+    await this.ft_checkJobNameInHotel(job.hotel, ownerPatchJobByIdDto.JobName)
 
-  await this.jobDataEntity.save(job);
+    job.jobName = ownerPatchJobByIdDto.JobName;
+    job.jobTitle = ownerPatchJobByIdDto.JobTitle;
+    job.jobDescription = ownerPatchJobByIdDto.JobDescription;
+    job.jobPay = ownerPatchJobByIdDto.JobPay;
+
+    await this.jobDataEntity.save(job);
 }
 
   async getHotelRoomsData(hotelId: string, user: User):Promise<HotelRooms[]> {

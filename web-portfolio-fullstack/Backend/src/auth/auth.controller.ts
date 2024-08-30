@@ -1,16 +1,17 @@
-import { Controller, UseGuards, Post, Body } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Request } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/user.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { checkRolesGuard } from './auth-checkRoles';
+import { RouteService } from 'src/routes/routes.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private UserService: UserService,
+    private routeService: RouteService,
   ) {}
 
   /**
@@ -39,4 +40,12 @@ export class AuthController {
   @Post('jwtCheck')
   @UseGuards(AuthGuard('jwt'))
   jwtCheck() {}
+
+  @Post('getAllBackendPaths')
+  @UseGuards(AuthGuard('jwt'))
+  async getAllBackendPaths(@Request() req) {
+    const user: User = req.user;
+    const routes = this.routeService.getRoutes();
+    return { routes };
+  }
 }

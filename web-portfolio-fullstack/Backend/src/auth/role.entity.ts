@@ -13,4 +13,7 @@ export class RoleEntity {
 
   @Column('text', { array: true, default: '{}' })
   pages: string[];
+
+  @Column('text', { array: true, default: '{}' })
+  ControllerRequests: string[];
 }

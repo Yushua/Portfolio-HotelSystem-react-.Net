@@ -81,12 +81,19 @@ export class UserService {
     return found;
   }
 
-  async getUseryUsername(username: string): Promise<User> {
-    const found: User = await this.userEntity.findOneBy({ username });
-    if (!found) {
-      throw new NotFoundException(`User with username "${username}" not found`);
+  async getUserById(id: string): Promise<User> {
+    // Fetch user along with roles using JOIN
+    const user = await this.userEntity
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.role', 'role')
+      .where('user.id = :id', { id })
+      .getOne();
+
+    if (!user) {
+      throw new UnauthorizedException();
     }
-    return found;
+
+    return user;
   }
 
   async userNameUserExist(username: string): Promise<User> {
@@ -96,40 +103,4 @@ export class UserService {
     }
     throw new NotFoundException(`"${username}" not in use`);
   }
-
-  /*
-    topBar functions
-  */
-
-  // async addFavorite(
-  //   user: User,
-  //   WebBrowserDtoPatch: WebBrowserDtoPatch,
-  // ): Promise<void> {
-  //   const { WebBrowserName } = WebBrowserDtoPatch;
-  //   await this.webserviceService.checkWebrowserName(WebBrowserName);
-  //   if (await this.checkWebrowserNameInUser(user, WebBrowserName)) {
-  //     throw new NotFoundException(`"${WebBrowserName}" already in favorites`);
-  //   }
-  //   user.favorites.push(WebBrowserName);
-  //   await this.userEntity.save(user);
-  // }
-
-  // async removeFavorite(
-  //   user: User,
-  //   WebBrowserDtoPatch: WebBrowserDtoPatch,
-  // ): Promise<void> {
-  //   const { WebBrowserName } = WebBrowserDtoPatch;
-  //   await this.webserviceService.checkWebrowserName(WebBrowserName);
-  //   if (!(await this.checkWebrowserNameInUser(user, WebBrowserName))) {
-  //     throw new NotFoundException(`"${WebBrowserName}" not in favorites`);
-  //   }
-  //   const index = user.favorites.indexOf(WebBrowserName);
-  //   user.favorites.splice(index, 1);
-  //   await this.userEntity.save(user);
-  // }
-
-  /*
-    Employee functions
-  */
-
 }

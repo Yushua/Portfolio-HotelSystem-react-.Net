@@ -10,6 +10,7 @@ import { JwtModule, JwtService  } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { RoleEntity } from './role.entity';
 import { RolesInitializerService } from './roles-initializer.service';
+import { RouteService } from 'src/routes/routes.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { RolesInitializerService } from './roles-initializer.service';
     UserService,
     JwtService,
     JwtStrategy,
+    RouteService,
     RolesInitializerService,
   ],
   exports: [JwtStrategy, PassportModule, AuthModule],
