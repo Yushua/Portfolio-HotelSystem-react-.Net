@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  UseGuards,
-  Request,
-  Post,
-  Res,
-  Body,
-  Patch,
-} from '@nestjs/common';
+import { Controller, UseGuards, Post, Body } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -44,13 +34,6 @@ export class AuthController {
     const user: User = await this.UserService.loginUser(createUserDto);
     const authToken = await this.authService.createAuthToken(user);
     return { authToken };
-  }
-
-  @Post('test')
-  @UseGuards(AuthGuard('jwt'))
-  @UseGuards(new checkRolesGuard(["Owner"]))
-  test(@Request() req) {
-    const user: User = req.user;
   }
 
   @Post('jwtCheck')
