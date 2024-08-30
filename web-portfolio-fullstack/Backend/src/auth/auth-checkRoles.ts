@@ -15,15 +15,18 @@ export class CheckRolesGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const user: User = request.user;
-
-    if (user.role && user.role.roleName === 'Admin') {
-      return true;
-    }
-
     const requiredPermissions = this.reflector.get<string[]>(
       'permissions',
       context.getHandler(),
     );
+
+    if (
+      requiredPermissions == undefined ||
+      (user.role && user.role.roleName === 'Admin')
+    ) {
+      return true;
+    }
+
     console.log("permission name " + requiredPermissions);
 
     if (!requiredPermissions || requiredPermissions.length === 0) {
