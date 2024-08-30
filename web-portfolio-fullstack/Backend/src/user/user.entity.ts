@@ -4,6 +4,7 @@ import { Hotels } from 'src/hotels/hotels.entity';
 import { HotelVacancy } from 'src/hotels/hotelsVacancy.entity';
 import { JobDataEntity } from 'src/hotels/JobDataEntity.entity';
 import { RoomBooking } from 'src/hotels/hotelRoomBooking';
+import { RoleEntity } from 'src/auth/role.entity';
 
 @Entity()
 export class User {
@@ -21,35 +22,35 @@ export class User {
 
   @Column({ default: UserStatus.IN_PROGRESS })
   status: UserStatus;
-  
+
   @Column({ default: '' })
   email: string;
 
   @Column({ default: false })
   twoFactorAuth: boolean;
 
-  @Column('text', { array: true, default: '{}' })
-  roles: string[];
+  @ManyToOne(() => RoleEntity, (role) => role.users)
+  role: RoleEntity;
 
   //Hotels.
 
-  @OneToMany(() => Hotels, hotels => hotels.boss)
+  @OneToMany(() => Hotels, (hotels) => hotels.boss)
   hotels: Hotels[];
 
   //employeeData
 
-  @ManyToMany(() => HotelVacancy, vacancy => vacancy.users)
-  @JoinTable() 
+  @ManyToMany(() => HotelVacancy, (vacancy) => vacancy.users)
+  @JoinTable()
   vacancies: HotelVacancy[];
 
   //who I employed
-  @OneToMany(() => JobDataEntity, JobDataEntity => JobDataEntity.bosses)
-  @JoinTable() 
+  @OneToMany(() => JobDataEntity, (JobDataEntity) => JobDataEntity.bosses)
+  @JoinTable()
   employeed: JobDataEntity[];
 
   //where I am employed
-  @OneToOne(() => JobDataEntity, JobDataEntity => JobDataEntity.EmployeeUser)
-  @JoinTable() 
+  @OneToOne(() => JobDataEntity, (JobDataEntity) => JobDataEntity.EmployeeUser)
+  @JoinTable()
   employedTo: JobDataEntity[];
 
   @OneToMany(() => RoomBooking, roomBooking => roomBooking.user)

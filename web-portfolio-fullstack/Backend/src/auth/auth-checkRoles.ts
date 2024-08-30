@@ -28,9 +28,10 @@ export class checkRolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user: User = request.user;
 
-    if (user.roles.length === 0) {
-      return true;
-    }
+    //fish out the roles of the user
+    // if (user.roles.length === 0) {
+    //   return true;
+    // }
 
     //checking the roles. if Admin, always allow. Admin has full access
     // if (!this.roles.some((role) => user.roles.includes(role))) {

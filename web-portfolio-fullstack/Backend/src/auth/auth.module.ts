@@ -8,11 +8,12 @@ import { UserModule } from 'src/user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule, JwtService  } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { RoleEntity } from './role.entity';
 
 @Module({
   imports: [
     UserModule,
-    TypeOrmModule.forFeature([User]), // Import TaskRepository along with Task
+    TypeOrmModule.forFeature([User, RoleEntity]), // Import TaskRepository along with Task
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'topsecret51',
