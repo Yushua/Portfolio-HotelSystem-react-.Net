@@ -70,6 +70,7 @@ function AllVacancies() {
         <Grid container
         className='containerTabs'
         spacing={3}
+        key={vacancy.id}
         >
           <Grid item xs={6}>
             <TextfieldComponent value={vacancy.hotelName} helpertext={"Hotel Name"}/>
