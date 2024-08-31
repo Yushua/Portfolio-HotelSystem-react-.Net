@@ -1,43 +1,55 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
-import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { RoleEntity } from './role.entity';
+import { CreateRoleDTO } from './dto/auth-credentials.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    @InjectRepository(User)
-    private userEntity: Repository<User>,
-    private readonly jwtService: JwtService,
+    @InjectRepository(RoleEntity)
+    private readonly roleRepository: Repository<RoleEntity>, // Inject RoleEntity repository
+    private readonly jwtService: JwtService, // Inject JwtService directly
   ) {}
-
-  // /**
-  //  * no need to wait if no roles given in controller
-  //  * this means everyone is allowed to use it.
-  //  * @param userID 
-  //  * @param rolesAllowed 
-  //  * @returns 
-  //  */
-  // async checkRoles(userID: string, rolesAllowed: string[]): Promise<void> {
-  //   if (rolesAllowed.length == 0) {
-  //     return;
-  //   }
-  //   const user = await this.userService.getUseryId(userID);
-  //   const unauthorizedRoles = rolesAllowed.filter(
-  //     (role) => !user.roles.includes(role),
-  //   );
-  //   if (unauthorizedRoles.length > 0) {
-  //     throw new UnauthorizedException(
-  //       `Access not allowed for roles: ${unauthorizedRoles.join(', ')}`,
-  //     );
-  //   }
-  // }
 
   async createAuthToken(user: User): Promise<string> {
     const payload = { username: user.username, id: user.id };
     return this.jwtService.sign(payload, { secret: `topsecret51` });
   }
+
+  /* roles */
+  
+  async createRole(createRoleDto: CreateRoleDTO): Promise<RoleEntity> {
+    // Check if the role already exists
+    const existingRole = await this.roleRepository.findOneBy({
+      roleName: createRoleDto.roleName,
+    });
+
+    if (existingRole) {
+      throw new ConflictException('Role already found');
+    }
+
+    // Create and save the new role if it does not exist
+    const newRole = this.roleRepository.create(createRoleDto);
+    return await this.roleRepository.save(newRole);
+  }
+
+  async deleteRole(id: string): Promise<void> {
+    const role = await this.roleRepository.findOneBy({ id });
+    if (!role) {
+      throw new NotFoundException(`Role with ID ${id} not found`);
+    }
+    if (role.roleName === 'Admin') {
+      throw new ForbiddenException('Role Admin cannot be deleted');
+    }
+
+    await this.roleRepository.delete(id);
+  }
+
+  async GetAllRoles(): Promise<any[]> {
+    return await this.roleRepository.find();
+  }
+
 }

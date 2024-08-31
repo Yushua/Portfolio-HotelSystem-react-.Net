@@ -9,6 +9,12 @@ export class CheckRolesGuard implements CanActivate {
     private readonly userService: UserService,
   ) {}
 
+  /**
+   * CONTEXT, checks every methodName based on the roles this user has
+   * for example. if user has role X where they can go into "CreateNewHotel" and that role has
+   * "CreateNewHotel" in the methodName, then they pass, else.
+   * it means that any of the roles they got, do not permit this.
+   */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const user = request.user;

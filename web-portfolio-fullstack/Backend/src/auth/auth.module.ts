@@ -10,7 +10,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { RoleEntity } from './role.entity';
 import { RolesInitializerService } from './roles-initializer.service';
-import { Reflector, ModulesContainer, MetadataScanner, DiscoveryService } from '@nestjs/core';
+import { Reflector, MetadataScanner, DiscoveryService } from '@nestjs/core';
 import { RouteService } from 'src/routes/routes.service'; // Ensure this path is correct
 
 @Module({
