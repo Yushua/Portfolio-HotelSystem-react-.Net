@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Body, Request } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -43,9 +43,9 @@ export class AuthController {
 
   @Post('getAllBackendPaths')
   @UseGuards(AuthGuard('jwt'))
-  async getAllBackendPaths(@Request() req) {
-    const user: User = req.user;
-    const routes = this.routeService.getRoutes();
-    return { routes };
+  async getAllBackendPaths(): Promise<{ routes: any[] }> {
+    const routes = await this.routeService.getRoutes();
+    console.log(routes);
+    return { routes: routes };
   }
 }

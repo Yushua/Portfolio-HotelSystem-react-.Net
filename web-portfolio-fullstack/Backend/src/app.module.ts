@@ -12,15 +12,15 @@ import { HotelsModule } from './hotels/hotels.module';
 import { Hotels } from './hotels/hotels.entity';
 import { HotelRooms } from './hotels/hotelsRooms.entity';
 import { RoleEntity } from './auth/role.entity';
-import { APP_GUARD } from '@nestjs/core';
 import { CheckRolesGuard } from './auth/auth-checkRoles';
-import { RouteService } from './routes/routes.service';
+import { RouteServiceModule } from './routes/route.module';
+import { APP_GUARD, DiscoveryModule } from '@nestjs/core'; // Import DiscoveryModule
 
 @Module({
   imports: [
     UserModule,
     TasksModule,
-    TypeOrmModule.forFeature([User, Task, HotelRooms, Hotels, RoleEntity]), // Include relevant entities
+    TypeOrmModule.forFeature([User, Task, HotelRooms, Hotels, RoleEntity]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -33,16 +33,16 @@ import { RouteService } from './routes/routes.service';
     }),
     AuthModule,
     HotelsModule,
+    RouteServiceModule, // Ensure RouteServiceModule is imported
+    DiscoveryModule,   // Import DiscoveryModule
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
-    RouteService,
     JwtService,
-    RouteService,
     {
       provide: APP_GUARD,
-      useClass: CheckRolesGuard, // Apply CheckRolesGuard globally
+      useClass: CheckRolesGuard,
     },
   ],
 })

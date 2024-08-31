@@ -1,54 +1,49 @@
-import { Reflector } from '@nestjs/core';
-import { ROUTE_METADATA_KEY } from './route.decorator'; // Ensure correct path
-import { Injectable, RequestMethod } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Reflector, DiscoveryService } from '@nestjs/core';
+import { RequestMethod } from '@nestjs/common/enums/request-method.enum';
+import { PATH_METADATA, METHOD_METADATA } from '@nestjs/common/constants';
 
 @Injectable()
-export class RouteService {
-  constructor(private readonly reflector: Reflector) {}
+export class RouteService implements OnModuleInit {
+  private routes: any[] = [];
 
-  async getRoutes(): Promise<any[]> {
-    const routes = [];
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly discoveryService: DiscoveryService
+  ) {}
 
-    // Retrieve all modules and their controllers
-    const modules = this.getModules();
-    for (const module of modules) {
-      for (const controller of module.controllers || []) {
-        const controllerRoutes = this.getControllerRoutes(controller);
-        routes.push(...controllerRoutes);
-      }
-    }
+  onModuleInit() {
+    const providers = this.discoveryService.getControllers(); // Use getControllers() to get controllers
 
-    return routes;
-  }
+    providers.forEach((provider) => {
+      const { instance } = provider;
 
-  private getModules(): any[] {
-    // This should be replaced with actual method to get modules
-    // This part may require custom logic or internal APIs
-    // Example: return NestFactory.create(AppModule).then(app => app.getModules());
-    return []; // Placeholder
-  }
+      if (instance && instance.constructor) {
+        // Get the controller path
+        const controllerPath = this.reflector.get<string>(PATH_METADATA, instance.constructor) || '';
 
-  private getControllerRoutes(controller: any): any[] {
-    const routes = [];
-    const controllerPath = this.reflector.get<string>('path', controller);
+        // Get all methods of the controller
+        const methods = Object.getOwnPropertyNames(instance.constructor.prototype);
 
-    Object.getOwnPropertyNames(controller.prototype).forEach((methodName) => {
-      const methodRoutes = this.reflector.get<any[]>(
-        ROUTE_METADATA_KEY,
-        controller.prototype[methodName],
-      );
-      if (methodRoutes) {
-        methodRoutes.forEach((route) => {
-          routes.push({
-            controller: controller.name,
-            method: methodName,
-            path: `${controllerPath}${route.path}`,
-            httpMethod: RequestMethod[route.method],
-          });
+        methods.forEach((method) => {
+          // Get the route path and method metadata
+          const routePath = this.reflector.get<string>(PATH_METADATA, instance.constructor.prototype[method]);
+          const requestMethod = this.reflector.get<RequestMethod>(METHOD_METADATA, instance.constructor.prototype[method]);
+
+          if (routePath && requestMethod !== undefined) {
+            this.routes.push({
+              controller: instance.constructor.name,
+              methodName: method,
+              path: `${controllerPath}${routePath}`,
+              httpMethod: RequestMethod[requestMethod],
+            });
+          }
         });
       }
     });
+  }
 
-    return routes;
+  getRoutes() {
+    return this.routes;
   }
 }

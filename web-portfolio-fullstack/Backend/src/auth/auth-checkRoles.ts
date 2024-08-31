@@ -27,7 +27,7 @@ export class CheckRolesGuard implements CanActivate {
       return true;
     }
 
-    console.log("permission name " + requiredPermissions);
+    console.log('Permission name ' + requiredPermissions);
 
     if (!requiredPermissions || requiredPermissions.length === 0) {
       return true;
