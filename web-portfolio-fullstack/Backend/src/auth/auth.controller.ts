@@ -46,6 +46,8 @@ export default class AuthController {
 
   @Post('getAllBackendMethodNames')
   @UseGuards(AuthGuard('jwt'))
+  @Permissions('getAllBackendMethodNames')
+  @UseGuards(CheckRolesGuard)
   async getAllBackendMethodNames(): Promise<{ methodNames: any[] }> {
     const routes = await this.routeService.getRoutes();
     const methodNames = routes.map((routes) => routes.methodName);
@@ -55,8 +57,8 @@ export default class AuthController {
 
   @Patch('CreateNewRole')
   @UseGuards(AuthGuard('jwt'))
-  @Permissions('CreateNewRole')
-  @UseGuards(CheckRolesGuard)
+  // @Permissions('CreateNewRole')
+  // @UseGuards(CheckRolesGuard)
   async CreateNewRole(
     @Body() CreateUserDto: CreateRoleDTO,
   ): Promise<{  }> {

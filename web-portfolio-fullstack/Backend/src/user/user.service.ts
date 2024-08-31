@@ -40,6 +40,10 @@ export class UserService {
     }
   }
 
+  async findOne(options: object): Promise<User | undefined> {
+    return this.userEntity.findOne(options);
+  }
+
   async loginUser(createUserDto: CreateUserDto): Promise<User> {
     const { username, password } = createUserDto;
     const user: User = await this.userNameUserExist(username);

@@ -12,9 +12,8 @@ import { HotelsModule } from './hotels/hotels.module';
 import { Hotels } from './hotels/hotels.entity';
 import { HotelRooms } from './hotels/hotelsRooms.entity';
 import { RoleEntity } from './auth/role.entity';
-import { CheckRolesGuard } from './auth/auth-checkRoles';
 import { RouteServiceModule } from './routes/route.module';
-import { APP_GUARD, DiscoveryModule } from '@nestjs/core'; // Import DiscoveryModule
+import { DiscoveryModule } from '@nestjs/core'; // Import DiscoveryModule
 
 @Module({
   imports: [
@@ -33,17 +32,19 @@ import { APP_GUARD, DiscoveryModule } from '@nestjs/core'; // Import DiscoveryMo
     }),
     AuthModule,
     HotelsModule,
-    RouteServiceModule, // Ensure RouteServiceModule is imported
-    DiscoveryModule,   // Import DiscoveryModule
+    RouteServiceModule,
+    DiscoveryModule,
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
     JwtService,
-    {
-      provide: APP_GUARD,
-      useClass: CheckRolesGuard,
-    },
+    // {
+    //  GLOBAL CheckRolesGuard
+    //  however, this needs to be put in manually
+    //  provide: APP_GUARD,
+    //  useClass: CheckRolesGuard,
+    // },
   ],
 })
 export class AppModule {}

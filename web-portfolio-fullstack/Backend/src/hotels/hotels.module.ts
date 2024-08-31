@@ -11,14 +11,17 @@ import { JobDataEntity } from './JobDataEntity.entity';
 import { RoomBooking } from './hotelRoomBooking';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([
-    Hotels,
-    HotelRooms,
-    User,
-    HotelVacancy,
-    JobDataEntity,
-    RoomBooking])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Hotels,
+      HotelRooms,
+      User,
+      HotelVacancy,
+      JobDataEntity,
+      RoomBooking,
+    ]),
+  ],
   controllers: [HotelsController],
-  providers: [HotelsService, UserService, ],
+  providers: [HotelsService, UserService],
 })
 export class HotelsModule {}
