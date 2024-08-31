@@ -1,10 +1,11 @@
 
 import React, { useEffect, useState } from 'react';
-import { WebPages } from '../../../Login/RoleSetup';
+import CreateRole from './CreateRole';
+import RolesManagement from './RoleManagement';
 
 async function getAllRoutes(){
   try {
-    const response = await fetch("http://localhost:3000/auth/getAllBackendPaths", {
+    const response = await fetch("http://localhost:3000/auth/getAllBackendMethodNames", {
       method: "POST",
       headers: {
         Accept: 'application/json',
@@ -16,8 +17,8 @@ async function getAllRoutes(){
     }
     else {
       const data = await response.json();
-      _setData(data["routes"])
-      console.log(data["routes"])
+      _setData(data["methodNames"])
+      console.log(data["methodNames"])
     }
     return response;
   } catch (error: any) {
@@ -26,7 +27,7 @@ async function getAllRoutes(){
 
 var _setData: React.Dispatch<React.SetStateAction<any[]>>
 
-function RolesManagement() {
+function RolesManagementPage() {
   const [Data, setData] = useState<any[]>([]);
   _setData = setData;
 
@@ -55,11 +56,11 @@ function RolesManagement() {
   
   return (
     <>
-      Add or Remove Roles from your account
-      removing it wont make it that your data is gone, it is still there. you
-      just can't access it. roles are done at the end.
+      <CreateRole/>
+
+      <RolesManagement/>
     </>
   );
 }
 
-export default RolesManagement;
+export default RolesManagementPage;

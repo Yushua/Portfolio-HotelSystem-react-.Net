@@ -21,7 +21,7 @@ export class CheckRolesGuard implements CanActivate {
     );
 
     if (
-      requiredPermissions == undefined ||
+      (requiredPermissions == undefined && user.role.roleName === 'Admin') ||
       (user.role && user.role.roleName === 'Admin')
     ) {
       return true;
@@ -42,7 +42,7 @@ export class CheckRolesGuard implements CanActivate {
     const role = user.role as RoleEntity;
 
     // Check if the role has any of the required permissions
-    const hasPermission = role.ControllerRequests.some((request) =>
+    const hasPermission = role.methodNames.some((request) =>
       requiredPermissions.includes(request),
     );
 
@@ -50,6 +50,8 @@ export class CheckRolesGuard implements CanActivate {
       return true;
     }
 
-    throw new UnauthorizedException('User does not have permission to access this resource.');
+    throw new UnauthorizedException(
+      'User does not have permission to access this resource.',
+    );
   }
 }

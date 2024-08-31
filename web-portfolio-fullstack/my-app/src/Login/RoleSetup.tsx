@@ -8,7 +8,7 @@ import ShowAllEmployees from '../MainBrowser/Pages/HotelOwnerPages/ShowHotelEmpl
 import CreateHotelPage from '../MainBrowser/Pages/HotelOwnerPages/createPages/CreateHotelPage';
 import ShowAllHotelRooms from '../MainBrowser/Pages/UserPages/ShowAllRooms';
 import AllBookings from '../MainBrowser/Pages/UserPages/AllBookings';
-import RolesManagement from '../MainBrowser/Pages/SettingPages/RolesManagement';
+import RolesManagement from '../MainBrowser/Pages/SettingPages/RolesManagementPage';
 
 export const WebPages: Array<[string, JSX.Element]> = [
   ['Profile', <UserProfile />],

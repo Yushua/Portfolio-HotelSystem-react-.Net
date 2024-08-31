@@ -87,6 +87,13 @@
     width: 100%;
   }
 
+  .containerRoleSetup {
+    padding-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
   .containerInfoItems {
     padding: 1rem;
   }

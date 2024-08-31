@@ -1,13 +1,16 @@
-import { Controller, UseGuards, Post, Body } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Patch } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { RouteService } from 'src/routes/routes.service';
+import { Permissions } from 'src/auth/permissions';
+import { CheckRolesGuard } from 'src/auth/auth-checkRoles';
+import { CreateRoleDTO } from './dto/auth-credentials.dto';
 
 @Controller('auth')
-export class AuthController {
+export default class AuthController {
   constructor(
     private authService: AuthService,
     private UserService: UserService,
@@ -41,11 +44,23 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   jwtCheck() {}
 
-  @Post('getAllBackendPaths')
+  @Post('getAllBackendMethodNames')
   @UseGuards(AuthGuard('jwt'))
-  async getAllBackendPaths(): Promise<{ routes: any[] }> {
+  async getAllBackendMethodNames(): Promise<{ methodNames: any[] }> {
     const routes = await this.routeService.getRoutes();
+    const methodNames = routes.map((routes) => routes.methodName);
     console.log(routes);
-    return { routes: routes };
+    return { methodNames: methodNames };
+  }
+
+  @Patch('CreateNewRole')
+  @UseGuards(AuthGuard('jwt'))
+  @Permissions('CreateNewRole')
+  @UseGuards(CheckRolesGuard)
+  async CreateNewRole(
+    @Body() CreateUserDto: CreateRoleDTO,
+  ): Promise<{  }> {
+    //create new ROle, if fail, return error
+    return {  };
   }
 }

@@ -14,7 +14,7 @@ import './AppBarPage.css'
 import UserProfile from './Pages/UserPages/UserProfile';
 import { newDashboardWindow } from './Pages/DashboardPage';
 import SettingsPage from './Pages/SettingPages/SettingsPage';
-import RolesManagement from './Pages/SettingPages/RolesManagement';
+import RolesManagement from './Pages/SettingPages/RolesManagementPage';
 import LogoutImageComponentSetup from './components/logoutImageComponentSetup';
 import DashboardPageInfo from './Pages/DashboardInfo';
 import AdbIcon from '@mui/icons-material/Adb';

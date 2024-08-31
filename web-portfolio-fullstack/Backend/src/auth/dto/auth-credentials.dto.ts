@@ -13,3 +13,11 @@ export class credentialsDTO {
   @MaxLength(20)
   password: string;
 }
+
+export class CreateRoleDTO {
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
+  @MaxLength(20)
+  roleName: string;
+}

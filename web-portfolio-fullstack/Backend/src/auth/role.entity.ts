@@ -11,9 +11,10 @@ export class RoleEntity {
   @OneToMany(() => User, (user) => user.role)
   users: User[];
 
+  //stores pages names
   @Column('text', { array: true, default: '{}' })
-  pages: string[];
+  pageNames: string[];
 
   @Column('text', { array: true, default: '{}' })
-  ControllerRequests: string[];
+  methodNames: string[];
 }
