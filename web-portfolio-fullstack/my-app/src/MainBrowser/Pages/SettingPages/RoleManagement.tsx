@@ -1,8 +1,15 @@
 import { Autocomplete, Button, Grid, TextField } from "@mui/material";
 import { useState } from "react";
-import { getAllMethodNamesAndRoles } from "./RolesManagementPage";
+import RolesManagementPage, { getAllMethodNamesAndRoles } from "./RolesManagementPage";
+import RoleCheckBoxPatchData from "./RoleCheckBoxPatchData";
+import { newDashboardWindow } from "../DashboardPage";
 
 
+export async function refreshRolePage(){
+  await getAllMethodNamesAndRoles();
+  _setSelectedRole(null);
+  await newDashboardWindow(<RolesManagementPage/>);
+}
 // Async function to add a new role (keeping your original function for context)
 async function DeleteRole(roleId: string) {
   try {
@@ -17,7 +24,7 @@ async function DeleteRole(roleId: string) {
     if (!response.ok) {
       // Handle error here
     } else {
-      await getAllMethodNamesAndRoles();
+      refreshRolePage();
     }
     return response;
   } catch (error: any) {
@@ -26,9 +33,7 @@ async function DeleteRole(roleId: string) {
 }
 
 // Declare global variables for set state functions (need better approach in real app)
-var _setRoleNameMessage: React.Dispatch<React.SetStateAction<string>>;
-var _setRoleNameError: React.Dispatch<React.SetStateAction<boolean>>;
-var _setData: React.Dispatch<React.SetStateAction<any[]>>;
+var _setSelectedRole: React.Dispatch<React.SetStateAction<Role | null>>;
 
 interface Role {
   id: string;
@@ -37,27 +42,24 @@ interface Role {
   methodNames: string[];
 }
 
-
 interface ResponsiveAppBarProps {
-  AllMethodNames: string[];
+  AllMethodNames: any[];
   roles: Role[];
 }
 
 function RolesManagement({ AllMethodNames, roles }: ResponsiveAppBarProps) {
-  // State to store the selected role object
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null); // Initialize with null to represent no selection
-  const [inputRole, setInputRole] = useState<string>(''); // Input state for role autocomplete
-  const [selectedMethodName, setSelectedMethodName] = useState<string>(''); // State for selected method name
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [inputRole, setInputRole] = useState<string>('');
+  _setSelectedRole = setSelectedRole;
 
-  // Handler for role selection
   const handleRoleChange = (event: any, newRoleName: string | null) => {
     if (newRoleName) {
-      const role = roles.find((role) => role.roleName === newRoleName); // Find the role object based on the role name
-      setSelectedRole(role || null); // Set the selected role object or null if not found
+      const role = roles.find((role) => role.roleName === newRoleName);
+      setSelectedRole(role || null);
+      console.log(role);
     } else {
-      setSelectedRole(null); // Reset to null if no role is selected
+      setSelectedRole(null);
     }
-    setSelectedMethodName(''); // Reset selected method name when a new role is selected
   };
 
   // Handler for the confirm button
@@ -100,12 +102,10 @@ function RolesManagement({ AllMethodNames, roles }: ResponsiveAppBarProps) {
       </Grid>
       <Grid container>
         <Grid item xs={2.87} style={{ marginTop: 20 }}>
-          <Button onClick={handleConfirm} variant="contained">Submit Method Name</Button>
-        </Grid>
-        <Grid item xs={2.87} style={{ marginTop: 20 }}>
           <Button onClick={handleDelete} variant="contained">Delete Role</Button>
         </Grid>
       </Grid>
+      {selectedRole != null ? <RoleCheckBoxPatchData AllMethodNames={AllMethodNames} roles={selectedRole} /> : null}
     </>
   );
 }

@@ -7,7 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RouteService } from 'src/routes/routes.service';
 import { Permissions } from 'src/auth/permissions';
 import { CheckRolesGuard } from 'src/auth/auth-checkRoles';
-import { CreateRoleDTO } from './dto/auth-credentials.dto';
+import { CreateRoleDTO, patchMethodNamesInRolesDTO } from './dto/auth-credentials.dto';
 
 @Controller('auth')
 export default class AuthController {
@@ -35,7 +35,7 @@ export default class AuthController {
   async loginUser(
     @Body() createUserDto: CreateUserDto,
   ): Promise<{ authToken: string }> {
-    const user: User = await this.UserService.loginUser(createUserDto);
+    const user: User = await this.UserService.loginUserService(createUserDto);
     const authToken = await this.authService.createAuthToken(user);
     return { authToken };
   }
@@ -48,11 +48,26 @@ export default class AuthController {
   @Permissions('getAllBackendMethodNamesAndRoles')
   @UseGuards(AuthGuard('jwt'), CheckRolesGuard)
   async getAllBackendMethodNamesAndRoles(): Promise<{
-    methodNames: string[];
+    methodNames: any[];
     roles: any[];
   }> {
     const routes = await this.routeService.getRoutes();
-    const methodNames = routes.map((routes) => routes.methodName);
+
+    const uniqueMethods = new Set<string>();
+    const methodNames = routes
+      .filter((route) => {
+        if (uniqueMethods.has(route.methodName)) {
+          return false; // Skip this route if methodName is already processed
+        }
+        uniqueMethods.add(route.methodName);
+        return true; // Include this route if methodName is unique
+      })
+      .map((route) => ({
+        methodName: route.methodName,
+        controller: route.controller.replace('Controller', ''), // Assuming 'controllerName' is the correct property; adjust if necessary
+      }));
+
+    console.log(methodNames);
     return {
       methodNames: methodNames,
       roles: await this.authService.GetAllRoles(),
@@ -80,5 +95,17 @@ export default class AuthController {
   @UseGuards(AuthGuard('jwt'), CheckRolesGuard)
   async GetAllRoles() {
     await this.authService.GetAllRoles();
+  }
+
+  @Patch('PatchRole')
+  // @Permissions('PatchRole')
+  // @UseGuards(AuthGuard('jwt'), CheckRolesGuard)
+  async PatchRole(
+    @Body() patchMethodNamesInRolesDTO: patchMethodNamesInRolesDTO,
+  ) {
+    await this.authService.PatchRole(
+      patchMethodNamesInRolesDTO.methodNames,
+      patchMethodNamesInRolesDTO.roleId,
+    );
   }
 }

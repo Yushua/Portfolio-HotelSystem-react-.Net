@@ -4,6 +4,7 @@ import { WebPages } from '../../../Login/RoleSetup';
 import { Button, Grid, TextField } from '@mui/material';
 import { newBrowserWindow } from '../../MainBrowser';
 import RolesManagementPage, { getAllMethodNamesAndRoles } from './RolesManagementPage';
+import { refreshRolePage } from './RoleManagement';
 
 async function AddNewRole(roleName: string){
   const credentials = {
@@ -23,8 +24,7 @@ async function AddNewRole(roleName: string){
     if (!response.ok) {
     }
     else {
-      await getAllMethodNamesAndRoles();
-      console.log("success")
+      refreshRolePage();
     }
     return response;
   } catch (error: any) {

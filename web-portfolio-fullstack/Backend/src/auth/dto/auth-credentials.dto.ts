@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class credentialsDTO {
   @IsString()
@@ -23,8 +23,9 @@ export class CreateRoleDTO {
 }
 
 export class patchMethodNamesInRolesDTO {
-  @IsString()
-  @IsNotEmpty()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
   methodNames: string[];
 
   @IsString()

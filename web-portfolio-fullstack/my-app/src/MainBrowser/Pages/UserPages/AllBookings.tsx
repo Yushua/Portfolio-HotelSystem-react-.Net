@@ -84,7 +84,7 @@ function AllBookings() {
       <Grid container
         className='containerTabsDataRoomsData'
         spacing={3}
-        key={Booking.hotelRoomId}
+        key={Booking.hotelRoomId + Booking.startDate}
         onClick={() => handleOpen(Booking)}
         >
           <Grid item xs={3}>

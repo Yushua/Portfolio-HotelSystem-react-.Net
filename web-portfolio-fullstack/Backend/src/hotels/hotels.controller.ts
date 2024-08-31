@@ -48,7 +48,7 @@ export class HotelsController {
   @Post(`CreateHotel`)
   // @Permissions('CreateHotel')
   // @UseGuards(CheckRolesGuard)
-  async loginUser(
+  async CreateHotel(
     @Request() req,
     @Body() createHotelDto: CreateHotelDto,
   ): Promise<{ hotelID: string }> {

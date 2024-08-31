@@ -48,4 +48,14 @@ export class AuthService {
   async GetAllRoles(): Promise<any[]> {
     return await this.roleRepository.find();
   }
+
+  async PatchRole(methodNames: string[], roleId: string) {
+    const role = await this.roleRepository.findOne({ where: { id: roleId } });
+
+    if (!role) {
+      throw new Error('Role not found');
+    }
+    role.methodNames = methodNames;
+    await this.roleRepository.save(role);
+  }
 }
