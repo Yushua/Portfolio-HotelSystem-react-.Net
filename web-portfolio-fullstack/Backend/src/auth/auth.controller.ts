@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Body, Patch, Param, NotFoundException } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Patch, Param, NotFoundException, Delete } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -44,39 +44,40 @@ export default class AuthController {
   @UseGuards(AuthGuard('jwt'))
   jwtCheck() {}
 
-  @Post('getAllBackendMethodNames')
-  @UseGuards(AuthGuard('jwt'))
-  @Permissions('getAllBackendMethodNames')
-  @UseGuards(CheckRolesGuard)
-  async getAllBackendMethodNames(): Promise<{ methodNames: any[] }> {
+  @Post('getAllBackendMethodNamesAndRoles')
+  @Permissions('getAllBackendMethodNamesAndRoles')
+  @UseGuards(AuthGuard('jwt'), CheckRolesGuard)
+  async getAllBackendMethodNamesAndRoles(): Promise<{
+    methodNames: string[];
+    roles: any[];
+  }> {
     const routes = await this.routeService.getRoutes();
     const methodNames = routes.map((routes) => routes.methodName);
-    console.log(routes);
-    return { methodNames: methodNames };
+    return {
+      methodNames: methodNames,
+      roles: await this.authService.GetAllRoles(),
+    };
   }
 
   /* Roles */
 
   @Patch('CreateNewRole')
-  @UseGuards(AuthGuard('jwt'))
   @Permissions('CreateNewRole')
-  @UseGuards(CheckRolesGuard)
+  @UseGuards(AuthGuard('jwt'), CheckRolesGuard)
   async CreateNewRole(@Body() createUserDto: CreateRoleDTO) {
     await this.authService.createRole(createUserDto);
   }
 
-  @Patch('DeleteRole/:id')
-  @UseGuards(AuthGuard('jwt'))
+  @Delete('DeleteRole/:id')
   @Permissions('DeleteRole')
-  @UseGuards(CheckRolesGuard)
+  @UseGuards(AuthGuard('jwt'), CheckRolesGuard)
   async DeleteRole(@Param('id') id: string) {
     await this.authService.deleteRole(id);
   }
 
   @Post('GetAllRoles')
-  @UseGuards(AuthGuard('jwt'))
   @Permissions('GetAllRoles')
-  @UseGuards(CheckRolesGuard)
+  @UseGuards(AuthGuard('jwt'), CheckRolesGuard)
   async GetAllRoles() {
     await this.authService.GetAllRoles();
   }

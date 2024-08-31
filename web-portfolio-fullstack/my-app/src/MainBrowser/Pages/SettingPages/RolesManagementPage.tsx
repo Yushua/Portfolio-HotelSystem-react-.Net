@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import CreateRole from './CreateRole';
 import RolesManagement from './RoleManagement';
 
-async function getAllRoutes(){
+export async function getAllMethodNamesAndRoles(){
   try {
-    const response = await fetch("http://localhost:3000/auth/getAllBackendMethodNames", {
+    const response = await fetch("http://localhost:3000/auth/getAllBackendMethodNamesAndRoles", {
       method: "POST",
       headers: {
         Accept: 'application/json',
@@ -16,20 +16,25 @@ async function getAllRoutes(){
     if (!response.ok) {
     }
     else {
-      const data = await response.json();
-      _setData(data["methodNames"])
-      console.log(data["methodNames"])
+      const MethodNames = await response.json();
+      _setMethodNames(MethodNames["methodNames"])
+      _setRoles(MethodNames["roles"])
+      console.log(MethodNames["methodNames"])
+      console.log(MethodNames["roles"])
     }
     return response;
   } catch (error: any) {
   }
 }
 
-var _setData: React.Dispatch<React.SetStateAction<any[]>>
+var _setMethodNames: React.Dispatch<React.SetStateAction<any[]>>
+var _setRoles: React.Dispatch<React.SetStateAction<any[]>>
 
 function RolesManagementPage() {
-  const [Data, setData] = useState<any[]>([]);
-  _setData = setData;
+  const [MethodNames, setMethodNames] = useState<string[]>([]);
+  _setMethodNames = setMethodNames;
+  const [Roles, setRoles] = useState<any[]>([]);
+  _setRoles = setRoles;
 
   /*
   use webpages to see every available webpage for the dashboard. every other page
@@ -46,19 +51,18 @@ function RolesManagementPage() {
   then the backend will add this to said role IF you have the proper role to do this.
   */
 
-  const fetchData = async () => {
-    await getAllRoutes();
+  const fetchMethodNames = async () => {
+    await getAllMethodNamesAndRoles();
   }
 
   useEffect(() => {
-    fetchData();
+    fetchMethodNames();
   }, []);
   
   return (
     <>
       <CreateRole/>
-
-      <RolesManagement/>
+      {MethodNames != null && Roles != null ? <RolesManagement AllMethodNames={MethodNames} roles={Roles} /> : null}
     </>
   );
 }

@@ -20,9 +20,8 @@ export class AuthService {
   }
 
   /* roles */
-  
+
   async createRole(createRoleDto: CreateRoleDTO): Promise<RoleEntity> {
-    // Check if the role already exists
     const existingRole = await this.roleRepository.findOneBy({
       roleName: createRoleDto.roleName,
     });
@@ -30,8 +29,6 @@ export class AuthService {
     if (existingRole) {
       throw new ConflictException('Role already found');
     }
-
-    // Create and save the new role if it does not exist
     const newRole = this.roleRepository.create(createRoleDto);
     return await this.roleRepository.save(newRole);
   }
@@ -51,5 +48,4 @@ export class AuthService {
   async GetAllRoles(): Promise<any[]> {
     return await this.roleRepository.find();
   }
-
 }

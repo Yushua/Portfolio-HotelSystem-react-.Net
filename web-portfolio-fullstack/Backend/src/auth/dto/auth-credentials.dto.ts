@@ -21,3 +21,13 @@ export class CreateRoleDTO {
   @MaxLength(20)
   roleName: string;
 }
+
+export class patchMethodNamesInRolesDTO {
+  @IsString()
+  @IsNotEmpty()
+  methodNames: string[];
+
+  @IsString()
+  @IsNotEmpty()
+  roleId: string;
+}

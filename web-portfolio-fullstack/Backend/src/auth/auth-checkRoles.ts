@@ -17,13 +17,13 @@ export class CheckRolesGuard implements CanActivate {
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const user = request.user;
     const requiredPermissions = this.reflector.get<string[]>(
       'permissions',
       context.getHandler(),
     );
+    console.log(request.user);
     const dbUser = await this.userService.findOne({
-      where: { id: user.id },
+      where: { id: request.user.id },
       relations: ['role'],
     });
 
@@ -51,6 +51,8 @@ export class CheckRolesGuard implements CanActivate {
       return true;
     }
 
-    throw new UnauthorizedException('User does not have permission to access this resource.');
+    throw new UnauthorizedException(
+      'User does not have permission to access this resource.',
+    );
   }
 }

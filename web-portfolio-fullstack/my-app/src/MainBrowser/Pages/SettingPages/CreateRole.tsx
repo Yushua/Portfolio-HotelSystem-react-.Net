@@ -2,14 +2,17 @@
 import React, { useEffect, useState } from 'react';
 import { WebPages } from '../../../Login/RoleSetup';
 import { Button, Grid, TextField } from '@mui/material';
+import { newBrowserWindow } from '../../MainBrowser';
+import RolesManagementPage, { getAllMethodNamesAndRoles } from './RolesManagementPage';
 
 async function AddNewRole(roleName: string){
   const credentials = {
     roleName: roleName
   };
+  await getAllMethodNamesAndRoles();
   try {
     const response = await fetch("http://localhost:3000/auth/CreateNewRole", {
-      method: "POST",
+      method: "PATCH",
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -20,9 +23,8 @@ async function AddNewRole(roleName: string){
     if (!response.ok) {
     }
     else {
-      const data = await response.json();
-      _setData(data["methodNames"])
-      console.log(data["methodNames"])
+      await getAllMethodNamesAndRoles();
+      console.log("success")
     }
     return response;
   } catch (error: any) {
@@ -64,11 +66,9 @@ function CreateRole() {
           error={RoleNameError}
           onChange={handleRoleNameChange}
         />
-      </Grid>
-    </Grid>
-    <Grid container>
-      <Grid item xs={4} style={{ marginTop: 20 }}>
-          <Button onClick={handleConfirm} variant="contained">Submit new Role</Button>
+        <Grid item xs={6} style={{ marginTop: 20 }}>
+            <Button onClick={handleConfirm} variant="contained">Submit new Role</Button>
+        </Grid>
       </Grid>
     </Grid>
     </>
