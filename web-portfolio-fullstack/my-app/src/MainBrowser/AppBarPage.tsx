@@ -18,6 +18,7 @@ import RolesManagement from './Pages/SettingPages/RolesManagementPage';
 import LogoutImageComponentSetup from './components/logoutImageComponentSetup';
 import DashboardPageInfo from './Pages/DashboardInfo';
 import AdbIcon from '@mui/icons-material/Adb';
+import AppBarLanguage from './Pages/UserPages/LanguageSetting';
 
 export const addPage = (pageName: string, pageElement: JSX.Element) => {
   //this will later be done in the backend
@@ -120,12 +121,22 @@ function ResponsiveAppBar({ webPages }: ResponsiveAppBarProps){
               ))}
             </Menu>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, paddingLeft: "2rem" }}>
+          <Box sx={{paddingLeft: "0.5rem" }}>
+            <AppBarLanguage/>
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pagesUser.map((page, index) => (
               <Button
                 key={index}
                 onClick={() => handleonClickMenu(page[1])}
                 className='PageButton'
+                variant="outlined"
+                sx={{
+                  color: 'black',             // Set the text color
+                  '&:hover': {
+                      borderColor: 'white',        // Keep outline color white on hover
+                  },
+              }}
               >
                 {page[0]}
               </Button>

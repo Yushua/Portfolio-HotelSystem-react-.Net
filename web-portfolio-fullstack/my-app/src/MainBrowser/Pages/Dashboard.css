@@ -203,6 +203,15 @@
     margin: 0.5rem;
   }
   
+  .PageButtonLanguage{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: white !important;
+    display: block !important;
+    background-color: white;
+    min-width: 4rem!important;
+  }
 
   .gridTextfieldInput {
     border: 4px solid #B6E0C5;
